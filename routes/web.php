@@ -1,13 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
 use App\Http\Controllers\PacienteController;
 
-Route::post('/pacientes', [PacienteController::class, 'store'])->name('pacientes.store');
+Route::get('/', function () {
+    return redirect()->route('pacientes.create');
+});
 
-Route::view('/', 'pacientes');
+Route::get('/pacientes', [PacienteController::class, 'create'])->name('pacientes.create');
+Route::post('/pacientes', [PacienteController::class, 'store'])->name('pacientes.store');
+Route::get('/pacientes/lista', [PacienteController::class, 'index'])->name('pacientes.index');

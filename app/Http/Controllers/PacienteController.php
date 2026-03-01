@@ -24,4 +24,15 @@ class PacienteController extends Controller
 
         return redirect()->back()->with('success', 'Paciente registrado correctamente');
     }
+
+    public function create()
+    {
+        return view('pacientes');
+    }
+
+    public function index()
+    {
+        $pacientes = Paciente::all();
+        return view('lista_pacientes', compact('pacientes'));
+    }
 }
