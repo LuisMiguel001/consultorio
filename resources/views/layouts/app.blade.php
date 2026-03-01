@@ -16,6 +16,13 @@
         <ul class="nav flex-column">
 
             <li class="nav-item mb-2">
+                <a href="{{ route('pacientes.inicio') }}"
+                   class="nav-link text-white">
+                   Inicio
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
                 <a href="{{ route('pacientes.create') }}"
                    class="nav-link text-white">
                    🧑 Registrar Paciente
@@ -23,7 +30,7 @@
             </li>
 
             <li class="nav-item mb-2">
-                <a href="{{ route('pacientes.index') }}"
+                <a href="{{ route('pacientes.lista') }}"
                    class="nav-link text-white">
                    📋 Lista de Pacientes
                 </a>
