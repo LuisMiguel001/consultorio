@@ -15,13 +15,17 @@
 
         <ul class="nav flex-column">
 
+            <!-- INICIO -->
             <li class="nav-item mb-2">
                 <a href="{{ route('pacientes.inicio') }}"
                    class="nav-link text-white">
-                   Inicio
+                   🏠 Inicio
                 </a>
             </li>
 
+            <hr class="text-white">
+
+            <!-- PACIENTES -->
             <li class="nav-item mb-2">
                 <a href="{{ route('pacientes.create') }}"
                    class="nav-link text-white">
@@ -33,6 +37,23 @@
                 <a href="{{ route('pacientes.lista') }}"
                    class="nav-link text-white">
                    📋 Lista de Pacientes
+                </a>
+            </li>
+
+            <hr class="text-white">
+
+            <!-- CITAS -->
+            <li class="nav-item mb-2">
+                <a href="{{ route('citas.create') }}"
+                   class="nav-link text-white">
+                   📅 Agendar Cita
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a href="{{ route('citas.index') }}"
+                   class="nav-link text-white">
+                   🗂 Lista de Citas
                 </a>
             </li>
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\CitaController;
 
 Route::get('/', function () {
     return redirect()->route('pacientes.create');
@@ -16,3 +17,7 @@ Route::get('/consultorio/inicio', [PacienteController::class, 'inicio'])->name('
 Route::get('/pacientes/{id}/edit', [PacienteController::class, 'edit'])->name('pacientes.edit');
 Route::put('/pacientes/{id}', [PacienteController::class, 'update'])->name('pacientes.update');
 Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy'])->name('pacientes.destroy');
+
+Route::get('/citas', [CitaController::class, 'index'])->name('citas.index');
+Route::get('/citas/create', [CitaController::class, 'create'])->name('citas.create');
+Route::post('/citas', [CitaController::class, 'store'])->name('citas.store');
