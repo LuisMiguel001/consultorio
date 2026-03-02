@@ -6,7 +6,7 @@ use App\Http\Controllers\CitaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\AntecedenteController;
-
+use App\Http\Controllers\EstudioController;
 //Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -38,9 +38,11 @@ Route::middleware('auth')->group(function () {
     //Antecedentes
     Route::middleware('auth')->group(function () {
         Route::get('/pacientes/{id}/antecedentes', [AntecedenteController::class, 'index']);
-        Route::post(
-            '/pacientes/{id}/antecedentes',
-            [AntecedenteController::class, 'store']
-        )->name('antecedentes.store');
+        Route::post('/pacientes/{id}/antecedentes', [AntecedenteController::class, 'store'])->name('antecedentes.store');
     });
+
+    // Estudios
+    Route::get('/pacientes/{paciente}/estudios', [EstudioController::class, 'index'])->name('estudios.index');
+    Route::post('/pacientes/{paciente}/estudios', [EstudioController::class, 'store'])->name('estudios.store');
+    Route::get('/estudios/{estudio}/descargar', [EstudioController::class, 'descargarArchivo'])->name('estudios.descargar');
 });
