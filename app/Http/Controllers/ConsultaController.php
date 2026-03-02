@@ -16,6 +16,20 @@ class ConsultaController extends Controller
         return view('consultas.create', compact('paciente'));
     }
 
+    public function show(Consulta $consulta)
+    {
+        $consulta->load([
+            'estudios',
+            // después agregaremos:
+            // 'diagnosticos',
+            // 'tratamientos',
+            // 'procedimientos',
+            // 'signosVitales'
+        ]);
+
+        return view('consultas.show', compact('consulta'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([

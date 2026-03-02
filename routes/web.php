@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/pacientes/{id}/consulta', [ConsultaController::class, 'create'])->name('consultas.create');
     Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
     Route::get('/pacientes/{id}', [PacienteController::class, 'show'])->name('pacientes.show');
+    Route::get('/consultas/{consulta}',[ConsultaController::class, 'show'] )->name('consultas.show');
 
     //Antecedentes
     Route::middleware('auth')->group(function () {
@@ -42,7 +43,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Estudios
-    Route::get('/pacientes/{paciente}/estudios', [EstudioController::class, 'index'])->name('estudios.index');
-    Route::post('/pacientes/{paciente}/estudios', [EstudioController::class, 'store'])->name('estudios.store');
+    Route::get('/consultas/{consulta}/estudios', [EstudioController::class, 'index'] )->name('estudios.index');
+    Route::post('/consultas/{consulta}/estudios', [EstudioController::class, 'store'] )->name('estudios.store');
     Route::get('/estudios/{estudio}/descargar', [EstudioController::class, 'descargarArchivo'])->name('estudios.descargar');
 });

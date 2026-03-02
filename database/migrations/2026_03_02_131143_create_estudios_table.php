@@ -10,12 +10,22 @@ return new class extends Migration
     {
         Schema::create('estudios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('paciente_id')->constrained()->onDelete('cascade');
+
+            $table->foreignId('consulta_id')
+                ->constrained('consultas')
+                ->onDelete('cascade');
+
             $table->string('tipo_estudio');
-            $table->date('fecha');
+
+            $table->enum('estado', ['indicado', 'realizado'])
+                ->default('indicado');
+
+            $table->date('fecha_estudio')->nullable();
+
             $table->text('resultado')->nullable();
-            $table->string('medico');
+
             $table->string('archivo')->nullable();
+
             $table->timestamps();
         });
     }

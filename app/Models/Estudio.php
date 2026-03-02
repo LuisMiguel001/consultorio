@@ -7,16 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class Estudio extends Model
 {
     protected $fillable = [
-        'paciente_id',
+        'consulta_id',
         'tipo_estudio',
-        'fecha',
+        'estado',
+        'fecha_estudio',
         'resultado',
-        'medico',
         'archivo'
     ];
 
-    public function paciente()
+    protected $casts = [
+        'fecha_estudio' => 'date',
+    ];
+
+    public function consulta()
     {
-        return $this->belongsTo(Paciente::class);
+        return $this->belongsTo(Consulta::class);
     }
 }

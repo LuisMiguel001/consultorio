@@ -26,4 +26,36 @@ class Consulta extends Model
     {
         return $this->belongsTo(User::class, 'doctor_id');
     }
+
+
+    public function estudios()
+    {
+        return $this->hasMany(Estudio::class);
+    }
+
+   /* NUEVAS RELACIONES
+    public function tratamientos()
+    {
+        return $this->hasMany(Tratamiento::class);
+    }
+
+    public function procedimientos()
+    {
+        return $this->hasMany(Procedimiento::class);
+    }
+
+    public function diagnosticos()
+    {
+        return $this->hasMany(Diagnostico::class);
+    }
+
+    public function signosVitales()
+    {
+        return $this->hasOne(SignoVital::class);
+    }
+
+    public function examenFisico()
+    {
+        return $this->hasOne(ExamenFisico::class);
+    }*/
 }

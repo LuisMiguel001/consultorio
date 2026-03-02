@@ -4,43 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Estudio;
 use App\Models\Paciente;
+use App\Models\Consulta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class EstudioController extends Controller
 {
-    public function index(Paciente $paciente)
+    public function index(Consulta $consulta)
     {
-        $estudios = $paciente->estudios()->orderByDesc('fecha')->get();
-        return view('estudios.index', compact('paciente', 'estudios'));
+        $estudios = $consulta->estudios()->orderByDesc('fecha_estudio')->get();
+
+        return view('estudios.index', compact('consulta', 'estudios'));
     }
 
-    public function store(Request $request, Paciente $paciente)
+    public function store(Request $request, Consulta $consulta)
     {
-        // Validaciones
         $request->validate([
             'tipo_estudio' => 'required|string|max:255',
-            'fecha' => 'required|date',
+            'estado' => 'required|in:indicado,realizado',
+            'fecha_estudio' => 'nullable|date',
             'resultado' => 'nullable|string',
-            'medico' => 'required|string|max:255',
-            'archivo' => 'nullable|file|mimes:pdf,jpg,png|max:10240' // máximo 10 MB
+            'archivo' => 'nullable|file|mimes:pdf,jpg,png|max:10240'
         ]);
 
-        // Datos básicos
-        $data = $request->only('tipo_estudio', 'fecha', 'resultado', 'medico');
+        $data = $request->only(
+            'tipo_estudio',
+            'estado',
+            'fecha_estudio',
+            'resultado'
+        );
 
-        // Asignar paciente
-        $data['paciente_id'] = $paciente->id;
+        $data['consulta_id'] = $consulta->id;
 
-        // Adjuntar archivo si existe y es válido
         if ($request->hasFile('archivo') && $request->file('archivo')->isValid()) {
             $data['archivo'] = $request->file('archivo')->store('estudios', 'public');
         }
 
-        // Crear registro
-        $estudio = Estudio::create($data);
+        Estudio::create($data);
 
-        // Retornar con éxito
         return redirect()->back()->with('success', 'Estudio registrado correctamente');
     }
 
