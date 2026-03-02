@@ -37,8 +37,8 @@ class PacienteController extends Controller
         if ($request->has('buscar') && $request->buscar != '') {
             $buscar = $request->buscar;
             $query->where('nombre', 'like', "%{$buscar}%")
-                  ->orWhere('apellido', 'like', "%{$buscar}%")
-                  ->orWhere('email', 'like', "%{$buscar}%");
+                ->orWhere('apellido', 'like', "%{$buscar}%")
+                ->orWhere('email', 'like', "%{$buscar}%");
         }
 
         $pacientes = $query->get();
@@ -50,6 +50,15 @@ class PacienteController extends Controller
         return view('inicio');
     }
 
+    public function show($id)
+    {
+        $paciente = Paciente::with([
+            'consultas.doctor',
+            'antecedentes.usuario'
+        ])->findOrFail($id);
+
+        return view('pacientes.show', compact('paciente'));
+    }
     // NUEVOS MÉTODOS
 
     public function edit($id)
@@ -76,7 +85,7 @@ class PacienteController extends Controller
         $paciente->update($request->all());
 
         return redirect()->route('pacientes.edit', $id)
-                         ->with('success', 'Paciente actualizado correctamente');
+            ->with('success', 'Paciente actualizado correctamente');
     }
 
     public function destroy($id)
@@ -85,6 +94,6 @@ class PacienteController extends Controller
         $paciente->delete();
 
         return redirect()->route('pacientes.lista')
-                         ->with('success', 'Paciente eliminado correctamente');
+            ->with('success', 'Paciente eliminado correctamente');
     }
 }

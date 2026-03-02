@@ -86,9 +86,9 @@
                                             <td class="text-center">
                                                 <div class="d-flex gap-1 justify-content-center">
 
-                                                    <a href="#" class="btn btn-sm"
+                                                    <a href="{{ route('pacientes.show', $p->id) }}" class="btn btn-sm"
                                                         style="background:#bfa2db;color:white;border-radius:6px;">
-                                                        Ver
+                                                        Ver Info.
                                                     </a>
 
                                                     <!-- Reemplaza el enlace de editar -->

@@ -1,25 +1,18 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ConsultaController;
+use App\Http\Controllers\AntecedenteController;
 
-/*
-|--------------------------------------------------------------------------
-| Rutas Públicas
-|--------------------------------------------------------------------------
-*/
-
+//Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-/*
-|--------------------------------------------------------------------------
-| Rutas Protegidas
-|--------------------------------------------------------------------------
-*/
-
+//Módulos con autenticación
 Route::middleware('auth')->group(function () {
 
     Route::get('/consultorio/inicio', [PacienteController::class, 'inicio'])->name('pacientes.inicio');
@@ -37,5 +30,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/citas/create', [CitaController::class, 'create'])->name('citas.create');
     Route::post('/citas', [CitaController::class, 'store'])->name('citas.store');
 
-});
+    //Consulta
+    Route::get('/pacientes/{id}/consulta', [ConsultaController::class, 'create'])->name('consultas.create');
+    Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
+    Route::get('/pacientes/{id}', [PacienteController::class, 'show'])->name('pacientes.show');
 
+    //Antecedentes
+    Route::middleware('auth')->group(function () {
+        Route::get('/pacientes/{id}/antecedentes', [AntecedenteController::class, 'index']);
+        Route::post(
+            '/pacientes/{id}/antecedentes',
+            [AntecedenteController::class, 'store']
+        )->name('antecedentes.store');
+    });
+});

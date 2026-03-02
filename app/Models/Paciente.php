@@ -20,4 +20,14 @@ class Paciente extends Model
         'nss',
         'estado_civil'
     ];
+
+    public function consultas()
+    {
+        return $this->hasMany(Consulta::class);
+    }
+
+    public function antecedentes()
+    {
+        return $this->hasMany(Antecedente::class);
+    }
 }

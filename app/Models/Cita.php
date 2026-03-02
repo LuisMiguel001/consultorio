@@ -13,15 +13,15 @@ class Cita extends Model
         'hora',
         'duracion_minutos',
         'tipo_consulta',
-        'servicio_especifico', // NUEVO: Para los servicios que ofreces
+        'servicio_especifico',
         'notas_previas',
         'estado_cita',
         'recordatorio_enviado',
         'fecha_envio_recordatorio',
-        'prioridad', // NUEVO: Urgente, Preferente, Normal
-        'motivo_consulta', // NUEVO: Descripción breve
-        'requiere_ayuno', // NUEVO: Para ciertos procedimientos
-        'estudios_previos', // NUEVO: Si debe traer estudios
+        'prioridad',
+        'motivo_consulta',
+        'requiere_ayuno',
+        'estudios_previos',
     ];
 
     protected $casts = [
