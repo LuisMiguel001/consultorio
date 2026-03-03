@@ -47,4 +47,9 @@ class Consulta extends Model
     {
         return $this->hasMany(Procedimiento::class);
     }
+
+    public function signoVital()
+    {
+        return $this->hasOne(SignoVital::class);
+    }
 }

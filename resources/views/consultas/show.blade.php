@@ -59,6 +59,10 @@
                 </button>
             </li>
 
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#signos">
+                    Signos Vitales
+                </button>
         </ul>
 
         <div class="tab-content p-4 border border-top-0">
@@ -145,6 +149,69 @@
                         No hay estudios registrados.
                     </div>
                 @endforelse
+
+            </div>
+
+            <!-- SIGNOS VITALES -->
+            <div class="tab-pane fade" id="signos">
+                <div class="card card-body">
+
+                    <form method="POST" action="{{ route('signos-vitales.store', $consulta) }}">
+                        @csrf
+
+                        <div class="row">
+
+                            <div class="col-md-3 mb-3">
+                                <label>Presión Arterial</label>
+                                <div class="input-group">
+                                    <input type="number" name="presion_sistolica" class="form-control"
+                                        placeholder="Sistólica">
+                                    <span class="input-group-text">/</span>
+                                    <input type="number" name="presion_diastolica" class="form-control"
+                                        placeholder="Diastólica">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label>Frecuencia Cardíaca</label>
+                                <input type="number" name="frecuencia_cardiaca" class="form-control">
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label>Temperatura</label>
+                                <input type="number" step="0.1" name="temperatura" class="form-control">
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label>Saturación O₂</label>
+                                <input type="number" name="saturacion_oxigeno" class="form-control">
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label>Peso (kg)</label>
+                                <input type="number" step="0.01" name="peso" class="form-control">
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label>Talla (m)</label>
+                                <input type="number" step="0.01" name="talla" class="form-control">
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-success w-100">
+                            Guardar Signos Vitales
+                        </button>
+
+                    </form>
+
+                </div>
+
+                @if ($consulta->signoVital)
+                    <div class="alert alert-info mt-3">
+                        IMC calculado: {{ number_format($consulta->signoVital->imc, 2) }}
+                    </div>
+                @endif
 
             </div>
 
@@ -299,7 +366,6 @@
 
             <!-- PROCEDIMIENTOS -->
             <div class="tab-pane fade" id="procedimientos">
-
                 <button class="btn btn-light btn-sm mb-3" data-bs-toggle="collapse" data-bs-target="#formProcedimiento">
                     ➕ Registrar Procedimiento
                 </button>
@@ -394,6 +460,8 @@
                 @endforelse
 
             </div>
+
+
         </div>
     </div>
 @endsection

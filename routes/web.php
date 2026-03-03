@@ -10,6 +10,7 @@ use App\Http\Controllers\EstudioController;
 use App\Http\Controllers\DiagnosticoController;
 use App\Http\Controllers\TratamientoController;
 use App\Http\Controllers\ProcedimientoController;
+use App\Http\Controllers\SignoVitalController;
 
 //Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
@@ -60,7 +61,8 @@ Route::middleware('auth')->group(function () {
     //Procedimientos
     Route::post('/consultas/{consulta}/procedimientos', [ProcedimientoController::class, 'store'])->name('procedimientos.store');
 
-
+    // Signos Vitales
+    Route::post('/consultas/{consulta}/signos-vitales',[SignoVitalController::class, 'store'])->name('signos-vitales.store');
 
 
 });
