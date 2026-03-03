@@ -52,4 +52,9 @@ class Consulta extends Model
     {
         return $this->hasOne(SignoVital::class);
     }
+
+    public function examenFisico()
+    {
+        return $this->hasOne(ExamenFisico::class);
+    }
 }

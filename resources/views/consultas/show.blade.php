@@ -63,6 +63,13 @@
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#signos">
                     Signos Vitales
                 </button>
+            </li>
+
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#examen">
+                    Examen Físico
+                </button>
+            </li>
         </ul>
 
         <div class="tab-content p-4 border border-top-0">
@@ -204,7 +211,50 @@
                         </button>
 
                     </form>
+                    @if ($consulta->signoVital)
+                        <div class="card mt-4">
+                            <div class="card-header bg-light">
+                                📊 Signos Vitales Registrados
+                            </div>
+                            <div class="card-body">
 
+                                <p><strong>Presión Arterial:</strong>
+                                    {{ $consulta->signoVital->presion_sistolica }}
+                                    /
+                                    {{ $consulta->signoVital->presion_diastolica }} mmHg
+                                </p>
+
+                                <p><strong>Frecuencia Cardíaca:</strong>
+                                    {{ $consulta->signoVital->frecuencia_cardiaca }} lpm
+                                </p>
+
+                                <p><strong>Frecuencia Respiratoria:</strong>
+                                    {{ $consulta->signoVital->frecuencia_respiratoria }} rpm
+                                </p>
+
+                                <p><strong>Temperatura:</strong>
+                                    {{ $consulta->signoVital->temperatura }} °C
+                                </p>
+
+                                <p><strong>Saturación O₂:</strong>
+                                    {{ $consulta->signoVital->saturacion_oxigeno }} %
+                                </p>
+
+                                <p><strong>Peso:</strong>
+                                    {{ $consulta->signoVital->peso }} kg
+                                </p>
+
+                                <p><strong>Talla:</strong>
+                                    {{ $consulta->signoVital->talla }} m
+                                </p>
+
+                                <p><strong>IMC:</strong>
+                                    {{ number_format($consulta->signoVital->imc, 2) }}
+                                </p>
+
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 @if ($consulta->signoVital)
@@ -461,7 +511,103 @@
 
             </div>
 
+            <!-- EXAMEN FÍSICO -->
+            <div class="tab-pane fade" id="examen">
 
+                <div class="card card-body">
+
+                    <form method="POST" action="{{ route('examen-fisico.store', $consulta) }}">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label>Estado General</label>
+                            <textarea name="estado_general" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Cabeza y Cuello</label>
+                            <textarea name="cabeza_cuello" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Sistema Cardiovascular</label>
+                            <textarea name="cardiovascular" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Sistema Respiratorio</label>
+                            <textarea name="respiratorio" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Abdomen</label>
+                            <textarea name="abdomen" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Extremidades</label>
+                            <textarea name="extremidades" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Neurológico</label>
+                            <textarea name="neurologico" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Otros Hallazgos</label>
+                            <textarea name="otros" class="form-control"></textarea>
+                        </div>
+
+                        <button class="btn btn-success w-100">
+                            Guardar Examen Físico
+                        </button>
+
+                    </form>
+                    @if ($consulta->examenFisico)
+                        <div class="card mt-4">
+                            <div class="card-header bg-light">
+                                🩺 Examen Físico Registrado
+                            </div>
+                            <div class="card-body">
+
+                                <p><strong>Estado General:</strong><br>
+                                    {{ $consulta->examenFisico->estado_general }}
+                                </p>
+
+                                <p><strong>Cabeza y Cuello:</strong><br>
+                                    {{ $consulta->examenFisico->cabeza_cuello }}
+                                </p>
+
+                                <p><strong>Cardiovascular:</strong><br>
+                                    {{ $consulta->examenFisico->cardiovascular }}
+                                </p>
+
+                                <p><strong>Respiratorio:</strong><br>
+                                    {{ $consulta->examenFisico->respiratorio }}
+                                </p>
+
+                                <p><strong>Abdomen:</strong><br>
+                                    {{ $consulta->examenFisico->abdomen }}
+                                </p>
+
+                                <p><strong>Extremidades:</strong><br>
+                                    {{ $consulta->examenFisico->extremidades }}
+                                </p>
+
+                                <p><strong>Neurológico:</strong><br>
+                                    {{ $consulta->examenFisico->neurologico }}
+                                </p>
+
+                                <p><strong>Otros:</strong><br>
+                                    {{ $consulta->examenFisico->otros }}
+                                </p>
+
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 @endsection
