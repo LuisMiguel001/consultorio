@@ -296,7 +296,104 @@
                 @endforelse
 
             </div>
-        </div>
 
+            <!-- PROCEDIMIENTOS -->
+            <div class="tab-pane fade" id="procedimientos">
+
+                <button class="btn btn-light btn-sm mb-3" data-bs-toggle="collapse" data-bs-target="#formProcedimiento">
+                    ➕ Registrar Procedimiento
+                </button>
+
+                <div class="collapse mb-4" id="formProcedimiento">
+                    <div class="card card-body">
+
+                        <form method="POST" action="{{ route('procedimientos.store', $consulta) }}">
+                            @csrf
+
+                            <div class="mb-3">
+                                <label>Nombre del Procedimiento</label>
+                                <input type="text" name="nombre" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Tipo</label>
+                                <input type="text" name="tipo" class="form-control"
+                                    placeholder="Ej: Quirúrgico, Ambulatorio">
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Fecha</label>
+                                <input type="date" name="fecha" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Estado</label>
+                                <select name="estado" class="form-control" required>
+                                    <option value="programado">Programado</option>
+                                    <option value="realizado">Realizado</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Descripción</label>
+                                <textarea name="descripcion" class="form-control"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Resultado</label>
+                                <textarea name="resultado" class="form-control"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Complicaciones</label>
+                                <textarea name="complicaciones" class="form-control"></textarea>
+                            </div>
+
+                            <button class="btn btn-success w-100">
+                                Guardar Procedimiento
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+
+                @forelse ($consulta->procedimientos as $procedimiento)
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            {{ $procedimiento->fecha }} - {{ $procedimiento->nombre }}
+                            | {{ ucfirst($procedimiento->estado) }}
+                        </div>
+                        <div class="card-body">
+
+                            @if ($procedimiento->descripcion)
+                                <p><strong>Descripción:</strong><br>
+                                    {{ $procedimiento->descripcion }}
+                                </p>
+                            @endif
+
+                            @if ($procedimiento->resultado)
+                                <p><strong>Resultado:</strong><br>
+                                    {{ $procedimiento->resultado }}
+                                </p>
+                            @endif
+
+                            @if ($procedimiento->complicaciones)
+                                <p><strong>Complicaciones:</strong><br>
+                                    {{ $procedimiento->complicaciones }}
+                                </p>
+                            @endif
+
+                        </div>
+                    </div>
+                @empty
+                    <div class="alert alert-secondary">
+                        No hay procedimientos registrados.
+                    </div>
+                @endforelse
+
+            </div>
+        </div>
     </div>
 @endsection

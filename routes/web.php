@@ -9,6 +9,7 @@ use App\Http\Controllers\AntecedenteController;
 use App\Http\Controllers\EstudioController;
 use App\Http\Controllers\DiagnosticoController;
 use App\Http\Controllers\TratamientoController;
+use App\Http\Controllers\ProcedimientoController;
 
 //Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
@@ -55,4 +56,11 @@ Route::middleware('auth')->group(function () {
 
     //Tratamientos
     Route::post('/consultas/{consulta}/tratamientos', [TratamientoController::class, 'store'] )->name('tratamientos.store');
+
+    //Procedimientos
+    Route::post('/consultas/{consulta}/procedimientos', [ProcedimientoController::class, 'store'])->name('procedimientos.store');
+
+
+
+
 });

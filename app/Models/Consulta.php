@@ -42,4 +42,9 @@ class Consulta extends Model
     {
         return $this->hasMany(Tratamiento::class);
     }
+
+    public function procedimientos()
+    {
+        return $this->hasMany(Procedimiento::class);
+    }
 }
