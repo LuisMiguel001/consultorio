@@ -8,6 +8,10 @@
                 Consulta del {{ $consulta->fecha_consulta }}
                 | {{ $consulta->tipo_consulta }}
                 | Dr. {{ $consulta->doctor->name }}
+
+                <a href="{{ route('receta.pdf', $consulta) }}" target="_blank" class="btn btn-danger mb-3">
+                    🧾 Generar Receta
+                </a>
             </div>
 
             <div class="card-body">
@@ -49,7 +53,7 @@
 
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tratamientos">
-                    Tratamientos
+                    Medicación
                 </button>
             </li>
 
@@ -67,7 +71,7 @@
 
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#examen">
-                    Examen Físico
+                    Evaluación Física
                 </button>
             </li>
 
@@ -669,7 +673,6 @@
 
                                 </div>
                             @endforeach
-
                         </div>
                     </div>
                 @endif

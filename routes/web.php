@@ -13,6 +13,8 @@ use App\Http\Controllers\ProcedimientoController;
 use App\Http\Controllers\SignoVitalController;
 use App\Http\Controllers\ExamenFisicoController;
 use App\Http\Controllers\EvolucionController;
+use App\Http\Controllers\RecetaController;
+use App\Http\Controllers\HistorialController;
 
 //Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
@@ -40,7 +42,7 @@ Route::middleware('auth')->group(function () {
     //Consulta
     Route::get('/pacientes/{id}/consulta', [ConsultaController::class, 'create'])->name('consultas.create');
     Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
-    Route::get('/pacientes/{id}', [PacienteController::class, 'show'])->name('pacientes.show');
+    Route::get('/pacientes/{paciente}', [PacienteController::class, 'show'])->name('pacientes.show');
     Route::get('/consultas/{consulta}', [ConsultaController::class, 'show'])->name('consultas.show');
 
     //Antecedentes
@@ -58,17 +60,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/consultas/{consulta}/diagnosticos', [DiagnosticoController::class, 'store'])->name('diagnosticos.store');
 
     //Tratamientos
-    Route::post('/consultas/{consulta}/tratamientos', [TratamientoController::class, 'store'] )->name('tratamientos.store');
+    Route::post('/consultas/{consulta}/tratamientos', [TratamientoController::class, 'store'])->name('tratamientos.store');
 
     //Procedimientos
     Route::post('/consultas/{consulta}/procedimientos', [ProcedimientoController::class, 'store'])->name('procedimientos.store');
 
     // Signos Vitales
-    Route::post('/consultas/{consulta}/signos-vitales',[SignoVitalController::class, 'store'])->name('signos-vitales.store');
+    Route::post('/consultas/{consulta}/signos-vitales', [SignoVitalController::class, 'store'])->name('signos-vitales.store');
 
     //Examen Físico
     Route::post('/consultas/{consulta}/examen-fisico', [ExamenFisicoController::class, 'store'])->name('examen-fisico.store');
 
     // Evolución
     Route::post('/consultas/{consulta}/evoluciones', [EvolucionController::class, 'store'])->name('evoluciones.store');
+
+    //Receta
+    Route::get('/consultas/{consulta}/receta/pdf', [RecetaController::class, 'generar'])->name('receta.pdf');
 });

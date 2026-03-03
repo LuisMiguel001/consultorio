@@ -50,15 +50,75 @@ class PacienteController extends Controller
         return view('inicio');
     }
 
-    public function show($id)
+    public function show(Paciente $paciente)
     {
-        $paciente = Paciente::with([
+        $paciente->load([
             'consultas.doctor',
+            'consultas.diagnosticos',
+            'consultas.tratamientos',
+            'consultas.procedimientos',
+            'consultas.estudios',
+            'consultas.evoluciones',
             'antecedentes.usuario'
-        ])->findOrFail($id);
+        ]);
 
-        return view('pacientes.show', compact('paciente'));
+        $eventos = collect();
+
+        foreach ($paciente->consultas as $consulta) {
+            // Consulta
+            $eventos->push([
+                'tipo' => 'Consulta',
+                'fecha' => $consulta->created_at,
+                'contenido' => "Consulta {$consulta->tipo_consulta} - Dr. {$consulta->doctor->name}"
+            ]);
+
+            foreach ($consulta->diagnosticos as $diag) {
+                $eventos->push([
+                    'tipo' => 'Diagnóstico',
+                    'fecha' => $diag->created_at,
+                    'contenido' => $diag->descripcion
+                ]);
+            }
+
+            foreach ($consulta->tratamientos as $med) {
+                $eventos->push([
+                    'tipo' => 'Medicamento',
+                    'fecha' => $med->created_at,
+                    'contenido' => "{$med->medicamento} - {$med->dosis} ({$med->frecuencia})"
+                ]);
+            }
+
+            foreach ($consulta->procedimientos as $proc) {
+                $eventos->push([
+                    'tipo' => 'Procedimiento',
+                    'fecha' => $proc->created_at,
+                    'contenido' => $proc->descripcion
+                ]);
+            }
+
+            foreach ($consulta->estudios as $est) {
+                $eventos->push([
+                    'tipo' => 'Estudio',
+                    'fecha' => $est->created_at,
+                    'contenido' => $est->nombre
+                ]);
+            }
+
+            foreach ($consulta->evoluciones as $evo) {
+                $eventos->push([
+                    'tipo' => 'Evolución',
+                    'fecha' => $evo->created_at,
+                    'contenido' => $evo->descripcion
+                ]);
+            }
+        }
+
+        // Ordenar eventos por fecha (más reciente primero)
+        $eventos = $eventos->sortByDesc('fecha')->values();
+
+        return view('pacientes.show', compact('paciente', 'eventos'));
     }
+
     // NUEVOS MÉTODOS
 
     public function edit($id)
