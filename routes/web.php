@@ -12,6 +12,7 @@ use App\Http\Controllers\TratamientoController;
 use App\Http\Controllers\ProcedimientoController;
 use App\Http\Controllers\SignoVitalController;
 use App\Http\Controllers\ExamenFisicoController;
+use App\Http\Controllers\EvolucionController;
 
 //Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
@@ -66,5 +67,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/consultas/{consulta}/signos-vitales',[SignoVitalController::class, 'store'])->name('signos-vitales.store');
 
     //Examen Físico
-    Route::post('/consultas/{consulta}/examen-fisico', [ExamenFisicoController::class, 'store'] )->name('examen-fisico.store');
+    Route::post('/consultas/{consulta}/examen-fisico', [ExamenFisicoController::class, 'store'])->name('examen-fisico.store');
+
+    // Evolución
+    Route::post('/consultas/{consulta}/evoluciones', [EvolucionController::class, 'store'])->name('evoluciones.store');
 });

@@ -70,6 +70,12 @@
                     Examen Físico
                 </button>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#evolucion">
+                    Evolución
+                </a>
+            </li>
         </ul>
 
         <div class="tab-content p-4 border border-top-0">
@@ -607,6 +613,67 @@
                         </div>
                     @endif
                 </div>
+            </div>
+
+            <div class="tab-pane fade" id="evolucion">
+
+                <div class="card card-body">
+
+                    <form method="POST" action="{{ route('evoluciones.store', $consulta) }}">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label>Nota de Evolución</label>
+                            <textarea name="nota" class="form-control" rows="4" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Plan / Conducta</label>
+                            <textarea name="plan" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <button class="btn btn-primary w-100">
+                            Guardar Evolución
+                        </button>
+
+                    </form>
+
+                </div>
+
+                {{-- HISTORIAL --}}
+                @if ($consulta->evoluciones->count())
+                    <div class="card mt-4">
+                        <div class="card-header bg-light">
+                            Historial de Evoluciones
+                        </div>
+                        <div class="card-body">
+
+                            @foreach ($consulta->evoluciones->sortByDesc('created_at') as $evolucion)
+                                <div class="mb-4 border-bottom pb-3">
+
+                                    <strong>
+                                        {{ $evolucion->created_at->format('d/m/Y H:i') }}
+                                    </strong>
+
+                                    <p class="mt-2">
+                                        <strong>Nota:</strong><br>
+                                        {{ $evolucion->nota }}
+                                    </p>
+
+                                    @if ($evolucion->plan)
+                                        <p>
+                                            <strong>Plan:</strong><br>
+                                            {{ $evolucion->plan }}
+                                        </p>
+                                    @endif
+
+                                </div>
+                            @endforeach
+
+                        </div>
+                    </div>
+                @endif
+
             </div>
         </div>
     </div>

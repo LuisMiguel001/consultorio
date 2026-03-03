@@ -57,4 +57,9 @@ class Consulta extends Model
     {
         return $this->hasOne(ExamenFisico::class);
     }
+
+    public function evoluciones()
+    {
+        return $this->hasMany(Evolucion::class);
+    }
 }
