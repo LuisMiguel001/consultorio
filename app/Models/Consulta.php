@@ -33,29 +33,13 @@ class Consulta extends Model
         return $this->hasMany(Estudio::class);
     }
 
-   /* NUEVAS RELACIONES
-    public function tratamientos()
-    {
-        return $this->hasMany(Tratamiento::class);
-    }
-
-    public function procedimientos()
-    {
-        return $this->hasMany(Procedimiento::class);
-    }
-
     public function diagnosticos()
     {
         return $this->hasMany(Diagnostico::class);
     }
 
-    public function signosVitales()
+    public function tratamientos()
     {
-        return $this->hasOne(SignoVital::class);
+        return $this->hasMany(Tratamiento::class);
     }
-
-    public function examenFisico()
-    {
-        return $this->hasOne(ExamenFisico::class);
-    }*/
 }

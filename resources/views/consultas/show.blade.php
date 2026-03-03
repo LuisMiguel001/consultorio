@@ -65,7 +65,6 @@
 
             <!--ESTUDIOS-->
             <div class="tab-pane fade show active" id="estudios">
-
                 <button class="btn btn-light btn-sm mb-3" data-bs-toggle="collapse" data-bs-target="#formEstudio">
                     ➕ Registrar Estudio
                 </button>
@@ -149,8 +148,154 @@
 
             </div>
 
-            <!-- Aquí luego agregamos diagnósticos, tratamientos, procedimientos -->
+            <!-- DIAGNÓSTICOS -->
+            <div class="tab-pane fade" id="diagnosticos">
+                <button class="btn btn-light btn-sm mb-3" data-bs-toggle="collapse" data-bs-target="#formDiagnostico">
+                    ➕ Registrar Diagnóstico
+                </button>
 
+                <div class="collapse mb-4" id="formDiagnostico">
+                    <div class="card card-body">
+
+                        <form method="POST" action="{{ route('diagnosticos.store', $consulta) }}">
+                            @csrf
+
+                            <div class="mb-3">
+                                <label>Diagnóstico</label>
+                                <textarea name="diagnostico" class="form-control" required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Tipo</label>
+                                <select name="tipo" class="form-control" required>
+                                    <option value="">--Seleccione--</option>
+                                    <option value="presuntivo">Presuntivo</option>
+                                    <option value="definitivo">Definitivo</option>
+                                    <option value="diferencial">Diferencial</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Código CIE-10</label>
+                                <input type="text" name="codigo_cie10" class="form-control">
+                            </div>
+
+                            <button class="btn btn-success w-100">
+                                Guardar Diagnóstico
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+                @forelse ($consulta->diagnosticos as $diagnostico)
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            {{ $diagnostico->tipo }}
+                            @if ($diagnostico->codigo_cie10)
+                                | CIE-10: {{ $diagnostico->codigo_cie10 }}
+                            @endif
+                        </div>
+                        <div class="card-body">
+                            <p>{{ $diagnostico->diagnostico }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <div class="alert alert-secondary">
+                        No hay diagnósticos registrados.
+                    </div>
+                @endforelse
+
+            </div>
+
+            <!-- TRATAMIENTOS -->
+            <div class="tab-pane fade" id="tratamientos">
+                <button class="btn btn-light btn-sm mb-3" data-bs-toggle="collapse" data-bs-target="#formTratamiento">
+                    ➕ Registrar Tratamiento
+                </button>
+
+                <div class="collapse mb-4" id="formTratamiento">
+                    <div class="card card-body">
+
+                        <form method="POST" action="{{ route('tratamientos.store', $consulta) }}">
+                            @csrf
+
+                            <div class="mb-3">
+                                <label>Medicamento</label>
+                                <input type="text" name="medicamento" class="form-control" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label>Dosis</label>
+                                    <input type="text" name="dosis" class="form-control" required>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label>Frecuencia</label>
+                                    <input type="text" name="frecuencia" class="form-control"
+                                        placeholder="Ej: Cada 8 horas">
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label>Duración</label>
+                                    <input type="text" name="duracion" class="form-control" placeholder="Ej: 7 días">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Vía de administración</label>
+                                <select name="via_administracion" class="form-control" required>
+                                    <option value="">--Seleccione--</option>
+                                    <option value="oral">Oral</option>
+                                    <option value="intravenosa">Intravenosa</option>
+                                    <option value="intramuscular">Intramuscular</option>
+                                    <option value="subcutanea">Subcutánea</option>
+                                    <option value="topica">Tópica</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Indicaciones adicionales</label>
+                                <textarea name="indicaciones" class="form-control"></textarea>
+                            </div>
+
+                            <button class="btn btn-success w-100">
+                                Guardar Tratamiento
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+
+                @forelse ($consulta->tratamientos as $tratamiento)
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            {{ $tratamiento->medicamento }}
+                        </div>
+                        <div class="card-body">
+
+                            <p><strong>Dosis:</strong> {{ $tratamiento->dosis }}</p>
+                            <p><strong>Frecuencia:</strong> {{ $tratamiento->frecuencia }}</p>
+                            <p><strong>Duración:</strong> {{ $tratamiento->duracion }}</p>
+                            <p><strong>Vía:</strong> {{ $tratamiento->via_administracion }}</p>
+
+                            @if ($tratamiento->indicaciones)
+                                <p><strong>Indicaciones:</strong><br>
+                                    {{ $tratamiento->indicaciones }}
+                                </p>
+                            @endif
+
+                        </div>
+                    </div>
+                @empty
+                    <div class="alert alert-secondary">
+                        No hay tratamientos registrados.
+                    </div>
+                @endforelse
+
+            </div>
         </div>
 
     </div>

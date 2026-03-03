@@ -7,6 +7,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\AntecedenteController;
 use App\Http\Controllers\EstudioController;
+use App\Http\Controllers\DiagnosticoController;
+use App\Http\Controllers\TratamientoController;
+
 //Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -34,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/pacientes/{id}/consulta', [ConsultaController::class, 'create'])->name('consultas.create');
     Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
     Route::get('/pacientes/{id}', [PacienteController::class, 'show'])->name('pacientes.show');
-    Route::get('/consultas/{consulta}',[ConsultaController::class, 'show'] )->name('consultas.show');
+    Route::get('/consultas/{consulta}', [ConsultaController::class, 'show'])->name('consultas.show');
 
     //Antecedentes
     Route::middleware('auth')->group(function () {
@@ -43,7 +46,13 @@ Route::middleware('auth')->group(function () {
     });
 
     // Estudios
-    Route::get('/consultas/{consulta}/estudios', [EstudioController::class, 'index'] )->name('estudios.index');
-    Route::post('/consultas/{consulta}/estudios', [EstudioController::class, 'store'] )->name('estudios.store');
+    Route::get('/consultas/{consulta}/estudios', [EstudioController::class, 'index'])->name('estudios.index');
+    Route::post('/consultas/{consulta}/estudios', [EstudioController::class, 'store'])->name('estudios.store');
     Route::get('/estudios/{estudio}/descargar', [EstudioController::class, 'descargarArchivo'])->name('estudios.descargar');
+
+    //Diagnósticos
+    Route::post('/consultas/{consulta}/diagnosticos', [DiagnosticoController::class, 'store'])->name('diagnosticos.store');
+
+    //Tratamientos
+    Route::post('/consultas/{consulta}/tratamientos', [TratamientoController::class, 'store'] )->name('tratamientos.store');
 });

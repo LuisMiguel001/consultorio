@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estudio;
-use App\Models\Paciente;
 use App\Models\Consulta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;

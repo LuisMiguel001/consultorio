@@ -18,6 +18,7 @@
     <div class="mb-3">
         <label>Tipo de Consulta</label>
         <select name="tipo_consulta" class="form-control" required>
+            <option value="">--Seleccione--</option>
             <option value="Consulta">Consulta</option>
             <option value="Control">Control</option>
             <option value="Postquirurgico">Postquirúrgico</option>
