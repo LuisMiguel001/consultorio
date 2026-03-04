@@ -17,59 +17,78 @@
 
             <ul class="nav flex-column">
 
-                <!-- INICIO -->
-                <li class="nav-item mb-2">
-                    <a href="{{ route('pacientes.inicio') }}" class="nav-link text-white">
-                        Inicio
-                    </a>
-                </li>
+                <!-- INICIO (admin y doctor) -->
+                @hasanyrole('admin|doctor')
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('pacientes.inicio') }}" class="nav-link text-white">
+                            Inicio
+                        </a>
+                    </li>
+                    <hr class="text-white">
+                @endhasanyrole
 
-                <hr class="text-white">
 
-
+                <!-- REGISTRAR PACIENTE (solo admin y doctor) -->
+                @can('crear pacientes')
                     <li class="nav-item mb-2">
                         <a href="{{ route('pacientes.create') }}" class="nav-link text-white">
                             Registrar Paciente
                         </a>
                     </li>
+                @endcan
 
-                <li class="nav-item mb-2">
-                    <a href="{{ route('pacientes.lista') }}" class="nav-link text-white">
-                        Lista de Pacientes
-                    </a>
-                </li>
 
-                <hr class="text-white">
+                <!-- LISTA PACIENTES (admin, doctor y secretaria) -->
+                @can('ver pacientes')
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('pacientes.lista') }}" class="nav-link text-white">
+                            Lista de Pacientes
+                        </a>
+                    </li>
+                    <hr class="text-white">
+                @endcan
+
 
                 <!-- CITAS -->
-                <li class="nav-item mb-2">
-                    <a href="{{ route('citas.create') }}" class="nav-link text-white">
-                        📅 Agendar Cita
-                    </a>
-                </li>
+                @can('crear citas')
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('citas.create') }}" class="nav-link text-white">
+                            📅 Agendar Cita
+                        </a>
+                    </li>
+                @endcan
 
-                <li class="nav-item mb-2">
-                    <a href="{{ route('citas.index') }}" class="nav-link text-white">
-                        🗂 Lista de Citas
-                    </a>
-                </li>
+                @can('ver citas')
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('citas.index') }}" class="nav-link text-white">
+                            🗂 Lista de Citas
+                        </a>
+                    </li>
+                @endcan
 
-                <li class="nav-item">
-                    <a href="{{ route('usuarios.index') }}" class="nav-link text-white">
-                        👥 Usuarios
-                    </a>
-                </li>
 
-                <div class="text-center mb-3">
+                <!-- USUARIOS (solo admin) -->
+                @role('admin')
+                    <li class="nav-item">
+                        <a href="{{ route('usuarios.index') }}" class="nav-link text-white">
+                            👥 Usuarios
+                        </a>
+                    </li>
+                @endrole
+
+
+                <!-- INFO USUARIO -->
+                <div class="text-center mb-3 mt-4">
                     @auth
                         👤 {{ auth()->user()->name }}
-                        {{ auth()->user()->role }}
+
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button class="btn btn-sm btn-light mt-2">Cerrar sesión</button>
                         </form>
                     @endauth
                 </div>
+
             </ul>
         </div>
 
