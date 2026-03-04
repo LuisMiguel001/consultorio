@@ -14,12 +14,24 @@ use App\Http\Controllers\SignoVitalController;
 use App\Http\Controllers\ExamenFisicoController;
 use App\Http\Controllers\EvolucionController;
 use App\Http\Controllers\RecetaController;
-use App\Http\Controllers\HistorialController;
+use App\Http\Controllers\UserController;
 
 //Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth','role:admin|secretaria'])->group(function () {
+
+    Route::get('/usuarios', [UserController::class,'index'])->name('usuarios.index');
+
+    Route::get('/usuarios/create', [UserController::class,'create'])->name('usuarios.create');
+    Route::post('/usuarios', [UserController::class,'store'])->name('usuarios.store');
+
+    Route::get('/usuarios/{user}/edit', [UserController::class,'edit'])->name('usuarios.edit');
+    Route::put('/usuarios/{user}', [UserController::class,'update'])->name('usuarios.update');
+
+});
 
 //Módulos con autenticación
 Route::middleware('auth')->group(function () {
@@ -27,7 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/consultorio/inicio', [PacienteController::class, 'inicio'])->name('pacientes.inicio');
 
     // Pacientes
-    Route::get('/pacientes', [PacienteController::class, 'create'])->name('pacientes.create');
+    Route::get('/pacientes', [PacienteController::class, 'create'])
+        ->middleware('permission:crear pacientes')
+        ->name('pacientes.create');
     Route::post('/pacientes', [PacienteController::class, 'store'])->name('pacientes.store');
     Route::get('/pacientes/lista', [PacienteController::class, 'lista'])->name('pacientes.lista');
     Route::get('/pacientes/{id}/edit', [PacienteController::class, 'edit'])->name('pacientes.edit');

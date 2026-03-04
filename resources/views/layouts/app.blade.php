@@ -20,22 +20,22 @@
                 <!-- INICIO -->
                 <li class="nav-item mb-2">
                     <a href="{{ route('pacientes.inicio') }}" class="nav-link text-white">
-                        🏠 Inicio
+                        Inicio
                     </a>
                 </li>
 
                 <hr class="text-white">
 
-                <!-- PACIENTES -->
-                <li class="nav-item mb-2">
-                    <a href="{{ route('pacientes.create') }}" class="nav-link text-white">
-                        🧑 Registrar Paciente
-                    </a>
-                </li>
+
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('pacientes.create') }}" class="nav-link text-white">
+                            Registrar Paciente
+                        </a>
+                    </li>
 
                 <li class="nav-item mb-2">
                     <a href="{{ route('pacientes.lista') }}" class="nav-link text-white">
-                        📋 Lista de Pacientes
+                        Lista de Pacientes
                     </a>
                 </li>
 
@@ -54,9 +54,16 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('usuarios.index') }}" class="nav-link text-white">
+                        👥 Usuarios
+                    </a>
+                </li>
+
                 <div class="text-center mb-3">
                     @auth
                         👤 {{ auth()->user()->name }}
+                        {{ auth()->user()->role }}
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button class="btn btn-sm btn-light mt-2">Cerrar sesión</button>
