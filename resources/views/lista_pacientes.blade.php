@@ -66,9 +66,8 @@
                                 <thead style="background:#ede4f5;color:#4b2e83;">
                                     <tr>
                                         <th>Nombre</th>
-                                        <th>Apellido</th>
                                         <th>Teléfono</th>
-                                        <th>Email</th>
+                                        <th>NSS</th>
                                         <th>Registro</th>
                                         <th class="text-center">Acciones</th>
                                     </tr>
@@ -78,9 +77,8 @@
                                     @foreach ($pacientes as $p)
                                         <tr>
                                             <td>{{ $p->nombre }}</td>
-                                            <td>{{ $p->apellido }}</td>
                                             <td>{{ $p->telefono }}</td>
-                                            <td>{{ $p->email }}</td>
+                                            <td>{{ $p->nss }}</td>
                                             <td>{{ $p->created_at->format('d/m/Y') }}</td>
 
                                             <td class="text-center">
