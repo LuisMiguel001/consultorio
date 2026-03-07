@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Paciente;
 use Illuminate\Http\Request;
+use App\Models\Cita;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class PacienteController extends Controller
 {
@@ -70,7 +73,58 @@ class PacienteController extends Controller
 
     public function inicio()
     {
-        return view('inicio');
+        // TOTAL PACIENTES
+        $totalPacientes = Paciente::count();
+
+        // CITAS HOY
+        $citasHoy = Cita::whereDate('fecha', Carbon::today())->count();
+
+        // NUEVOS PACIENTES ESTE MES
+        $nuevosPacientes = Paciente::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->count();
+
+        // CITAS POR MES (gráfico doughnut)
+        $citasPorMes = Cita::select(
+            DB::raw('EXTRACT(MONTH FROM fecha) as mes'),
+            DB::raw('COUNT(*) as total')
+        )
+            ->whereYear('fecha', Carbon::now()->year)
+            ->groupBy('mes')
+            ->orderBy('mes')
+            ->get();
+
+        // PROMEDIO SEMANAL (citas de las últimas 4 semanas)
+        $citasUltimas4Semanas = Cita::whereBetween('fecha', [
+            Carbon::now()->subWeeks(4)->startOfDay(),
+            Carbon::now()->endOfDay()
+        ])->count();
+        $promedioSemanal = round($citasUltimas4Semanas / 4, 1);
+
+        // PROMEDIO MENSUAL (citas de los últimos 6 meses)
+        $citasUltimos6Meses = Cita::whereBetween('fecha', [
+            Carbon::now()->subMonths(6)->startOfDay(),
+            Carbon::now()->endOfDay()
+        ])->count();
+        $promedioMensual = round($citasUltimos6Meses / 6, 1);
+
+        // PRÓXIMAS CITAS (hoy en adelante, con paciente, ordenadas)
+        $proximasCitas = Cita::with('paciente')
+            ->whereDate('fecha', '>=', Carbon::today())
+            ->orderBy('fecha')
+            ->orderBy('hora')
+            ->limit(6)
+            ->get();
+
+        return view('inicio', compact(
+            'totalPacientes',
+            'citasHoy',
+            'nuevosPacientes',
+            'citasPorMes',
+            'promedioSemanal',
+            'promedioMensual',
+            'proximasCitas'
+        ));
     }
 
     public function show(Paciente $paciente)
