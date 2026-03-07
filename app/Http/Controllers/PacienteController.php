@@ -15,7 +15,7 @@ class PacienteController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:100',
             'apellido' => 'required|string|max:100',
-            'cedula' => 'nullable|max:13|unique:pacientes,cedula',
+            'cedula' => 'nullable|min:13|max:13|unique:pacientes,cedula',
             'fecha_nacimiento' => 'required|date',
             'sexo' => 'required|string|max:10',
             'email' => 'nullable|email',
@@ -209,7 +209,7 @@ class PacienteController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:100',
             'apellido' => 'required|string|max:100',
-            'cedula' => 'nullable|max:13|unique:pacientes,cedula,' . $id,
+            'cedula' => 'nullable|min:13|max:13|unique:pacientes,cedula,' . $id,
             'fecha_nacimiento' => 'required|date',
             'sexo' => 'required',
             'email' => 'nullable|email',

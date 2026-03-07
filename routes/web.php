@@ -15,6 +15,9 @@ use App\Http\Controllers\ExamenFisicoController;
 use App\Http\Controllers\EvolucionController;
 use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
+use App\Models\Paciente;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,14 +117,27 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     });
 
     Route::middleware('permission:editar citas')->group(function () {
-        Route::put('/citas/{cita}', [CitaController::class, 'update'])->name('citas.update');
+        Route::get('/citas/{id}/editar', [CitaController::class, 'edit'])->name('citas.edit');
+        Route::put('/citas/{id}', [CitaController::class, 'update'])->name('citas.update');
     });
 
     Route::middleware('permission:eliminar citas')->group(function () {
         Route::delete('/citas/{cita}', [CitaController::class, 'destroy'])->name('citas.destroy');
     });
 
+    Route::post('/citas/{id}/realizar', [CitaController::class, 'realizar'])->name('citas.realizar');
 
+    Route::get('/buscar-pacientes', function (Request $request) {
+
+        $buscar = $request->buscar;
+
+        return Paciente::where(DB::raw("CONCAT(nombre,' ',apellido)"), 'ILIKE', "%$buscar%")
+            ->orWhere('nombre', 'ILIKE', "%$buscar%")
+            ->orWhere('apellido', 'ILIKE', "%$buscar%")
+            ->orWhere('cedula', 'ILIKE', "%$buscar%")
+            ->limit(10)
+            ->get();
+    });
     /*
     |--------------------------------------------------------------------------
     | CONSULTAS

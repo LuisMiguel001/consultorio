@@ -10,7 +10,7 @@
 
     <form method="POST" action="{{ route('consultas.store') }}">
         @csrf
-
+        <input type="hidden" name="cita_id" value="{{ $cita_id }}">
         <input type="hidden" name="paciente_id" value="{{ $paciente->id }}">
 
         <div class="mb-3">

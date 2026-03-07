@@ -6,14 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Consulta;
 use App\Models\Paciente;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Cita;
 
 class ConsultaController extends Controller
 {
-    public function create($paciente_id)
+    public function create(Request $request, $id)
     {
-        $paciente = Paciente::findOrFail($paciente_id);
+        $paciente = Paciente::findOrFail($id);
+        $cita_id = $request->cita;
 
-        return view('consultas.create', compact('paciente'));
+        return view('consultas.create', compact('paciente', 'cita_id'));
     }
 
     public function show(Consulta $consulta)
@@ -38,9 +40,9 @@ class ConsultaController extends Controller
             'tipo_consulta' => 'required'
         ]);
 
-        Consulta::create([
+        $consulta = Consulta::create([
             'paciente_id' => $request->paciente_id,
-            'doctor_id' => Auth::id(), // 🔥 importante
+            'doctor_id' => Auth::id(),
             'fecha_consulta' => $request->fecha_consulta,
             'tipo_consulta' => $request->tipo_consulta,
             'motivo_consulta' => $request->motivo_consulta,
@@ -49,7 +51,18 @@ class ConsultaController extends Controller
             'observaciones' => $request->observaciones,
         ]);
 
+        // 🔥 marcar cita como realizada
+        if ($request->cita_id) {
+
+            $cita = Cita::find($request->cita_id);
+
+            if ($cita) {
+                $cita->estado_cita = 'Realizada';
+                $cita->save();
+            }
+        }
+
         return redirect()->route('pacientes.show', $request->paciente_id)
-            ->with('success', 'Consulta registrada correctamente');
+            ->with('success', 'Consulta registrada y cita marcada como realizada');
     }
 }

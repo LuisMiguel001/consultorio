@@ -9,8 +9,19 @@ use Illuminate\Support\Facades\Auth;
 
 class CitaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // Marcar citas atrasadas
+        Cita::where('estado_cita', 'Programada')
+            ->where(function ($q) {
+                $q->where('fecha', '<', now()->toDateString())
+                    ->orWhere(function ($q2) {
+                        $q2->where('fecha', now()->toDateString())
+                            ->where('hora', '<', now()->format('H:i'));
+                    });
+            })
+            ->update(['estado_cita' => 'Atrasada']);
+
         $citas = Cita::with('paciente')
             ->where('doctor_id', Auth::id())
             ->orderBy('fecha', 'desc')
@@ -30,7 +41,7 @@ class CitaController extends Controller
     {
         $request->validate([
             'paciente_id' => 'required|exists:pacientes,id',
-            'servicio_especifico' => 'required|in:Cirugía de Corazón Abierto,Cirugía Venosa con Láser,Insuficiencia Renal,Tratamiento de Várices,Termodiálisis',
+            'servicio_especifico' => 'nullable|string|max:255',
             'fecha' => 'required|date|after_or_equal:today',
             'hora' => 'required',
             'duracion_minutos' => 'nullable|integer|min:15',
@@ -42,6 +53,12 @@ class CitaController extends Controller
             ->where('hora', $request->hora)
             ->where('doctor_id', Auth::id())
             ->exists();
+
+        if ($request->fecha == now()->toDateString() && $request->hora < now()->format('H:i')) {
+            return back()->withErrors([
+                'hora' => 'No se pueden registrar citas en horas pasadas'
+            ])->withInput();
+        }
 
         if ($existe) {
             return back()->withErrors([
@@ -66,5 +83,47 @@ class CitaController extends Controller
 
         return redirect()->route('citas.index')
             ->with('success', 'Procedimiento agendado correctamente para ' . $cita->paciente->nombre);
+    }
+
+    public function realizar($id)
+    {
+        $cita = Cita::findOrFail($id);
+
+        $cita->estado_cita = "Realizada";
+        $cita->save();
+
+        return redirect()->back()
+            ->with('success', 'Cita marcada como realizada');
+    }
+
+    public function edit($id)
+    {
+        $cita = Cita::findOrFail($id);
+        $pacientes = Paciente::orderBy('nombre')->get();
+
+        return view('agenda.edit', compact('cita', 'pacientes'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $cita = Cita::findOrFail($id);
+
+        $request->validate([
+            'paciente_id' => 'required|exists:pacientes,id',
+            'fecha' => 'required|date|after_or_equal:today',
+            'hora' => 'required'
+        ]);
+
+        if ($request->fecha == now()->toDateString() && $request->hora < now()->format('H:i')) {
+            return back()->withErrors([
+                'hora' => 'No se pueden registrar citas en horas pasadas'
+            ])->withInput();
+        }
+
+        $cita->update($request->all());
+
+        return redirect()
+            ->route('citas.index')
+            ->with('success', 'Cita actualizada correctamente');
     }
 }

@@ -6,7 +6,7 @@
 
 <div class="row g-3">
     <div class="col-md-6">
-        <label class="form-label">Nombre</label>
+        <label class="form-label">Nombre</label> <span class="text-danger">*</span>
         <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror"
             value="{{ old('nombre', $paciente->nombre ?? '') }}" required>
         @error('nombre')
@@ -17,7 +17,7 @@
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Apellido</label>
+        <label class="form-label">Apellido</label> <span class="text-danger">*</span>
         <input type="text" name="apellido" class="form-control @error('apellido') is-invalid @enderror"
             value="{{ old('apellido', $paciente->apellido ?? '') }}" required>
         @error('apellido')
@@ -28,7 +28,7 @@
     <div class="col-md-6">
         <label class="form-label">Cédula</label>
 
-        <input type="text" id="cedula" name="cedula" maxlength="13"
+        <input type="text" id="cedula" name="cedula" minlength="13" maxlength="13"
             class="form-control @error('cedula') is-invalid @enderror"
             value="{{ old('cedula', $paciente->cedula ?? '') }}">
 
@@ -45,7 +45,7 @@
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Fecha de nacimiento</label>
+        <label class="form-label">Fecha de nacimiento</label> <span class="text-danger">*</span>
         <input type="date" name="fecha_nacimiento"
             class="form-control @error('fecha_nacimiento') is-invalid @enderror"
             value="{{ old('fecha_nacimiento', $paciente->fecha_nacimiento ?? '') }}" required>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Sexo</label>
+        <label class="form-label">Sexo</label> <span class="text-danger">*</span>
         <select name="sexo" class="form-select @error('sexo') is-invalid @enderror" required>
             <option value="">--Seleccione--</option>
             <option value="Masculino" {{ old('sexo', $paciente->sexo ?? '') == 'Masculino' ? 'selected' : '' }}>
@@ -142,8 +142,8 @@
 
     <div class="col-md-6">
         <label class="form-label">NSS</label>
-        <input type="text" name="nss" id="nss" class="form-control" maxlength="11" inputmode="numeric"
-            pattern="[0-9]{11}" value="{{ old('nss', $paciente->nss ?? '') }}" disabled>
+        <input type="text" name="nss" id="nss" class="form-control" maxlength="11"
+            inputmode="numeric" pattern="[0-9]{11}" value="{{ old('nss', $paciente->nss ?? '') }}" disabled>
     </div>
 </div>
 

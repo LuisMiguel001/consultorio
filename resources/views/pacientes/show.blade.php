@@ -13,6 +13,10 @@
                 <h5 class="mb-0">
                     Ficha Clínica - {{ $paciente->nombre }} {{ $paciente->apellido }}
                 </h5>
+                <a href="{{ route('pacientes.edit', $paciente->id) }}" class="btn btn-sm"
+                    style="background:#a97bc9;color:white;border-radius:6px;">
+                    Editar
+                </a>
             </div>
 
             <div class="card-body">

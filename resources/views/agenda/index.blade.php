@@ -106,7 +106,6 @@
                                     <tr>
                                         <th class="px-4 py-3">Fecha / Hora</th>
                                         <th class="py-3">Paciente</th>
-                                        <th class="py-3">Procedimiento</th>
                                         <th class="py-3">Prioridad</th>
                                         <th class="py-3">Estado</th>
                                         <th class="py-3 text-center">Acciones</th>
@@ -140,14 +139,6 @@
                                             </td>
 
                                             <td>
-                                                <span class="badge"
-                                                    style="background: #e9d5ff; color: #4a2c6d; padding: 8px 12px;">
-                                                    <i class="fas fa-heartbeat me-1"></i>
-                                                    {{ $cita->servicio_especifico }}
-                                                </span>
-                                            </td>
-
-                                            <td>
                                                 @if ($cita->prioridad == 'Urgente')
                                                     <span class="badge bg-danger" style="padding: 6px 10px;">
                                                         <i class="fas fa-exclamation-circle me-1"></i>
@@ -172,30 +163,41 @@
                                                         <i class="fas fa-calendar-check me-1"></i>
                                                         Programada
                                                     </span>
-                                                @elseif($cita->estado_cita == 'Completada')
+                                                @elseif($cita->estado_cita == 'Realizada')
                                                     <span class="badge bg-success" style="padding: 6px 10px;">
                                                         <i class="fas fa-check-circle me-1"></i>
-                                                        Completada
+                                                        Realizada
                                                     </span>
                                                 @elseif($cita->estado_cita == 'Cancelada')
                                                     <span class="badge bg-danger" style="padding: 6px 10px;">
                                                         <i class="fas fa-times-circle me-1"></i>
                                                         Cancelada
                                                     </span>
+                                                @elseif($cita->estado_cita == 'Atrasada')
+                                                    <span class="badge bg-warning" style="padding: 6px 10px;">
+                                                        <i class="fas fa-clock"></i> Atrasada
+                                                    </span>
                                                 @endif
+
                                             </td>
 
                                             <td class="text-center">
                                                 <div class="d-flex gap-1 justify-content-center">
-                                                    <a href="#" class="btn btn-sm"
-                                                        style="background:#bfa2db;color:white;border-radius:6px;"
-                                                        title="Ver detalles">
+                                                    <a href="#" class="btn btn-sm" data-bs-toggle="modal"
+                                                        data-bs-target="#modalCita{{ $cita->id }}"
+                                                        style="background:#bfa2db;color:white;border-radius:6px;">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
 
-                                                    <a href="#" class="btn btn-sm"
-                                                        style="background:#a97bc9;color:white;border-radius:6px;"
-                                                        title="Editar cita">
+                                                    @if ($cita->estado_cita == 'Programada')
+                                                        <a href="{{ route('consultas.create', ['id' => $cita->paciente_id, 'cita' => $cita->id]) }}"
+                                                            class="btn btn-success btn-sm">
+                                                            <i class="fas fa-stethoscope"></i>
+                                                        </a>
+                                                    @endif
+
+                                                    <a href="{{ route('citas.edit', $cita->id) }}" class="btn btn-sm"
+                                                        style="background:#a97bc9;color:white;">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
 
@@ -212,6 +214,60 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        <div class="modal fade" id="modalCita{{ $cita->id }}">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">
+                                                            Detalle de la Cita
+                                                        </h5>
+                                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+
+                                                        <p><strong>Paciente:</strong>
+                                                            {{ $cita->paciente->nombre }} {{ $cita->paciente->apellido }}
+                                                        </p>
+
+                                                        <p><strong>Cédula:</strong>
+                                                            {{ $cita->paciente->cedula }}
+                                                        </p>
+
+                                                        <p><strong>Procedimiento:</strong>
+                                                            {{ $cita->servicio_especifico }}
+                                                        </p>
+
+                                                        <p><strong>Fecha:</strong>
+                                                            {{ \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') }}
+                                                        </p>
+
+                                                        <p><strong>Hora:</strong>
+                                                            {{ $cita->hora }} ({{ $cita->duracion_minutos }} min)
+                                                        </p>
+
+                                                        <p><strong>Prioridad:</strong>
+                                                            {{ $cita->prioridad }}
+                                                        </p>
+
+                                                        <p><strong>Notas:</strong>
+                                                            {{ $cita->notas_previas ?? 'Sin notas' }}
+                                                        </p>
+
+                                                        @if ($cita->requiere_ayuno)
+                                                            <span class="badge bg-warning">Ayuno requerido</span>
+                                                        @endif
+
+                                                        @if ($cita->estudios_previos)
+                                                            <span class="badge bg-info">Traer estudios</span>
+                                                        @endif
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
