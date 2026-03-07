@@ -11,18 +11,24 @@ class PacienteController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'apellido' => 'nullable|string|max:100',
-            'cedula' => 'nullable|max:20|unique:pacientes,cedula',
-            'fecha_nacimiento' => 'nullable|date',
-            'sexo' => 'nullable|string|max:10',
+            'apellido' => 'required|string|max:100',
+            'cedula' => 'nullable|max:13|unique:pacientes,cedula',
+            'fecha_nacimiento' => 'required|date',
+            'sexo' => 'required|string|max:10',
             'email' => 'nullable|email',
             'telefono' => 'nullable|max:20',
-            'nss' => 'nullable|max:15'
+            'nss' => 'nullable|max:11'
         ]);
 
         Paciente::create($request->all());
 
-        return redirect()->back()->with('success', 'Paciente registrado correctamente');
+        if ($request->accion == 'nuevo') {
+            return redirect()->route('pacientes.create')
+                ->with('success', 'Paciente creado correctamente');
+        }
+
+        return redirect()->route('pacientes.lista')
+            ->with('success', 'Paciente creado correctamente');
     }
 
     public function create()
@@ -34,14 +40,31 @@ class PacienteController extends Controller
     {
         $query = Paciente::query();
 
-        if ($request->has('buscar') && $request->buscar != '') {
-            $buscar = $request->buscar;
-            $query->where('nombre', 'like', "%{$buscar}%")
-                ->orWhere('apellido', 'like', "%{$buscar}%")
-                ->orWhere('email', 'like', "%{$buscar}%");
+        if ($request->filled('buscar')) {
+
+            $buscar = strtolower(str_replace('-', '', $request->buscar));
+
+            $query->where(function ($q) use ($buscar) {
+
+                $q->whereRaw("LOWER(nombre) LIKE ?", ["%{$buscar}%"])
+                    ->orWhereRaw("LOWER(apellido) LIKE ?", ["%{$buscar}%"])
+                    ->orWhereRaw("LOWER(email) LIKE ?", ["%{$buscar}%"])
+
+                    // quitar guiones de cédula
+                    ->orWhereRaw("REPLACE(LOWER(cedula), '-', '') LIKE ?", ["%{$buscar}%"])
+
+                    // quitar guiones de teléfono
+                    ->orWhereRaw("REPLACE(LOWER(telefono), '-', '') LIKE ?", ["%{$buscar}%"])
+
+                    // quitar guiones de NSS
+                    ->orWhereRaw("REPLACE(LOWER(nss), '-', '') LIKE ?", ["%{$buscar}%"])
+
+                    ->orWhereRaw("CAST(fecha_nacimiento AS TEXT) LIKE ?", ["%{$buscar}%"]);
+            });
         }
 
-        $pacientes = $query->get();
+        $pacientes = $query->orderBy('created_at', 'desc')->get();
+
         return view('lista_pacientes', compact('pacientes'));
     }
 
@@ -65,7 +88,6 @@ class PacienteController extends Controller
         $eventos = collect();
 
         foreach ($paciente->consultas as $consulta) {
-            // Consulta
             $eventos->push([
                 'tipo' => 'Consulta',
                 'fecha' => $consulta->created_at,
@@ -113,7 +135,6 @@ class PacienteController extends Controller
             }
         }
 
-        // Ordenar eventos por fecha (más reciente primero)
         $eventos = $eventos->sortByDesc('fecha')->values();
 
         return view('pacientes.show', compact('paciente', 'eventos'));
@@ -134,17 +155,17 @@ class PacienteController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:100',
             'apellido' => 'required|string|max:100',
-            'cedula' => 'nullable|max:20|unique:pacientes,cedula,' . $id,
+            'cedula' => 'nullable|max:13|unique:pacientes,cedula,' . $id,
             'fecha_nacimiento' => 'required|date',
             'sexo' => 'required',
             'email' => 'nullable|email',
             'telefono' => 'nullable|max:20',
-            'nss' => 'nullable|max:15'
+            'nss' => 'nullable|max:11'
         ]);
 
         $paciente->update($request->all());
 
-        return redirect()->route('pacientes.edit', $id)
+        return redirect()->route('pacientes.lista', $id)
             ->with('success', 'Paciente actualizado correctamente');
     }
 

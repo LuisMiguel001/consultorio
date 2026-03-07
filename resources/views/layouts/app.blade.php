@@ -27,6 +27,14 @@
                     <hr class="text-white">
                 @endhasanyrole
 
+                <!-- LISTA PACIENTES (admin, doctor y secretaria) -->
+                @can('ver pacientes')
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('pacientes.lista') }}" class="nav-link text-white">
+                            Lista de Pacientes
+                        </a>
+                    </li>
+                @endcan
 
                 <!-- REGISTRAR PACIENTE (solo admin y doctor) -->
                 @can('crear pacientes')
@@ -35,27 +43,7 @@
                             Registrar Paciente
                         </a>
                     </li>
-                @endcan
-
-
-                <!-- LISTA PACIENTES (admin, doctor y secretaria) -->
-                @can('ver pacientes')
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('pacientes.lista') }}" class="nav-link text-white">
-                            Lista de Pacientes
-                        </a>
-                    </li>
-                    <hr class="text-white">
-                @endcan
-
-
-                <!-- CITAS -->
-                @can('crear citas')
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('citas.create') }}" class="nav-link text-white">
-                            📅 Agendar Cita
-                        </a>
-                    </li>
+                      <hr class="text-white">
                 @endcan
 
                 @can('ver citas')
@@ -66,12 +54,21 @@
                     </li>
                 @endcan
 
+                <!-- CITAS -->
+                @can('crear citas')
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('citas.create') }}" class="nav-link text-white">
+                            📅 Agendar Cita
+                        </a>
+                    </li>
+                      <hr class="text-white">
+                @endcan
 
                 <!-- USUARIOS (solo admin) -->
                 @role('admin')
                     <li class="nav-item">
                         <a href="{{ route('usuarios.index') }}" class="nav-link text-white">
-                            👥 Usuarios
+                            Usuarios
                         </a>
                     </li>
                 @endrole
@@ -80,7 +77,7 @@
                 <!-- INFO USUARIO -->
                 <div class="text-center mb-3 mt-4">
                     @auth
-                        👤 {{ auth()->user()->name }}
+                        {{ auth()->user()->name }}
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

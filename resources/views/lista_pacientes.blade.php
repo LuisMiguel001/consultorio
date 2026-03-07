@@ -28,13 +28,18 @@
                 </div>
 
                 <div class="card-body">
-
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
                     <!-- BUSCADOR SIMPLE -->
                     <form method="GET" action="{{ route('pacientes.lista') }}">
                         <div class="row gx-2 gy-2 mb-4">
                             <div class="col-md-6">
                                 <input type="text" name="buscar" class="form-control"
-                                    placeholder="Nombre, apellido o email" value="{{ request('buscar') }}">
+                                    placeholder="Nombre, apellido, cédula, NSS, teléfono o fecha"
+                                    value="{{ request('buscar') }}">
                             </div>
                             <div class="col-md-auto">
                                 <button class="btn btn-outline-secondary">
