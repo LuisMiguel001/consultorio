@@ -46,10 +46,12 @@
                                     <option value="">Todos los estados</option>
                                     <option value="Programada"
                                         {{ request('filtro_estado') == 'Programada' ? 'selected' : '' }}>Programada</option>
-                                    <option value="Completada"
-                                        {{ request('filtro_estado') == 'Completada' ? 'selected' : '' }}>Completada</option>
+                                    <option value="Realizada"
+                                        {{ request('filtro_estado') == 'Realizada' ? 'selected' : '' }}>Realizada</option>
                                     <option value="Cancelada"
                                         {{ request('filtro_estado') == 'Cancelada' ? 'selected' : '' }}>Cancelada</option>
+                                    <option value="Atrasada"
+                                        {{ request('filtro_estado') == 'Atrasada' ? 'selected' : '' }}>Atrasada</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -196,10 +198,12 @@
                                                         </a>
                                                     @endif
 
-                                                    <a href="{{ route('citas.edit', $cita->id) }}" class="btn btn-sm"
+                                                    @if ($cita->estado_cita != 'Realizada' && $cita->estado_cita != 'Cancelada')
+                                                         <a href="{{ route('citas.edit', $cita->id) }}" class="btn btn-sm"
                                                         style="background:#a97bc9;color:white;">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
+                                                    @endif
 
                                                     <form action="#" method="POST"
                                                         onsubmit="return confirm('¿Seguro que desea cancelar esta cita?')">

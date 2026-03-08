@@ -23,11 +23,48 @@ class CitaController extends Controller
             })
             ->update(['estado_cita' => 'Atrasada']);
 
-        $citas = Cita::with('paciente')
-            ->where('doctor_id', Auth::id())
-            ->orderBy('fecha', 'desc')
-            ->orderBy('hora', 'asc')
-            ->paginate(15);
+        $query = Cita::with('paciente')
+            ->where('doctor_id', Auth::id());
+
+        // 🔎 BUSCADOR
+        if ($request->filled('buscar')) {
+
+            $buscar = strtolower($request->buscar);
+
+            $query->whereHas('paciente', function ($q) use ($buscar) {
+
+                $q->whereRaw("LOWER(nombre) LIKE ?", ["%{$buscar}%"])
+                    ->orWhereRaw("LOWER(apellido) LIKE ?", ["%{$buscar}%"])
+                    ->orWhereRaw("REPLACE(cedula,'-','') LIKE ?", ["%{$buscar}%"]);
+            });
+        }
+
+        // 🎯 FILTRO POR ESTADO
+        if ($request->filled('filtro_estado')) {
+            $query->where('estado_cita', $request->filtro_estado);
+        }
+
+        // 🎯 FILTRO POR PRIORIDAD
+        if ($request->filled('filtro_prioridad')) {
+            $query->where('prioridad', $request->filtro_prioridad);
+        }
+
+        // 📊 JERARQUÍA DE ESTADOS
+        $query->orderByRaw("
+        CASE
+            WHEN estado_cita = 'Programada' THEN 1
+            WHEN estado_cita = 'Realizada' THEN 2
+            WHEN estado_cita = 'Atrasada' THEN 3
+            WHEN estado_cita = 'Cancelada' THEN 4
+            ELSE 5
+        END
+    ");
+
+        // luego ordenar por fecha y hora
+        $query->orderBy('fecha', 'asc')
+            ->orderBy('hora', 'asc');
+
+        $citas = $query->paginate(15)->withQueryString();
 
         return view('agenda.index', compact('citas'));
     }
