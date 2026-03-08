@@ -86,7 +86,7 @@
             <!-- CONSULTAS -->
             <div class="tab-pane fade {{ $tab == 'consultas' ? 'show active' : '' }}" id="consultas">
                 <!-- Botón para nueva consulta -->
-                <a href="{{ route('consultas.create', $paciente->id) }}" class="btn btn-light btn-sm mb-3">
+                <a href="{{ route('consultas.create', $paciente->id) }}" class="btn btn-secondary btn-sm mb-3">
                     ➕ Nuevo Historial Clínico
                 </a>
 
@@ -104,8 +104,9 @@
                                 <input type="date" name="consulta_hasta" class="form-control"
                                     value="{{ request('consulta_hasta') }}">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <button class="btn btn-primary">Filtrar</button>
+
                                 <a href="{{ route('pacientes.show', $paciente->id) }}" class="btn btn-secondary">
                                     Limpiar
                                 </a>
@@ -179,7 +180,7 @@
 
             <!-- ANTECEDENTES -->
             <div class="tab-pane fade {{ $tab == 'antecedentes' ? 'show active' : '' }}" id="antecedentes">
-                <button class="btn btn-light btn-sm mb-3" data-bs-toggle="collapse" data-bs-target="#formAntecedente">
+                <button class="btn btn-secondary btn-sm mb-3" data-bs-toggle="collapse" data-bs-target="#formAntecedente">
                     ➕ Registrar Antecedentes
                 </button>
 

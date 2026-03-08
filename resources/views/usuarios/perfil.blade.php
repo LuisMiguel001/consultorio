@@ -87,8 +87,8 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" name="email" class="form-control" value="{{ $user->email }}">
+                                    <label class="form-label">Usuario</label>
+                                    <input type="text" name="email" class="form-control" value="{{ $user->email }}">
                                     @error('email')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror

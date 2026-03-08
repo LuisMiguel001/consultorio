@@ -84,7 +84,7 @@
                         <thead>
                             <tr>
                                 <th class="px-4">Nombre</th>
-                                <th>Email</th>
+                                <th>Usuario</th>
                                 <th>Rol</th>
                                 <th class="text-center">Acción</th>
                             </tr>

@@ -36,10 +36,8 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     Route::middleware('auth')->group(function () {
 
         Route::get('/perfil', [UserController::class, 'perfil'])->name('perfil');
-        Route::put('/perfil/update', [UserController::class, 'updatePerfil'])
-            ->name('perfil.update');
-        Route::put('/perfil/password', [UserController::class, 'updatePassword'])
-            ->name('perfil.password');
+        Route::put('/perfil/update', [UserController::class, 'updatePerfil'])->name('perfil.update');
+        Route::put('/perfil/password', [UserController::class, 'updatePassword'])->name('perfil.password');
     });
 
     /*Usuarios*/

@@ -143,7 +143,7 @@
                 <div class="user-box">
                     <input type="text" id="email" name="email" required placeholder=" "
                         value="{{ old('email') }}">
-                    <label for="email">Correo Electrónico</label>
+                    <label for="email">Usuario</label>
                 </div>
 
                 <div class="user-box">

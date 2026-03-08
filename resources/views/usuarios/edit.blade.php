@@ -17,8 +17,8 @@
     </div>
 
     <div class="mb-3">
-        <label>Email</label>
-        <input type="email"
+        <label>Usuario</label>
+        <input type="text"
                name="email"
                value="{{ $user->email }}"
                class="form-control">

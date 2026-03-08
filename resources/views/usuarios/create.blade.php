@@ -13,8 +13,8 @@
     </div>
 
     <div class="mb-3">
-        <label>Email</label>
-        <input type="email" name="email" class="form-control">
+        <label>Usuario</label>
+        <input type="text" name="email" class="form-control">
     </div>
 
     <div class="mb-3">

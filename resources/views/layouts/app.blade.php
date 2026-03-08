@@ -104,15 +104,11 @@
             margin: 10px;
         }
     </style>
-
 </head>
 
 <body>
 
     <div class="d-flex">
-
-        <!-- SIDEBAR -->
-
         <div class="sidebar" id="sidebar">
 
             <div class="logo d-flex justify-content-between align-items-center">
