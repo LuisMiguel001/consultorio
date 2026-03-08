@@ -287,15 +287,18 @@
                                             <td class="text-center">
                                                 <div class="d-flex gap-1 justify-content-center">
                                                     <a href="#" class="btn btn-sm btn-view" data-bs-toggle="modal"
+                                                        title="Ver Detalle de la Cita"
                                                         data-bs-target="#modalCita{{ $cita->id }}"><i
                                                             class="fas fa-eye"></i></a>
                                                     @if ($cita->estado_cita == 'Programada')
                                                         <a href="{{ route('consultas.create', ['id' => $cita->paciente_id, 'cita' => $cita->id]) }}"
+                                                            title="Atender Paciente"
                                                             class="btn btn-sm btn-success"><i
                                                                 class="fas fa-stethoscope"></i></a>
                                                     @endif
                                                     @if ($cita->estado_cita != 'Realizada' && $cita->estado_cita != 'Cancelada')
                                                         <a href="{{ route('citas.edit', $cita->id) }}"
+                                                            title="Editar cita"
                                                             class="btn btn-sm btn-edit"><i class="fas fa-edit"></i></a>
                                                     @endif
                                                     <form action="#" method="POST"
