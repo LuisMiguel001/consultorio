@@ -32,6 +32,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'nocache'])->group(function () {
 
+    // Perfil del usuario
+    Route::middleware('auth')->group(function () {
+
+        Route::get('/perfil', [UserController::class, 'perfil'])->name('perfil');
+        Route::put('/perfil/update', [UserController::class, 'updatePerfil'])
+            ->name('perfil.update');
+        Route::put('/perfil/password', [UserController::class, 'updatePassword'])
+            ->name('perfil.password');
+    });
+
     /*Usuarios*/
     Route::middleware('permission:ver usuarios')->group(function () {
         Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');

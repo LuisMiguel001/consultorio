@@ -72,6 +72,15 @@
                         </a>
                     </li>
                 @endcan
+
+                @can('ver perfil')
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('perfil') }}" class="nav-link text-white">
+                            Mi Perfil
+                        </a>
+                    </li>
+                @endcan
+
                 <!-- USUARIOS (solo admin) -->
                 @role('admin')
                     <li class="nav-item">
@@ -83,7 +92,7 @@
 
 
                 <!-- INFO USUARIO -->
-                <div class="text-center mb-3 mt-4">
+                <div class="text-start mb-3 mt-4">
                     @auth
                         {{ auth()->user()->name }}
 
