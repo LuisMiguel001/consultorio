@@ -292,22 +292,24 @@
                                                             class="fas fa-eye"></i></a>
                                                     @if ($cita->estado_cita == 'Programada')
                                                         <a href="{{ route('consultas.create', ['id' => $cita->paciente_id, 'cita' => $cita->id]) }}"
-                                                            title="Atender Paciente"
-                                                            class="btn btn-sm btn-success"><i
+                                                            title="Atender Paciente" class="btn btn-sm btn-success"><i
                                                                 class="fas fa-stethoscope"></i></a>
                                                     @endif
                                                     @if ($cita->estado_cita != 'Realizada' && $cita->estado_cita != 'Cancelada')
-                                                        <a href="{{ route('citas.edit', $cita->id) }}"
-                                                            title="Editar cita"
+                                                        <a href="{{ route('citas.edit', $cita->id) }}" title="Editar cita"
                                                             class="btn btn-sm btn-edit"><i class="fas fa-edit"></i></a>
                                                     @endif
-                                                    <form action="#" method="POST"
-                                                        onsubmit="return confirm('¿Seguro que desea cancelar esta cita?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-sm btn-cancel" title="Cancelar cita"><i
-                                                                class="fas fa-times"></i></button>
-                                                    </form>
+                                                    @if ($cita->estado_cita != 'Realizada' && $cita->estado_cita != 'Cancelada')
+                                                        <form action="{{ route('citas.destroy', $cita->id) }}"
+                                                            method="POST"
+                                                            onsubmit="return confirm('¿Seguro que desea cancelar esta cita?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button class="btn btn-sm btn-cancel" title="Cancelar cita">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

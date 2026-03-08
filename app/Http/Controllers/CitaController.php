@@ -170,4 +170,16 @@ class CitaController extends Controller
             ->route('citas.index')
             ->with('success', 'Cita actualizada correctamente');
     }
+
+    public function destroy($id)
+    {
+        $cita = Cita::findOrFail($id);
+
+        $cita->estado_cita = 'Cancelada';
+        $cita->save();
+
+        return redirect()
+            ->route('citas.index')
+            ->with('success', 'Cita cancelada correctamente');
+    }
 }
