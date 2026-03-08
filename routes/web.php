@@ -30,20 +30,9 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-/*
-|--------------------------------------------------------------------------
-| RUTAS PROTEGIDAS
-|--------------------------------------------------------------------------
-*/
-
 Route::middleware(['auth', 'nocache'])->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | USUARIOS
-    |--------------------------------------------------------------------------
-    */
-
+    /*Usuarios*/
     Route::middleware('permission:ver usuarios')->group(function () {
         Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
     });
@@ -63,23 +52,12 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     });
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | INICIO
-    |--------------------------------------------------------------------------
-    */
-
+    /*Inicio*/
     Route::middleware('permission:ver pacientes')->group(function () {
         Route::get('/consultorio/inicio', [PacienteController::class, 'inicio'])->name('pacientes.inicio');
     });
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | PACIENTES
-    |--------------------------------------------------------------------------
-    */
-
+    /*Pacientes*/
     Route::middleware('permission:crear pacientes')->group(function () {
         Route::get('/pacientes', [PacienteController::class, 'create'])->name('pacientes.create');
         Route::post('/pacientes', [PacienteController::class, 'store'])->name('pacientes.store');
@@ -99,14 +77,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
         Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy'])->name('pacientes.destroy');
     });
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CITAS
-    |--------------------------------------------------------------------------
-    */
-
+    /*Citas*/
     Route::middleware('permission:ver citas')->group(function () {
         Route::get('/citas', [CitaController::class, 'index'])->name('citas.index');
     });
@@ -138,11 +109,8 @@ Route::middleware(['auth', 'nocache'])->group(function () {
             ->limit(10)
             ->get();
     });
-    /*
-    |--------------------------------------------------------------------------
-    | CONSULTAS
-    |--------------------------------------------------------------------------
-    */
+
+    /*Consulta*/
 
     Route::middleware('permission:crear consultas')->group(function () {
         Route::get('/pacientes/{id}/consulta', [ConsultaController::class, 'create'])->name('consultas.create');
@@ -154,11 +122,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     });
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | ANTECEDENTES
-    |--------------------------------------------------------------------------
-    */
+    /*ANTECEDENTES*/
 
     Route::middleware('permission:crear antecedentes')->group(function () {
         Route::post('/pacientes/{id}/antecedentes', [AntecedenteController::class, 'store'])->name('antecedentes.store');
@@ -169,11 +133,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     });
 
 
-    /*
-|--------------------------------------------------------------------------
-| ESTUDIOS
-|--------------------------------------------------------------------------
-*/
+    /*Estudios*/
 
     Route::middleware('permission:ver estudios')->group(function () {
         Route::get(
@@ -196,12 +156,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
         )->name('estudios.descargar');
     });
 
-
-    /*
-|--------------------------------------------------------------------------
-| DIAGNOSTICOS
-|--------------------------------------------------------------------------
-*/
+   /*Diagnosticos*/
 
     Route::middleware('permission:crear diagnosticos')->group(function () {
         Route::post(
@@ -211,11 +166,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     });
 
 
-    /*
-|--------------------------------------------------------------------------
-| TRATAMIENTOS
-|--------------------------------------------------------------------------
-*/
+    /*tratamientos*/
 
     Route::middleware('permission:crear tratamientos')->group(function () {
         Route::post(
@@ -225,11 +176,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     });
 
 
-    /*
-|--------------------------------------------------------------------------
-| PROCEDIMIENTOS
-|--------------------------------------------------------------------------
-*/
+    /*Procedimientos*/
 
     Route::middleware('permission:crear procedimientos')->group(function () {
         Route::post(
@@ -238,12 +185,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
         )->name('procedimientos.store');
     });
 
-
-    /*
-|--------------------------------------------------------------------------
-| SIGNOS VITALES
-|--------------------------------------------------------------------------
-*/
+    /*Signos Vitales*/
 
     Route::middleware('permission:crear signos vitales')->group(function () {
         Route::post(
@@ -252,12 +194,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
         )->name('signos-vitales.store');
     });
 
-
-    /*
-|--------------------------------------------------------------------------
-| EXAMEN FISICO
-|--------------------------------------------------------------------------
-*/
+    /*Examen Fisico*/
 
     Route::middleware('permission:crear examen fisico')->group(function () {
         Route::post(
@@ -267,12 +204,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     });
 
 
-    /*
-|--------------------------------------------------------------------------
-| EVOLUCIONES
-|--------------------------------------------------------------------------
-*/
-
+    /*Evoluciones*/
     Route::middleware('permission:crear evoluciones')->group(function () {
         Route::post(
             '/consultas/{consulta}/evoluciones',
@@ -281,12 +213,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     });
 
 
-    /*
-|--------------------------------------------------------------------------
-| RECETA
-|--------------------------------------------------------------------------
-*/
-
+    /*Recetas*/
     Route::middleware('permission:generar recetas')->group(function () {
         Route::get(
             '/consultas/{consulta}/receta/pdf',

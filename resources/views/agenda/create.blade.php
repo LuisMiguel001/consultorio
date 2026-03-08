@@ -154,7 +154,7 @@
                                     Hora <span class="text-danger">*</span>
                                 </label>
                                 <input type="time" name="hora" class="form-control"
-                                    value="{{ old('hora', '09:00') }}" min="{{ now()->format('H:i') }}" required>
+                                    value="{{ old('hora', '09:00') }}" required>
                             </div>
 
                             <!-- Duración -->

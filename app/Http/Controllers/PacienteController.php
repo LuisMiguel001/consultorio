@@ -108,9 +108,19 @@ class PacienteController extends Controller
         ])->count();
         $promedioMensual = round($citasUltimos6Meses / 6, 1);
 
-        // PRÓXIMAS CITAS (hoy en adelante, con paciente, ordenadas)
+        $ahora = Carbon::now();
+
         $proximasCitas = Cita::with('paciente')
-            ->whereDate('fecha', '>=', Carbon::today())
+            ->where('estado_cita', 'Programada') // solo pendientes
+            ->where(function ($q) use ($ahora) {
+
+                $q->whereDate('fecha', '>', $ahora->toDateString())
+
+                    ->orWhere(function ($q2) use ($ahora) {
+                        $q2->whereDate('fecha', $ahora->toDateString())
+                            ->whereTime('hora', '>=', $ahora->format('H:i:s'));
+                    });
+            })
             ->orderBy('fecha')
             ->orderBy('hora')
             ->limit(6)

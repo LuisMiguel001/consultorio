@@ -51,15 +51,16 @@ class ConsultaController extends Controller
             'observaciones' => $request->observaciones,
         ]);
 
-        // 🔥 marcar cita como realizada
-        if ($request->cita_id) {
+        $cita = Cita::where('paciente_id', $request->paciente_id)
+            ->where('estado_cita', 'Programada')
+            ->orderBy('fecha')
+            ->orderBy('hora')
+            ->first();
 
-            $cita = Cita::find($request->cita_id);
-
-            if ($cita) {
-                $cita->estado_cita = 'Realizada';
-                $cita->save();
-            }
+        if ($cita) {
+            $cita->update([
+                'estado_cita' => 'Realizada'
+            ]);
         }
 
         return redirect()->route('pacientes.show', $request->paciente_id)

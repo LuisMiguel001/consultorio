@@ -6,6 +6,7 @@ use App\Models\Cita;
 use App\Models\Paciente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class CitaController extends Controller
 {
@@ -54,17 +55,18 @@ class CitaController extends Controller
             ->where('doctor_id', Auth::id())
             ->exists();
 
-        if ($request->fecha == now()->toDateString() && $request->hora < now()->format('H:i')) {
+        $fechaHoraCita = Carbon::parse($request->fecha . ' ' . $request->hora);
+
+        if ($fechaHoraCita->lt(Carbon::now())) {
             return back()->withErrors([
                 'hora' => 'No se pueden registrar citas en horas pasadas'
             ])->withInput();
         }
 
-        if ($existe) {
-            return back()->withErrors([
-                'hora' => 'Ya tiene una cita programada para esa fecha y hora'
-            ])->withInput();
-        }
+        $existe = Cita::where('fecha', $request->fecha)
+            ->where('hora', $request->hora)
+            ->where('estado_cita', 'Programada') // o 'Pendiente'
+            ->exists();
 
         $cita = Cita::create([
             'paciente_id' => $request->paciente_id,
