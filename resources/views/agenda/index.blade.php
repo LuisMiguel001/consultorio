@@ -23,7 +23,7 @@
 
                     <h5 class="mb-0">
                         <i class="fas fa-calendar-alt me-2"></i>
-                        Agenda de Procedimientos Cardiovasculares
+                        Agenda
                     </h5>
 
                     <a href="{{ route('citas.create') }}" class="btn btn-light" style="border-radius:8px;">

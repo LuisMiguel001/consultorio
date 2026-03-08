@@ -45,28 +45,31 @@ class PacienteController extends Controller
 
         if ($request->filled('buscar')) {
 
-            $buscar = strtolower(str_replace('-', '', $request->buscar));
+            $buscar = $request->buscar;
 
             $query->where(function ($q) use ($buscar) {
 
-                $q->whereRaw("LOWER(nombre) LIKE ?", ["%{$buscar}%"])
-                    ->orWhereRaw("LOWER(apellido) LIKE ?", ["%{$buscar}%"])
-                    ->orWhereRaw("LOWER(email) LIKE ?", ["%{$buscar}%"])
-
-                    // quitar guiones de cédula
-                    ->orWhereRaw("REPLACE(LOWER(cedula), '-', '') LIKE ?", ["%{$buscar}%"])
-
-                    // quitar guiones de teléfono
-                    ->orWhereRaw("REPLACE(LOWER(telefono), '-', '') LIKE ?", ["%{$buscar}%"])
-
-                    // quitar guiones de NSS
-                    ->orWhereRaw("REPLACE(LOWER(nss), '-', '') LIKE ?", ["%{$buscar}%"])
-
-                    ->orWhereRaw("CAST(fecha_nacimiento AS TEXT) LIKE ?", ["%{$buscar}%"]);
+                $q->where('nombre', 'ILIKE', "%{$buscar}%")
+                    ->orWhere('apellido', 'ILIKE', "%{$buscar}%")
+                    ->orWhere('cedula', 'ILIKE', "%{$buscar}%")
+                    ->orWhere('telefono', 'ILIKE', "%{$buscar}%")
+                    ->orWhere('nss', 'ILIKE', "%{$buscar}%")
+                    ->orWhere(DB::raw("CONCAT(nombre,' ',apellido)"), 'ILIKE', "%{$buscar}%");
             });
         }
 
-        $pacientes = $query->orderBy('created_at', 'desc')->get();
+        if ($request->filled('fecha_desde')) {
+            $query->whereDate('created_at', '>=', $request->fecha_desde);
+        }
+
+        if ($request->filled('fecha_hasta')) {
+            $query->whereDate('created_at', '<=', $request->fecha_hasta);
+        }
+
+        $pacientes = $query
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->withQueryString();
 
         return view('lista_pacientes', compact('pacientes'));
     }
@@ -154,6 +157,9 @@ class PacienteController extends Controller
                             $q2->whereDate('fecha', $ahora->toDateString())
                                 ->whereTime('hora', '>=', $ahora->format('H:i:s'));
                         });
+                })
+                ->whereHas('paciente', function ($q) {
+                    $q->whereNull('deleted_at');
                 })
                 ->orderBy('fecha')
                 ->orderBy('hora')
@@ -249,8 +255,6 @@ class PacienteController extends Controller
         return view('pacientes.show', compact('paciente', 'eventos'));
     }
 
-    // NUEVOS MÉTODOS
-
     public function edit($id)
     {
         $paciente = Paciente::findOrFail($id);
@@ -284,6 +288,24 @@ class PacienteController extends Controller
         $paciente->delete();
 
         return redirect()->route('pacientes.lista')
-            ->with('success', 'Paciente eliminado correctamente');
+            ->with('success', 'Paciente archivado correctamente');
+    }
+
+    public function archivados()
+    {
+        $pacientes = Paciente::onlyTrashed()
+            ->orderBy('deleted_at', 'desc')
+            ->paginate(20);
+
+        return view('pacientes.archivados', compact('pacientes'));
+    }
+
+    public function restaurar($id)
+    {
+        $paciente = Paciente::onlyTrashed()->findOrFail($id);
+        $paciente->restore();
+
+        return redirect()->route('pacientes.lista')
+            ->with('success', 'Paciente restaurado correctamente');
     }
 }

@@ -65,12 +65,14 @@ Route::middleware(['auth', 'nocache'])->group(function () {
 
     Route::middleware('permission:ver pacientes')->group(function () {
         Route::get('/pacientes/lista', [PacienteController::class, 'lista'])->name('pacientes.lista');
+        Route::get('/pacientes/archivados', [PacienteController::class, 'archivados'])->name('pacientes.archivados');
         Route::get('/pacientes/{paciente}', [PacienteController::class, 'show'])->name('pacientes.show');
     });
 
     Route::middleware('permission:editar pacientes')->group(function () {
         Route::get('/pacientes/{id}/edit', [PacienteController::class, 'edit'])->name('pacientes.edit');
         Route::put('/pacientes/{id}', [PacienteController::class, 'update'])->name('pacientes.update');
+        Route::post('/pacientes/{id}/restaurar', [PacienteController::class, 'restaurar'])->name('pacientes.restaurar');
     });
 
     Route::middleware('permission:eliminar pacientes')->group(function () {
@@ -156,7 +158,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
         )->name('estudios.descargar');
     });
 
-   /*Diagnosticos*/
+    /*Diagnosticos*/
 
     Route::middleware('permission:crear diagnosticos')->group(function () {
         Route::post(

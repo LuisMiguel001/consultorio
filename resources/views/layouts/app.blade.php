@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Consultorio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
@@ -14,7 +14,7 @@
     <div class="d-flex">
         <!-- MENÚ LATERAL -->
         <div class="bg-dark text-white p-3" style="width:250px; min-height:100vh;">
-            <h5 class="text-center mb-4">Consultorio</h5>
+            <h5 class="text-center mb-4">Dr. Lorenzo</h5>
 
             <ul class="nav flex-column">
 
@@ -44,13 +44,13 @@
                             Registrar Paciente
                         </a>
                     </li>
-                      <hr class="text-white">
+                    <hr class="text-white">
                 @endcan
 
                 @can('ver citas')
                     <li class="nav-item mb-2">
                         <a href="{{ route('citas.index') }}" class="nav-link text-white">
-                            🗂 Lista de Citas
+                            Lista de Citas
                         </a>
                     </li>
                 @endcan
@@ -59,12 +59,19 @@
                 @can('crear citas')
                     <li class="nav-item mb-2">
                         <a href="{{ route('citas.create') }}" class="nav-link text-white">
-                            📅 Agendar Cita
+                            Agendar Cita
                         </a>
                     </li>
-                      <hr class="text-white">
+                    <hr class="text-white">
                 @endcan
 
+                @can('ver pacientes')
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('pacientes.archivados') }}" class="nav-link text-white">
+                            Pacientes Archivados
+                        </a>
+                    </li>
+                @endcan
                 <!-- USUARIOS (solo admin) -->
                 @role('admin')
                     <li class="nav-item">
@@ -96,6 +103,7 @@
         </div>
 
     </div>
-  @yield('scripts')
+    @yield('scripts')
 </body>
+
 </html>

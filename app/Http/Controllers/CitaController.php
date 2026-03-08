@@ -24,7 +24,10 @@ class CitaController extends Controller
             ->update(['estado_cita' => 'Atrasada']);
 
         $query = Cita::with('paciente')
-            ->where('doctor_id', Auth::id());
+            ->where('doctor_id', Auth::id())
+            ->whereHas('paciente', function ($q) {
+                $q->whereNull('deleted_at');
+            });
 
         // 🔎 BUSCADOR
         if ($request->filled('buscar')) {
@@ -71,7 +74,9 @@ class CitaController extends Controller
 
     public function create()
     {
-        $pacientes = Paciente::orderBy('nombre')->get();
+        $pacientes = Paciente::orderBy('nombre')
+            ->whereNull('deleted_at')
+            ->get();
         return view('agenda.create', compact('pacientes'));
     }
 

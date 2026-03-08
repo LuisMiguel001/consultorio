@@ -33,7 +33,7 @@ class Cita extends Model
 
     public function paciente()
     {
-        return $this->belongsTo(Paciente::class);
+        return $this->belongsTo(Paciente::class)->withTrashed();
     }
 
     public function doctor()
