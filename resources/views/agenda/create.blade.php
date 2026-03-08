@@ -19,7 +19,7 @@
 
                 <!-- HEADER CON GRADIENTE -->
                 <div class="card-header border-0"
-                    style="background: linear-gradient(135deg, #a97bc9, #8e44ad);
+                    style="background: #0d47a1;
                     color: white;
                     border-radius: 18px 18px 0 0;
                     padding: 1.5rem;">
@@ -366,7 +366,7 @@
                         <!-- BOTONES DE ACCIÓN -->
                         <div class="d-flex justify-content-center gap-2 mt-4">
                             <button type="submit" class="btn btn-lg px-5"
-                                style="background: linear-gradient(135deg, #a97bc9, #8e44ad); color: white; border: none;">
+                                style="background: #0d47a1; color: white; border: none;">
                                 <i class="fas fa-calendar-check me-2"></i>
                                 Agendar
                             </button>

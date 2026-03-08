@@ -1,6 +1,7 @@
 <input type="hidden" name="paciente_id" value="{{ $paciente->id ?? '' }}">
+
 <!-- DATOS PERSONALES -->
-<h6 class="text-uppercase fw-bold mb-3" style="color:#7a4ea0;">
+<h6 class="text-uppercase fw-bold mb-3" style="color: var(--text-primary);">
     Datos personales
 </h6>
 
@@ -8,7 +9,8 @@
     <div class="col-md-6">
         <label class="form-label">Nombre</label> <span class="text-danger">*</span>
         <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror"
-            value="{{ old('nombre', $paciente->nombre ?? '') }}" required>
+            value="{{ old('nombre', $paciente->nombre ?? '') }}" required
+            style="border-color: var(--primary-border);">
         @error('nombre')
             <div class="invalid-feedback d-block">
                 {{ $message }}
@@ -19,7 +21,8 @@
     <div class="col-md-6">
         <label class="form-label">Apellido</label> <span class="text-danger">*</span>
         <input type="text" name="apellido" class="form-control @error('apellido') is-invalid @enderror"
-            value="{{ old('apellido', $paciente->apellido ?? '') }}" required>
+            value="{{ old('apellido', $paciente->apellido ?? '') }}" required
+            style="border-color: var(--primary-border);">
         @error('apellido')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -27,18 +30,15 @@
 
     <div class="col-md-6">
         <label class="form-label">Cédula</label>
-
         <input type="text" id="cedula" name="cedula" minlength="13" maxlength="13"
             class="form-control @error('cedula') is-invalid @enderror"
-            value="{{ old('cedula', $paciente->cedula ?? '') }}">
-
+            value="{{ old('cedula', $paciente->cedula ?? '') }}" style="border-color: var(--primary-border);">
         <div class="form-check mt-2">
             <input class="form-check-input" type="checkbox" id="extranjero">
             <label class="form-check-label">
                 Paciente extranjero (sin formato dominicano)
             </label>
         </div>
-
         @error('cedula')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -48,7 +48,8 @@
         <label class="form-label">Fecha de nacimiento</label> <span class="text-danger">*</span>
         <input type="date" name="fecha_nacimiento"
             class="form-control @error('fecha_nacimiento') is-invalid @enderror"
-            value="{{ old('fecha_nacimiento', $paciente->fecha_nacimiento ?? '') }}" required>
+            value="{{ old('fecha_nacimiento', $paciente->fecha_nacimiento ?? '') }}" required
+            style="border-color: var(--primary-border);">
         @error('fecha_nacimiento')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -56,7 +57,8 @@
 
     <div class="col-md-6">
         <label class="form-label">Sexo</label> <span class="text-danger">*</span>
-        <select name="sexo" class="form-select @error('sexo') is-invalid @enderror" required>
+        <select name="sexo" class="form-select @error('sexo') is-invalid @enderror" required
+            style="border-color: var(--primary-border);">
             <option value="">--Seleccione--</option>
             <option value="Masculino" {{ old('sexo', $paciente->sexo ?? '') == 'Masculino' ? 'selected' : '' }}>
                 Masculino</option>
@@ -71,79 +73,65 @@
     </div>
 </div>
 
-<hr class="my-4">
+<hr class="my-4" style="border-color: var(--primary-border);">
 
 <!-- CONTACTO -->
-<h6 class="text-uppercase fw-bold mb-3" style="color:#7a4ea0;">
+<h6 class="text-uppercase fw-bold mb-3" style="color: var(--text-secondary);">
     Información de contacto
 </h6>
 
 <div class="row g-3">
     <div class="col-md-6">
-
         <label class="form-label">Teléfono</label>
-
         <input type="text" id="telefono" name="telefono" maxlength="12" class="form-control"
-            value="{{ old('telefono', $paciente->telefono ?? '') }}" placeholder="809-000-0000">
-
+            value="{{ old('telefono', $paciente->telefono ?? '') }}" placeholder="809-000-0000"
+            style="border-color: var(--primary-border);">
         <div class="form-check mt-2">
             <input class="form-check-input" type="checkbox" id="telefono_extranjero">
             <label class="form-check-label">
                 Teléfono extranjero
             </label>
         </div>
-
     </div>
     <div class="col-md-6">
         <label class="form-label">Correo electrónico</label>
-        <input type="email" name="email" class="form-control" value="{{ old('email', $paciente->email ?? '') }}">
+        <input type="email" name="email" class="form-control"
+            value="{{ old('email', $paciente->email ?? '') }}" style="border-color: var(--primary-border);">
     </div>
 
     <div class="col-md-12">
         <label class="form-label">Dirección</label>
         <input type="text" name="direccion" class="form-control"
-            value="{{ old('direccion', $paciente->direccion ?? '') }}">
+            value="{{ old('direccion', $paciente->direccion ?? '') }}" style="border-color: var(--primary-border);">
     </div>
 </div>
 
-<hr class="my-4">
+<hr class="my-4" style="border-color: var(--primary-border);">
 
 <!-- SEGURO -->
-<h6 class="text-uppercase fw-bold mb-3" style="color:#7a4ea0;">
+<h6 class="text-uppercase fw-bold mb-3" style="color: var(--text-secondary);">
     Información adicional
 </h6>
 
 <div class="row g-3">
     <div class="col-md-6">
         <label class="form-label">ARS</label>
-        <select name="seguro_medico" id="seguro_medico" class="form-select">
+        <select name="seguro_medico" id="seguro_medico" class="form-select" style="border-color: var(--primary-border);">
             <option value="">--Seleccione--</option>
-            <option value="ARS SeNaSa"
-                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS SeNaSa' ? 'selected' : '' }}>ARS
-                SeNaSa</option>
-            <option value="ARS Universal"
-                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Universal' ? 'selected' : '' }}>ARS
-                Universal</option>
-            <option value="ARS Humano"
-                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Humano' ? 'selected' : '' }}>ARS
-                Humano</option>
-            <option value="Mapfre Salud ARS"
-                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Mapfre Salud ARS' ? 'selected' : '' }}>
-                Mapfre Salud ARS</option>
-            <option value="Primera ARS"
-                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Primera ARS' ? 'selected' : '' }}>
-                Primera
-                ARS</option>
-            <option value="Otro"
-                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Otro' ? 'selected' : '' }}>Otro
-            </option>
+            <option value="ARS SeNaSa" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS SeNaSa' ? 'selected' : '' }}>ARS SeNaSa</option>
+            <option value="ARS Universal" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Universal' ? 'selected' : '' }}>ARS Universal</option>
+            <option value="ARS Humano" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Humano' ? 'selected' : '' }}>ARS Humano</option>
+            <option value="Mapfre Salud ARS" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Mapfre Salud ARS' ? 'selected' : '' }}>Mapfre Salud ARS</option>
+            <option value="Primera ARS" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Primera ARS' ? 'selected' : '' }}>Primera ARS</option>
+            <option value="Otro" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Otro' ? 'selected' : '' }}>Otro</option>
         </select>
     </div>
 
     <div class="col-md-6">
         <label class="form-label">NSS</label>
         <input type="text" name="nss" id="nss" class="form-control" maxlength="11"
-            inputmode="numeric" pattern="[0-9]{11}" value="{{ old('nss', $paciente->nss ?? '') }}" disabled>
+            inputmode="numeric" pattern="[0-9]{11}" value="{{ old('nss', $paciente->nss ?? '') }}" disabled
+            style="border-color: var(--primary-border);">
     </div>
 </div>
 
