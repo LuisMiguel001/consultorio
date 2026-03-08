@@ -4,115 +4,236 @@
 <head>
     <meta charset="UTF-8">
     <title>Consultorio</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            background: #f4f8fd;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #0d47a1, #002171);
+            color: white;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar .logo {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .menu {
+            flex-grow: 1;
+            padding-top: 10px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 4px 10px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .menu i {
+            font-size: 18px;
+        }
+
+        .sidebar.collapsed span {
+            display: none;
+        }
+
+        /* USER */
+
+        .user-box {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            text-align: center;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #0d47a1;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            margin-top: 8px;
+        }
+
+        /* CONTENT */
+
+        .content {
+            flex-grow: 1;
+            padding: 25px;
+        }
+
+        /* BUTTON TOGGLE */
+
+        .toggle-btn {
+            border: none;
+            background: none;
+            color: white;
+            font-size: 20px;
+            margin: 10px;
+        }
+    </style>
+
 </head>
 
-<body style="background:#f4eef8;">
+<body>
 
     <div class="d-flex">
-        <!-- MENÚ LATERAL -->
-        <div class="bg-dark text-white p-3" style="width:250px; min-height:100vh;">
-            <h5 class="text-center mb-4">Dr. Lorenzo</h5>
 
-            <ul class="nav flex-column">
+        <!-- SIDEBAR -->
 
-                <!-- INICIO (admin y doctor) -->
+        <div class="sidebar" id="sidebar">
+
+            <div class="logo d-flex justify-content-between align-items-center">
+
+                <span>Dr. Lorenzo</span>
+
+                <button class="toggle-btn" onclick="toggleSidebar()">
+                    <i class="bi bi-list"></i>
+                </button>
+
+            </div>
+
+            <div class="menu">
+
                 @hasanyrole('admin|doctor')
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('pacientes.inicio') }}" class="nav-link text-white">
-                            Inicio
-                        </a>
-                    </li>
-                    <hr class="text-white">
+                    <a href="{{ route('pacientes.inicio') }}">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Inicio</span>
+                    </a>
                 @endhasanyrole
 
-                <!-- LISTA PACIENTES (admin, doctor y secretaria) -->
+
                 @can('ver pacientes')
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('pacientes.lista') }}" class="nav-link text-white">
-                            Lista de Pacientes
-                        </a>
-                    </li>
+                    <a href="{{ route('pacientes.lista') }}">
+                        <i class="bi bi-people"></i>
+                        <span>Lista de Pacientes</span>
+                    </a>
                 @endcan
 
-                <!-- REGISTRAR PACIENTE (solo admin y doctor) -->
+
                 @can('crear pacientes')
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('pacientes.create') }}" class="nav-link text-white">
-                            Registrar Paciente
-                        </a>
-                    </li>
-                    <hr class="text-white">
+                    <a href="{{ route('pacientes.create') }}">
+                        <i class="bi bi-person-plus"></i>
+                        <span>Registrar Paciente</span>
+                    </a>
                 @endcan
+
 
                 @can('ver citas')
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('citas.index') }}" class="nav-link text-white">
-                            Lista de Citas
-                        </a>
-                    </li>
+                    <a href="{{ route('citas.index') }}">
+                        <i class="bi bi-calendar-event"></i>
+                        <span>Lista de Citas</span>
+                    </a>
                 @endcan
 
-                <!-- CITAS -->
+
                 @can('crear citas')
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('citas.create') }}" class="nav-link text-white">
-                            Agendar Cita
-                        </a>
-                    </li>
-                    <hr class="text-white">
+                    <a href="{{ route('citas.create') }}">
+                        <i class="bi bi-journal-medical"></i>
+                        <span>Agendar Cita</span>
+                    </a>
                 @endcan
+
 
                 @can('ver pacientes')
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('pacientes.archivados') }}" class="nav-link text-white">
-                            Pacientes Archivados
-                        </a>
-                    </li>
+                    <a href="{{ route('pacientes.archivados') }}">
+                        <i class="bi bi-archive"></i>
+                        <span>Archivados</span>
+                    </a>
                 @endcan
+
 
                 @can('ver perfil')
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('perfil') }}" class="nav-link text-white">
-                            Mi Perfil
-                        </a>
-                    </li>
+                    <a href="{{ route('perfil') }}">
+                        <i class="bi bi-person-circle"></i>
+                        <span>Mi Perfil</span>
+                    </a>
                 @endcan
 
-                <!-- USUARIOS (solo admin) -->
+
                 @role('admin')
-                    <li class="nav-item">
-                        <a href="{{ route('usuarios.index') }}" class="nav-link text-white">
-                            Usuarios
-                        </a>
-                    </li>
+                    <a href="{{ route('usuarios.index') }}">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Usuarios</span>
+                    </a>
                 @endrole
 
+                <div class="user-box">
 
-                <!-- INFO USUARIO -->
-                <div class="text-start mb-3 mt-4">
                     @auth
-                        {{ auth()->user()->name }}
+
+                        <div class="fw-bold">
+                            <i class="bi bi-person-circle"></i>
+                            <span>{{ auth()->user()->name }}</span>
+                        </div>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button class="btn btn-sm btn-light mt-2">Cerrar sesión</button>
+                            <button class="logout-btn">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Salir</span>
+                            </button>
                         </form>
-                    @endauth
-                </div>
 
-            </ul>
+                    @endauth
+
+                </div>
+            </div>
         </div>
 
-        <!-- CONTENIDO -->
-        <div class="flex-fill p-4">
+        <!-- CONTENT -->
+
+        <div class="content flex-fill">
+
             @yield('content')
+
         </div>
 
     </div>
+
+    <script>
+        function toggleSidebar() {
+
+            let sidebar = document.getElementById("sidebar");
+
+            sidebar.classList.toggle("collapsed");
+        }
+    </script>
+
     @yield('scripts')
+
 </body>
 
 </html>

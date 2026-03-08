@@ -67,7 +67,7 @@ class CitaController extends Controller
         $query->orderBy('fecha', 'asc')
             ->orderBy('hora', 'asc');
 
-        $citas = $query->paginate(15)->withQueryString();
+        $citas = $query->paginate(25)->withQueryString();
 
         return view('agenda.index', compact('citas'));
     }

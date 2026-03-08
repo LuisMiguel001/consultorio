@@ -362,11 +362,16 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+                                <div class="text-muted small mb-3 mb-md-0">
+                                    Mostrando {{ $citas->firstItem() }} - {{ $citas->lastItem() }} de
+                                    {{ $citas->total() }} citas
+                                </div>
 
-                        <!-- PAGINACIÓN -->
-                        <div class="d-flex justify-content-center mt-4">
-                            {{ $citas->links() }}
+                                <div class="pagination-wrapper">
+                                    {{ $citas->links('pagination::bootstrap-5') }}
+                                </div>
+                            </div>
                         </div>
                     @endif
                 </div>
