@@ -2,36 +2,114 @@
 
 @section('content')
     <div class="container">
+        <style>
+            .consulta-card {
+                border-radius: 16px;
+                border: none;
+                background: #f4f8fd;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+            }
 
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-dark text-white">
-                Consulta del {{ $consulta->fecha_consulta }}
-                | {{ $consulta->tipo_consulta }}
-                | Dr. {{ $consulta->doctor->name }}
+            .consulta-header {
+                background: #0d47a1;
+                color: white;
+                border-radius: 16px 16px 0 0;
+                padding: 16px 20px;
+            }
 
-                <a href="{{ route('receta.pdf', $consulta) }}" target="_blank" class="btn btn-danger mb-3">
+            .consulta-header h6 {
+                margin: 0;
+                font-weight: 600;
+            }
+
+            .consulta-meta {
+                font-size: 14px;
+                opacity: .9;
+            }
+
+            .consulta-section {
+                margin-bottom: 18px;
+                padding-bottom: 12px;
+                border-bottom: 1px solid #e3ecf7;
+            }
+
+            .consulta-section:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+
+            .consulta-label {
+                font-weight: 600;
+                color: #0d47a1;
+                margin-bottom: 4px;
+            }
+
+            .consulta-text {
+                color: #1a2b3c;
+                line-height: 1.5;
+            }
+
+            .btn-receta {
+                background: #e8f1fb;
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+            }
+
+            .btn-receta:hover {
+                background: #4caf50;
+            }
+        </style>
+
+        <div class="card consulta-card mb-4">
+
+            <div class="consulta-header d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <h6>
+                        Consulta Médica
+                    </h6>
+
+                    <div class="consulta-meta">
+                        {{ $consulta->fecha_consulta }}
+                        | {{ $consulta->tipo_consulta }}
+                        | {{ $consulta->doctor->name }}
+                    </div>
+                </div>
+
+                <a href="{{ route('receta.pdf', $consulta) }}" target="_blank" class="btn btn-receta btn-sm">
                     🧾 Generar Receta
                 </a>
             </div>
 
             <div class="card-body">
 
-                <p><strong>Motivo:</strong><br>
-                    {{ $consulta->motivo_consulta }}
-                </p>
+                <div class="consulta-section">
+                    <div class="consulta-label">Motivo de Consulta</div>
+                    <div class="consulta-text">
+                        {{ $consulta->motivo_consulta }}
+                    </div>
+                </div>
 
-                <p><strong>Enfermedad Actual:</strong><br>
-                    {{ $consulta->enfermedad_actual }}
-                </p>
+                <div class="consulta-section">
+                    <div class="consulta-label">Enfermedad Actual</div>
+                    <div class="consulta-text">
+                        {{ $consulta->enfermedad_actual }}
+                    </div>
+                </div>
 
-                <p><strong>Plan:</strong><br>
-                    {{ $consulta->plan }}
-                </p>
+                <div class="consulta-section">
+                    <div class="consulta-label">Plan de Tratamiento</div>
+                    <div class="consulta-text">
+                        {{ $consulta->plan }}
+                    </div>
+                </div>
 
-                <p><strong>Observaciones:</strong><br>
-                    {{ $consulta->observaciones }}
-                </p>
-
+                <div class="consulta-section">
+                    <div class="consulta-label">Observaciones</div>
+                    <div class="consulta-text">
+                        {{ $consulta->observaciones }}
+                    </div>
+                </div>
             </div>
         </div>
 
