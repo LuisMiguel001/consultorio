@@ -148,7 +148,7 @@
 
                 <div class="user-box">
                     <input type="password" id="password" name="password" required placeholder=" ">
-                    <label for="password">Contraseña</label>
+                    <label for="password">Contrase</label>
                 </div>
 
                 <button class="login-button" type="submit" id="submitBtn">

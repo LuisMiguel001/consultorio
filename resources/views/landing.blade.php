@@ -1220,7 +1220,6 @@
         </div>
     </section>
 
-    <!-- Sección Dr. -->
     <section class="section" id="doctor">
         <div class="container">
             <div class="doctor">
@@ -1522,6 +1521,7 @@
                         *SOLICITUD DE CITA MÉDICA*
 
                         *Nombre:* ${name}
+
 
                         *Motivo de la consulta:*
                         ${message}
