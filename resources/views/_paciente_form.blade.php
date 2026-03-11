@@ -207,8 +207,8 @@
 
     <div class="col-md-6">
         <label class="form-label">NSS</label>
-        <input type="text" name="nss" id="nss" class="form-control" maxlength="11"
-            inputmode="numeric" pattern="[0-9]{11}" value="{{ old('nss', $paciente->nss ?? '') }}" disabled
+        <input type="text" name="nss" id="nss" class="form-control" maxlength="9"
+            inputmode="numeric" pattern="[0-9]{9}" value="{{ old('nss', $paciente->nss ?? '') }}" disabled
             style="border-color: var(--primary-border);">
     </div>
 </div>

@@ -20,7 +20,7 @@ class PacienteController extends Controller
             'sexo' => 'required|string|max:10',
             'email' => 'nullable|email',
             'telefono' => 'nullable|max:20',
-            'nss' => 'nullable|max:11'
+            'nss' => 'nullable|max:9'
         ]);
 
         Paciente::create($request->all());
@@ -284,7 +284,7 @@ class PacienteController extends Controller
             'sexo' => 'required',
             'email' => 'nullable|email',
             'telefono' => 'nullable|max:20',
-            'nss' => 'nullable|max:11'
+            'nss' => 'nullable|max:9'
         ]);
 
         $paciente->update($request->all());
