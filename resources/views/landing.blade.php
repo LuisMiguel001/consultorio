@@ -5,8 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dr. Lorenzo - Tu Salud es Nuestra Prioridad</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/healthicons@2.0.0/font/healthicons.css" rel="stylesheet">
     <style>
         /* Variables de colores y fuentes */
         :root {
@@ -433,6 +434,13 @@
             will-change: transform;
         }
 
+        .service-icon-img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
         /* Estilos para las tarjetas del carrusel */
         .testimonials-row .testimonial-card {
             flex: 0 0 350px;
@@ -662,6 +670,108 @@
             border: 0;
         }
 
+        /*Redes sociales*/
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            /* Aumentado de 12px a 25px */
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            transition: var(--transition);
+            font-size: 1.4rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Redes sociales en sección de contacto - Horizontal */
+        .contact-social {
+            display: flex;
+            gap: 20px;
+            /* Aumentado de 12px a 20px */
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .contact-social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            transition: var(--transition);
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+
+        .contact-social-link:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Colores específicos para hover (opcional) */
+        .social-link:hover .fa-facebook-f,
+        .contact-social-link:hover .fa-facebook-f {
+            color: white;
+        }
+
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+            .social-links {
+                justify-content: center;
+                gap: 20px;
+                /* Un poco menos en móvil pero sigue siendo amplio */
+            }
+
+            .contact-social {
+                justify-content: flex-start;
+                gap: 18px;
+            }
+
+            .social-link {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .contact-social-link {
+                width: 38px;
+                height: 38px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Para pantallas muy pequeñas */
+        @media (max-width: 480px) {
+            .social-links {
+                gap: 15px;
+            }
+
+            .contact-social {
+                gap: 15px;
+            }
+        }
+
         /* Sección Consultorio */
         .clinic-images {
             display: grid;
@@ -742,134 +852,205 @@
             line-height: 1;
         }
 
-        /* Footer */
+        /* ===== FOOTER PROFESIONAL REDISEÑADO ===== */
         footer {
-            background-color: var(--primary-dark);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #0a3b5e 100%);
             color: var(--text-on-dark);
             padding: 60px 0 30px;
+            position: relative;
         }
 
         .footer-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 40px;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
-        .footer-section {
-            flex: 1;
-            min-width: 250px;
-        }
-
+        /* Columnas del footer */
         .footer-section h3 {
-            margin-bottom: 20px;
-            font-size: 1.3rem;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
         }
 
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        .footer-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Enlaces del footer */
         .footer-links {
             list-style: none;
+            padding: 0;
         }
 
         .footer-links li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
             transition: var(--transition);
+            font-size: 0.95rem;
+            display: inline-block;
         }
 
         .footer-links a:hover {
             color: var(--accent-color);
-            padding-left: 5px;
+            transform: translateX(5px);
         }
 
+        /* Información de contacto */
+        .contact-info li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-icon-footer {
+            color: var(--accent-color);
+            font-size: 1rem;
+            min-width: 20px;
+            margin-top: 3px;
+        }
+
+        /* Sección de Redes Sociales */
+        .social-section {
+            margin-top: 25px;
+        }
+
+        .social-title {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .social-links-footer {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .social-link-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        /* Instagram DESTACADO - más grande y con estilo especial */
+        .social-link-footer.instagram {
+            width: 48px;
+            height: 48px;
+            font-size: 1.5rem;
+            background: radial-gradient(circle at 30% 30%, #fdf497, #fd5949, #d6249f, #285AEB);
+            box-shadow: 0 5px 15px rgba(225, 48, 108, 0.4);
+        }
+
+        .social-link-footer.instagram:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(225, 48, 108, 0.6);
+        }
+
+        /* Otros iconos de redes */
+        .social-link-footer.facebook:hover {
+            background-color: #1877f2;
+            transform: translateY(-5px);
+        }
+
+        .social-link-footer.linkedin:hover {
+            background-color: #0077b5;
+            transform: translateY(-5px);
+        }
+
+        .social-link-footer.youtube:hover {
+            background-color: #ff0000;
+            transform: translateY(-5px);
+        }
+
+        .social-link-footer:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Copyright */
         .copyright {
             text-align: center;
             padding-top: 30px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 0.9rem;
-            opacity: 0.8;
         }
 
-        /* Responsive */
-        @media (max-width: 992px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .doctor {
-                flex-direction: column;
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
             }
         }
 
         @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
+            footer {
+                padding: 40px 0 20px;
             }
 
-            .nav-links {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                background-color: var(--text-on-dark);
-                flex-direction: column;
-                align-items: center;
-                padding: 20px 0;
-                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-                transition: var(--transition);
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
             }
 
-            .nav-links.active {
+            .footer-section h3::after {
                 left: 0;
+                transform: none;
             }
 
-            .nav-links li {
-                margin: 15px 0;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero-buttons {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-            }
-
-            .hero-buttons .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .section {
-                padding: 60px 0;
+            .social-links-footer {
+                justify-content: flex-start;
             }
         }
 
-        @media (max-width: 576px) {
-            .hero {
-                padding: 150px 0 80px;
-            }
-
-            .hero-info {
-                align-items: center;
-            }
-
-            .info-item {
-                display: flex;
-                align-items: flex-start;
+        @media (max-width: 480px) {
+            .social-links-footer {
                 gap: 12px;
-                width: 100%;
-                max-width: 320px;
             }
 
-            .stats {
-                flex-direction: column;
-                gap: 40px;
+            .social-link-footer {
+                width: 38px;
+                height: 38px;
+                font-size: 1.1rem;
+            }
+
+            .social-link-footer.instagram {
+                width: 46px;
+                height: 46px;
+                font-size: 1.4rem;
             }
         }
 
@@ -979,7 +1160,6 @@
         </div>
     </section>
 
-    <!-- Sección Servicios -->
     <section class="section services" id="servicios">
         <div class="container">
             <h2 class="section-title">Procedimientos Especializados</h2>
@@ -1069,7 +1249,34 @@
         </div>
     </section>
 
-    <!-- Sección Testimonios -->
+    <!-- Sección Dr. -->
+    <section class="section" id="doctor">
+        <div class="container">
+            <div class="doctor">
+                <div class="doctor-image">
+                    <img src="https://i.postimg.cc/Fsk5p3t4/Whats-App-Image-2026-03-07-at-9-44-53-PM-(1).jpg"
+                        alt="Dr. Lorenzo" />
+                </div>
+
+                <div class="doctor-info">
+                    <h2>Dr. Lorenzo García</h2>
+
+                    <p>
+                        Pionero en la cirugía cardiovascular del nordeste. Primer
+                        especialista en realizar procedimientos de corazón abierto en la
+                        región.
+                    </p>
+
+                    <p>
+                        Manejo avanzado de patología venosa con láser y procedimientos de
+                        última tecnología. Especialista en pacientes con insuficiencia
+                        renal, creación de fístula arteriovenosa, colocación de catéter
+                        permanente.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Sección Consultorio -->
     <section class="section" id="consultorio">
@@ -1170,58 +1377,91 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
+                <!-- Columna 1: Logo y descripción -->
+                <div class="footer-section about-section">
                     <div class="logo" style="margin-bottom: 20px">
                         <i class="fas fa-heartbeat logo-icon"></i>
                         <span class="logo-text">Dr. Lorenzo García</span>
                     </div>
-                    <p>
+                    <p class="footer-description">
                         Especialista en Cirugía Cardiovascular. Innovación, precisión y
                         experiencia al servicio de tu salud.
                     </p>
                 </div>
 
+                <!-- Columna 2: Enlaces Rápidos -->
                 <div class="footer-section">
                     <h3>Enlaces Rápidos</h3>
                     <ul class="footer-links">
                         <li><a href="#inicio">Inicio</a></li>
                         <li><a href="#servicios">Procedimientos</a></li>
-                        <li><a href="#doctora">Sobre Mí</a></li>
+                        <li><a href="#doctor">Sobre Mí</a></li>
                         <li><a href="#consultorio">Más de Nosotros</a></li>
                         <li><a href="#contacto">Contacto</a></li>
                     </ul>
                 </div>
 
+                <!-- Columna 3: Procedimientos (más compacta) -->
                 <div class="footer-section">
-                    <h3>Servicios</h3>
+                    <h3>Procedimientos</h3>
                     <ul class="footer-links">
-                        <li><a href="#servicios">Cirugía de Corazón Abierto</a></li>
+                        <li><a href="#servicios">Cirugía de Corazón</a></li>
                         <li><a href="#servicios">Cirugía Venosa con Láser</a></li>
                         <li><a href="#servicios">Insuficiencia Renal</a></li>
                         <li><a href="#servicios">Tratamiento de Várices</a></li>
-                        <li><a href="#servicios">Termodiálisis</a></li>
+                        <li><a href="#servicios">Endarterectomía Carotídea</a></li>
+                        <li><a href="#servicios">Aneurisma de Aorta</a></li>
                     </ul>
                 </div>
 
-                <div class="footer-section">
+                <!-- Columna 4: Contacto + Redes Sociales (Instagram destacado) -->
+                <div class="footer-section contact-section">
                     <h3>Contacto</h3>
-                    <ul class="footer-links">
-                        <li><i class="fas fa-phone"></i> 1 (809) 588-5601</li>
-                        <!--li><i class="fas fa-envelope"></i> juanperez@gmail.com</li-->
+                    <ul class="footer-links contact-info">
                         <li>
-                            <i class="fas fa-map-marker-alt"></i> C/. Duarte, Edificio Profesional
-                            Dr. Reynaldo Almanzar, 2Do Nivel, San Francisco
-                            de Macorís
+                            <i class="fas fa-phone contact-icon-footer"></i>
+                            <span>1 (809) 588-5601</span>
                         </li>
-                        <li><i class="far fa-clock"></i> Lun-Vie: 9:00-17:00</li>
+                        <li>
+                            <i class="fas fa-map-marker-alt contact-icon-footer"></i>
+                            <span>C/. Duarte, Edif. Dr. Reynaldo Almanzar, 2do Nivel<br>San Francisco de Macorís</span>
+                        </li>
+                        <li>
+                            <i class="far fa-clock contact-icon-footer"></i>
+                            <span>Lun-Vie: Previa cita desde 9AM</span>
+                        </li>
                     </ul>
+
+                    <!-- Redes Sociales con Instagram Destacado -->
+                    <div class="social-section">
+                        <h4 class="social-title">Síguenos en:</h4>
+                        <div class="social-links-footer">
+                            <!-- Instagram DESTACADO (más grande y primero) -->
+                            <a href="https://www.instagram.com/cardiovascular_lorenzogarcia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                                target="_blank" class="social-link-footer instagram" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://facebook.com/" target="_blank" class="social-link-footer facebook"
+                                aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://linkedin.com/" target="_blank" class="social-link-footer linkedin"
+                                aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://youtube.com/" target="_blank" class="social-link-footer youtube"
+                                aria-label="YouTube">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Copyright -->
             <div class="copyright">
                 <p>&copy; <span id="year"></span> Dr. Lorenzo García.</p>
             </div>
@@ -1276,7 +1516,7 @@
                 const name = document.getElementById("name").value.trim();
                 const message = document.getElementById("message").value.trim();
 
-                const whatsappNumber = "18297268194"; ///18095885601
+                const whatsappNumber = "18095885601"; ///18095885601
 
                 const text = `
                         *SOLICITUD DE CITA MÉDICA*
