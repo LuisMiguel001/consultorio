@@ -144,7 +144,7 @@
                                             <td>{{ $p->nombre }} {{ $p->apellido }}</td>
                                             <td>{{ $p->telefono }}</td>
                                             <td>{{ $p->nss }}</td>
-                                            <td>{{ $p->created_at->format('d/m/Y') }}</td>
+                                         <td>{{ $p->created_at ? $p->created_at->format('d/m/Y') : '' }}</td>
                                             <td class="text-center">
                                                 <div class="d-flex gap-1 justify-content-center">
                                                     <a href="{{ route('pacientes.show', $p->id) }}"

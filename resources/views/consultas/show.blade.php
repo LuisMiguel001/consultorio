@@ -107,7 +107,15 @@
                 <div class="consulta-section">
                     <div class="consulta-label">Observaciones</div>
                     <div class="consulta-text">
-                        {{ $consulta->observaciones }}
+                        {!! nl2br(
+                            e(
+                                preg_replace(
+                                    '/\n+/',
+                                    "\n",
+                                    trim(str_replace(['\\n', '\\r', '\\t'], "\n", strip_tags($consulta->observaciones ?? 'No registrado'))),
+                                ),
+                            ),
+                        ) !!}
                     </div>
                 </div>
             </div>

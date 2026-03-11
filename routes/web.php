@@ -17,20 +17,20 @@ use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use App\Models\Paciente;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-/*
-|--------------------------------------------------------------------------
-| LOGIN
-|--------------------------------------------------------------------------
-*/
 
-Route::get('/', [AuthController::class, 'showLogin']);
+//Landing page
+Route::get('/', function () {
+    return view('landing');
+});
+
+//Login
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
 
 Route::middleware(['auth', 'nocache'])->group(function () {
 

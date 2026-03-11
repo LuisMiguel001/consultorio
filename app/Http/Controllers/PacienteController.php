@@ -45,16 +45,28 @@ class PacienteController extends Controller
 
         if ($request->filled('buscar')) {
 
-            $buscar = $request->buscar;
+            $buscar = strtolower($request->buscar);
 
-            $query->where(function ($q) use ($buscar) {
+            // eliminar símbolos y guiones
+            $buscar = preg_replace('/[^a-z0-9\s]/i', ' ', $buscar);
 
-                $q->where('nombre', 'ILIKE', "%{$buscar}%")
-                    ->orWhere('apellido', 'ILIKE', "%{$buscar}%")
-                    ->orWhere('cedula', 'ILIKE', "%{$buscar}%")
-                    ->orWhere('telefono', 'ILIKE', "%{$buscar}%")
-                    ->orWhere('nss', 'ILIKE', "%{$buscar}%")
-                    ->orWhere(DB::raw("CONCAT(nombre,' ',apellido)"), 'ILIKE', "%{$buscar}%");
+            // dividir palabras
+            $palabras = array_filter(explode(' ', $buscar));
+
+            $query->where(function ($q) use ($palabras) {
+
+                foreach ($palabras as $palabra) {
+
+                    $q->where(function ($sub) use ($palabra) {
+
+                        $sub->whereRaw("LOWER(nombre) LIKE ?", ["%{$palabra}%"])
+                            ->orWhereRaw("LOWER(apellido) LIKE ?", ["%{$palabra}%"])
+                            ->orWhereRaw("LOWER(CONCAT(nombre,' ',apellido)) LIKE ?", ["%{$palabra}%"])
+                            ->orWhereRaw("REPLACE(cedula,'-','') LIKE ?", ["%" . str_replace('-', '', $palabra) . "%"])
+                            ->orWhereRaw("REPLACE(telefono,'-','') LIKE ?", ["%" . str_replace('-', '', $palabra) . "%"])
+                            ->orWhereRaw("LOWER(nss) LIKE ?", ["%{$palabra}%"]);
+                    });
+                }
             });
         }
 
@@ -67,7 +79,7 @@ class PacienteController extends Controller
         }
 
         $pacientes = $query
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc') // más reciente primero
             ->paginate(20)
             ->withQueryString();
 
@@ -75,117 +87,116 @@ class PacienteController extends Controller
     }
 
     public function inicio()
-    { {
-            // --- MÉTRICAS EXISTENTES (las mantenemos) ---
-            $totalPacientes = Paciente::count();
+    {
+        // --- MÉTRICAS EXISTENTES (las mantenemos) ---
+        $totalPacientes = Paciente::count();
 
-            // 1️⃣ PACIENTES ATENDIDOS HOY (Citas con estado 'Realizada')
-            $atendidosHoy = Cita::whereDate('fecha', Carbon::today())
-                ->where('estado_cita', 'Realizada')
-                ->count();
+        // 1️⃣ PACIENTES ATENDIDOS HOY (Citas con estado 'Realizada')
+        $atendidosHoy = Cita::whereDate('fecha', Carbon::today())
+            ->where('estado_cita', 'Realizada')
+            ->count();
 
-            // NUEVA: 2️⃣ PACIENTES ATENDIDOS ESTA SEMANA (Lunes a Domingo)
-            $inicioSemana = Carbon::now()->startOfWeek(); // Lunes
-            $finSemana = Carbon::now()->endOfWeek();      // Domingo
-            $atendidosSemana = Cita::whereBetween('fecha', [$inicioSemana, $finSemana])
-                ->where('estado_cita', 'Realizada')
-                ->count();
+        // NUEVA: 2️⃣ PACIENTES ATENDIDOS ESTA SEMANA (Lunes a Domingo)
+        $inicioSemana = Carbon::now()->startOfWeek(); // Lunes
+        $finSemana = Carbon::now()->endOfWeek();      // Domingo
+        $atendidosSemana = Cita::whereBetween('fecha', [$inicioSemana, $finSemana])
+            ->where('estado_cita', 'Realizada')
+            ->count();
 
-            // NUEVA: 3️⃣ PACIENTES ATENDIDOS ESTE MES
-            $atendidosMes = Cita::whereMonth('fecha', Carbon::now()->month)
-                ->whereYear('fecha', Carbon::now()->year)
-                ->where('estado_cita', 'Realizada')
-                ->count();
+        // NUEVA: 3️⃣ PACIENTES ATENDIDOS ESTE MES
+        $atendidosMes = Cita::whereMonth('fecha', Carbon::now()->month)
+            ->whereYear('fecha', Carbon::now()->year)
+            ->where('estado_cita', 'Realizada')
+            ->count();
 
-            // 4️⃣ NUEVO PROMEDIO SEMANAL REAL (Promedio de las últimas 4 semanas completas)
-            $promedioSemanaReal = 0;
-            $fechasSemanas = [];
-            for ($i = 4; $i > 0; $i--) {
-                $inicio = Carbon::now()->subWeeks($i)->startOfWeek();
-                $fin = Carbon::now()->subWeeks($i)->endOfWeek();
-                $fechasSemanas[] = [
-                    'inicio' => $inicio->copy(),
-                    'fin' => $fin->copy(),
-                ];
-            }
-            $totalesSemanas = [];
-            foreach ($fechasSemanas as $semana) {
-                $totalesSemanas[] = Cita::whereBetween('fecha', [$semana['inicio'], $semana['fin']])
-                    ->where('estado_cita', 'Realizada')
-                    ->count();
-            }
-            if (count($totalesSemanas) > 0) {
-                $promedioSemanaReal = round(array_sum($totalesSemanas) / count($totalesSemanas), 1);
-            }
-
-            // 5️⃣ GRÁFICO COMPARATIVO MENSUAL (Citas Realizadas vs Totales)
-            $citasPorMesComparativo = Cita::select(
-                DB::raw('EXTRACT(MONTH FROM fecha) as mes'),
-                DB::raw("COUNT(CASE WHEN estado_cita = 'Realizada' THEN 1 END) as realizadas"),
-                DB::raw('COUNT(*) as totales')
-            )
-                ->whereYear('fecha', Carbon::now()->year)
-                ->groupBy('mes')
-                ->orderBy('mes')
-                ->get();
-
-            // 6️⃣ TASA DE ASISTENCIA (%)
-            $citasProgramadas = Cita::where('estado_cita', 'Programada')->count();
-            $citasRealizadas = Cita::where('estado_cita', 'Realizada')->count();
-            $totalCitasConsideradas = $citasProgramadas + $citasRealizadas; // Evitar dividir por 0
-            $tasaAsistencia = $totalCitasConsideradas > 0
-                ? round(($citasRealizadas / $totalCitasConsideradas) * 100, 1)
-                : 0;
-
-            // --- MÉTRICAS PARA GRÁFICOS (simplificadas) ---
-            $citasPorMes = Cita::select(
-                DB::raw('EXTRACT(MONTH FROM fecha) as mes'),
-                DB::raw('COUNT(*) as total')
-            )
-                ->whereYear('fecha', Carbon::now()->year)
-                ->groupBy('mes')
-                ->orderBy('mes')
-                ->get();
-
-            // --- PRÓXIMAS CITAS (igual) ---
-            $ahora = Carbon::now();
-            $proximasCitas = Cita::with('paciente')
-                ->where('estado_cita', 'Programada')
-                ->where(function ($q) use ($ahora) {
-                    $q->whereDate('fecha', '>', $ahora->toDateString())
-                        ->orWhere(function ($q2) use ($ahora) {
-                            $q2->whereDate('fecha', $ahora->toDateString())
-                                ->whereTime('hora', '>=', $ahora->format('H:i:s'));
-                        });
-                })
-                ->whereHas('paciente', function ($q) {
-                    $q->whereNull('deleted_at');
-                })
-                ->orderBy('fecha')
-                ->orderBy('hora')
-                ->limit(6)
-                ->get();
-
-            $citasUltimos6Meses = Cita::where('estado_cita', 'Realizada')
-                ->whereBetween('fecha', [
-                    Carbon::now()->subMonths(6)->startOfDay(),
-                    Carbon::now()->endOfDay()
-                ])->count();
-            $promedioMensual = round($citasUltimos6Meses / 6, 1);
-
-            return view('inicio', compact(
-                'totalPacientes',
-                'atendidosHoy',          // Actualizado
-                'atendidosSemana',        // Nuevo
-                'atendidosMes',            // Nuevo
-                'citasPorMes',
-                'promedioMensual',
-                'promedioSemanaReal',      // Nuevo (reemplaza al anterior)
-                'proximasCitas',
-                'citasPorMesComparativo',  // Nuevo
-                'tasaAsistencia'           // Nuevo
-            ));
+        // 4️⃣ NUEVO PROMEDIO SEMANAL REAL (Promedio de las últimas 4 semanas completas)
+        $promedioSemanaReal = 0;
+        $fechasSemanas = [];
+        for ($i = 4; $i > 0; $i--) {
+            $inicio = Carbon::now()->subWeeks($i)->startOfWeek();
+            $fin = Carbon::now()->subWeeks($i)->endOfWeek();
+            $fechasSemanas[] = [
+                'inicio' => $inicio->copy(),
+                'fin' => $fin->copy(),
+            ];
         }
+        $totalesSemanas = [];
+        foreach ($fechasSemanas as $semana) {
+            $totalesSemanas[] = Cita::whereBetween('fecha', [$semana['inicio'], $semana['fin']])
+                ->where('estado_cita', 'Realizada')
+                ->count();
+        }
+        if (count($totalesSemanas) > 0) {
+            $promedioSemanaReal = round(array_sum($totalesSemanas) / count($totalesSemanas), 1);
+        }
+
+        // 5️⃣ GRÁFICO COMPARATIVO MENSUAL (Citas Realizadas vs Totales)
+        $citasPorMesComparativo = Cita::select(
+            DB::raw('EXTRACT(MONTH FROM fecha) as mes'),
+            DB::raw("COUNT(CASE WHEN estado_cita = 'Realizada' THEN 1 END) as realizadas"),
+            DB::raw('COUNT(*) as totales')
+        )
+            ->whereYear('fecha', Carbon::now()->year)
+            ->groupBy('mes')
+            ->orderBy('mes')
+            ->get();
+
+        // 6️⃣ TASA DE ASISTENCIA (%)
+        $citasProgramadas = Cita::where('estado_cita', 'Programada')->count();
+        $citasRealizadas = Cita::where('estado_cita', 'Realizada')->count();
+        $totalCitasConsideradas = $citasProgramadas + $citasRealizadas; // Evitar dividir por 0
+        $tasaAsistencia = $totalCitasConsideradas > 0
+            ? round(($citasRealizadas / $totalCitasConsideradas) * 100, 1)
+            : 0;
+
+        // --- MÉTRICAS PARA GRÁFICOS (simplificadas) ---
+        $citasPorMes = Cita::select(
+            DB::raw('EXTRACT(MONTH FROM fecha) as mes'),
+            DB::raw('COUNT(*) as total')
+        )
+            ->whereYear('fecha', Carbon::now()->year)
+            ->groupBy('mes')
+            ->orderBy('mes')
+            ->get();
+
+        // --- PRÓXIMAS CITAS (igual) ---
+        $ahora = Carbon::now();
+        $proximasCitas = Cita::with('paciente')
+            ->where('estado_cita', 'Programada')
+            ->where(function ($q) use ($ahora) {
+                $q->whereDate('fecha', '>', $ahora->toDateString())
+                    ->orWhere(function ($q2) use ($ahora) {
+                        $q2->whereDate('fecha', $ahora->toDateString())
+                            ->whereTime('hora', '>=', $ahora->format('H:i:s'));
+                    });
+            })
+            ->whereHas('paciente', function ($q) {
+                $q->whereNull('deleted_at');
+            })
+            ->orderBy('fecha')
+            ->orderBy('hora')
+            ->limit(6)
+            ->get();
+
+        $citasUltimos6Meses = Cita::where('estado_cita', 'Realizada')
+            ->whereBetween('fecha', [
+                Carbon::now()->subMonths(6)->startOfDay(),
+                Carbon::now()->endOfDay()
+            ])->count();
+        $promedioMensual = round($citasUltimos6Meses / 6, 1);
+
+        return view('inicio', compact(
+            'totalPacientes',
+            'atendidosHoy',          // Actualizado
+            'atendidosSemana',        // Nuevo
+            'atendidosMes',            // Nuevo
+            'citasPorMes',
+            'promedioMensual',
+            'promedioSemanaReal',      // Nuevo (reemplaza al anterior)
+            'proximasCitas',
+            'citasPorMesComparativo',  // Nuevo
+            'tasaAsistencia'           // Nuevo
+        ));
     }
 
     public function show(Paciente $paciente)

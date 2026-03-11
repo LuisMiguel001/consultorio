@@ -32,7 +32,7 @@
                             </button>
 
                             <a href="{{ route('pacientes.lista') }}" class="btn btn-secondary"
-                                style="border-radius:8px; background: var(--primary-border); border-color: var(--primary-border); color: var(--text-primary);">
+                                style="border-radius:8px; background: -border); border-color: var(--primary-border); color: var(--text-primary);">
                                 Cancelar
                             </a>
 

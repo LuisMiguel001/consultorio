@@ -140,8 +140,11 @@
                     <div class="card mb-3 shadow-sm" style="border-radius:12px;">
                         <div class="card-header text-white d-flex justify-content-between align-items-center"
                             style="background: #90caf9">
-                            <span>{{ $consulta->created_at->format('d/m/Y h:i A') }} | Dr.
-                                {{ $consulta->doctor->name ?? 'No especificado' }}</span>
+                            <span>
+                                {{ $consulta->created_at ? $consulta->created_at->format('d/m/Y h:i A') : 'Sin fecha' }} |
+                                Dr.
+                                {{ $consulta->doctor->name ?? 'No especificado' }}
+                            </span>
                             <a href="{{ route('consultas.show', $consulta) }}" class="btn btn-sm btn-light">Ver Detalle</a>
                         </div>
                         <div class="card-body p-2">
@@ -165,14 +168,19 @@
                                     </tr>
                                     <tr>
                                         <th>Observaciones</th>
-                                        <td>{{ $consulta->observaciones ?? 'No registrado' }}</td>
+                                        <td>
+                                            {!! nl2br(
+                                                e(trim(str_replace(['\\n', '\\r', '\\t'], "\n", strip_tags($consulta->observaciones ?? 'No registrado')))),
+                                            ) !!}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 @empty
-                    <div class="alert alert-secondary">No hay consultas registradas en este rango de fechas.</div>
+                    <div class="alert alert-secondary">No hay historiales clínicos registradas en este rango de fechas.
+                    </div>
                 @endforelse
 
             </div>

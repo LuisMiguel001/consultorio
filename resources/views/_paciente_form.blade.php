@@ -9,8 +9,7 @@
     <div class="col-md-6">
         <label class="form-label">Nombre</label> <span class="text-danger">*</span>
         <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror"
-            value="{{ old('nombre', $paciente->nombre ?? '') }}" required
-            style="border-color: var(--primary-border);">
+            value="{{ old('nombre', $paciente->nombre ?? '') }}" required style="border-color: var(--primary-border);">
         @error('nombre')
             <div class="invalid-feedback d-block">
                 {{ $message }}
@@ -95,8 +94,8 @@
     </div>
     <div class="col-md-6">
         <label class="form-label">Correo electrónico</label>
-        <input type="email" name="email" class="form-control"
-            value="{{ old('email', $paciente->email ?? '') }}" style="border-color: var(--primary-border);">
+        <input type="email" name="email" class="form-control" value="{{ old('email', $paciente->email ?? '') }}"
+            style="border-color: var(--primary-border);">
     </div>
 
     <div class="col-md-12">
@@ -116,14 +115,93 @@
 <div class="row g-3">
     <div class="col-md-6">
         <label class="form-label">ARS</label>
-        <select name="seguro_medico" id="seguro_medico" class="form-select" style="border-color: var(--primary-border);">
+        <select name="seguro_medico" id="seguro_medico" class="form-select"
+            style="border-color: var(--primary-border);">
             <option value="">--Seleccione--</option>
-            <option value="ARS SeNaSa" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS SeNaSa' ? 'selected' : '' }}>ARS SeNaSa</option>
-            <option value="ARS Universal" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Universal' ? 'selected' : '' }}>ARS Universal</option>
-            <option value="ARS Humano" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Humano' ? 'selected' : '' }}>ARS Humano</option>
-            <option value="Mapfre Salud ARS" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Mapfre Salud ARS' ? 'selected' : '' }}>Mapfre Salud ARS</option>
-            <option value="Primera ARS" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Primera ARS' ? 'selected' : '' }}>Primera ARS</option>
-            <option value="Otro" {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Otro' ? 'selected' : '' }}>Otro</option>
+            <option value="ARS SeNaSa"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS SeNaSa' ? 'selected' : '' }}>ARS SeNaSa
+            </option>
+            <option value="ARS Universal"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Universal' ? 'selected' : '' }}>ARS
+                Universal</option>
+            <option value="ARS Humano"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Humano' ? 'selected' : '' }}>ARS Humano
+            </option>
+            <option value="Mapfre Salud ARS"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Mapfre Salud ARS' ? 'selected' : '' }}>
+                Mapfre Salud ARS</option>
+            <option value="Primera ARS"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Primera ARS' ? 'selected' : '' }}>Primera
+                ARS</option>
+            <option value="ARS Reservas"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Reservas' ? 'selected' : '' }}>ARS
+                Reservas</option>
+            <option value="ARS Monumental"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Monumental' ? 'selected' : '' }}>ARS
+                Monumental</option>
+            <option value="ARS CMD"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS CMD' ? 'selected' : '' }}>ARS CMD
+            </option>
+            <option value="ARS Futuro"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Futuro' ? 'selected' : '' }}>ARS Futuro
+            </option>
+            <option value="ARS Palic-Salud"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Palic-Salud' ? 'selected' : '' }}>ARS
+                Palic-Salud</option>
+            <option value="ARS Meta-Salud"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Meta-Salud' ? 'selected' : '' }}>ARS
+                Meta-Salud</option>
+            <option value="ARS Plan Salud"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Plan Salud' ? 'selected' : '' }}>ARS
+                Plan Salud (Banco Central)</option>
+            <option value="ARS SEMMA"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS SEMMA' ? 'selected' : '' }}>ARS SEMMA
+                (Maestros)</option>
+            <option value="ARS ASEMAP"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS ASEMAP' ? 'selected' : '' }}>ARS ASEMAP
+            </option>
+            <option value="ARS Yunen"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Yunen' ? 'selected' : '' }}>ARS Yunen
+            </option>
+            <option value="ARS GMA"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS GMA' ? 'selected' : '' }}>ARS GMA
+            </option>
+            <option value="ARS Renacer"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Renacer' ? 'selected' : '' }}>ARS
+                Renacer</option>
+            <option value="ARS Abel González"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Abel González' ? 'selected' : '' }}>ARS
+                Abel González</option>
+            <option value="ARS Banreservas"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS Banreservas' ? 'selected' : '' }}>ARS
+                Banreservas</option>
+            <option value="ARS APS"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS APS' ? 'selected' : '' }}>ARS APS
+            </option>
+            <option value="ARS SIMAG"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS SIMAG' ? 'selected' : '' }}>ARS SIMAG
+            </option>
+            <option value="ARS BMI"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS BMI' ? 'selected' : '' }}>ARS BMI
+            </option>
+            <option value="ARS SEMUNASED"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS SEMUNASED' ? 'selected' : '' }}>ARS
+                SEMUNASED</option>
+            <option value="ARS UCEMED"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS UCEMED' ? 'selected' : '' }}>ARS UCEMED
+            </option>
+            <option value="ARS La Colonial"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS La Colonial' ? 'selected' : '' }}>ARS
+                La Colonial</option>
+            <option value="ARS ISSPOL"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS ISSPOL' ? 'selected' : '' }}>ARS ISSPOL
+                (Policía Nacional)</option>
+            <option value="ARS FFAA"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'ARS FFAA' ? 'selected' : '' }}>ARS FFAA
+                (Fuerzas Armadas)</option>
+            <option value="Otro"
+                {{ old('seguro_medico', $paciente->seguro_medico ?? '') == 'Otro' ? 'selected' : '' }}>Otra ARS
+            </option>
         </select>
     </div>
 
