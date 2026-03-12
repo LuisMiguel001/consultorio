@@ -4,124 +4,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Iniciar Sesión</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        .login-background {
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        body {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: system-ui;
         }
 
-        /* CARD */
-        .login-box {
-            width: 380px;
-            padding: 42px 36px;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(8px);
-            border-radius: 22px;
+        /* CARD PRINCIPAL */
+
+        .login-card {
+            width: 850px;
+            background: white;
+            border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-            animation: fadeInUp 0.6s ease;
+            overflow: hidden;
+            display: flex;
+            animation: fadeIn .6s ease;
         }
 
-        /* TÍTULO */
-        .login-box h3 {
-            color: #1e293b;
-            text-align: center;
-            margin-bottom: 32px;
+        /* LADO IZQUIERDO */
+
+        .logo-side {
+            flex: 1;
+            background: linear-gradient(135deg, #0ea5a5, #0f766e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* CORAZON */
+
+        .heart {
+            width: 260px;
+            animation: heartbeat 1s infinite;
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+        }
+
+        /* LATIDO */
+
+        @keyframes heartbeat {
+
+            0% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.07);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+
+            60% {
+                transform: scale(1.12);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+
+        }
+
+        /* LADO DERECHO */
+
+        .form-side {
+            flex: 1;
+            padding: 45px 40px;
+        }
+
+        .form-side h3 {
             font-weight: 700;
-            letter-spacing: 0.5px;
+            margin-bottom: 35px;
+            text-align: center;
+            color: #1e293b;
         }
 
-        /* INPUTS */
+        /* INPUT */
+
         .user-box {
             position: relative;
-            margin-bottom: 28px;
+            margin-bottom: 30px;
         }
 
         .user-box input {
             width: 100%;
-            padding: 10px 4px;
-            font-size: 15px;
-            color: #1e293b;
             border: none;
             border-bottom: 2px solid #e2e8f0;
-            background: transparent;
             outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .user-box input:focus {
-            border-bottom-color: #94a3b8;
+            padding: 8px 3px;
+            font-size: 15px;
+            background: transparent;
         }
 
         .user-box label {
             position: absolute;
-            top: 10px;
-            left: 4px;
+            top: 8px;
+            left: 2px;
             color: #64748b;
             font-size: 14px;
+            transition: .3s;
             pointer-events: none;
-            transition: 0.3s;
         }
 
         .user-box input:focus~label,
         .user-box input:not(:placeholder-shown)~label {
             top: -14px;
             font-size: 12px;
-            color: #334155;
+            color: #0f766e;
             font-weight: 600;
         }
 
-        /* BOTÓN */
+        .user-box input:focus {
+            border-bottom: 2px solid #0f766e;
+        }
+
+        /* BOTON */
+
         .login-button {
             width: 100%;
             padding: 12px;
-            font-size: 15px;
-            font-weight: 700;
-            border-radius: 14px;
             border: none;
-            color: #ffffff;
-            background: linear-gradient(135deg, #2c3e50, #1e293b);
-            transition: all 0.3s ease;
-        }
-
-        .login-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(30, 41, 59, 0.15);
-        }
-
-        .login-button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        /* LINK */
-        .login-box a {
-            color: #2c3e50;
-            font-size: 0.9rem;
-            text-decoration: none;
-        }
-
-        .login-box a:hover {
-            text-decoration: underline;
-            color: #1e293b;
-        }
-
-        /* ALERTA */
-        .login-box .alert {
-            margin-top: 18px;
             border-radius: 12px;
-            font-size: 0.9rem;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #0f766e, #115e59);
+            transition: .3s;
         }
 
-        /* ANIMACIÓN */
-        @keyframes fadeInUp {
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ANIMACION */
+
+        @keyframes fadeIn {
+
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(15px);
             }
 
             to {
@@ -133,56 +165,77 @@
 </head>
 
 <body>
-    <section class="login-background">
-        <div class="login-box">
+
+    <div class="login-card">
+
+        <!-- LADO IZQUIERDO -->
+        <div class="logo-side">
+            <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png" class="heart"
+                id="heart">
+        </div>
+
+
+        <!-- LADO DERECHO -->
+        <div class="form-side">
+
             <h3>Iniciar Sesión</h3>
 
             <form method="POST" action="{{ route('login.post') }}" id="loginForm">
                 @csrf
 
                 <div class="user-box">
-                    <input type="text" id="email" name="email" required placeholder=" "
-                        value="{{ old('email') }}">
-                    <label for="email">Usuario</label>
+                    <input type="text" name="email" required placeholder=" " value="{{ old('email') }}">
+                    <label>Usuario</label>
                 </div>
 
                 <div class="user-box">
-                    <input type="password" id="password" name="password" required placeholder=" ">
-                    <label for="password">Contrase</label>
+                    <input type="password" name="password" required placeholder=" ">
+                    <label>Contraseña</label>
                 </div>
 
-                <button class="login-button" type="submit" id="submitBtn">
-                    <span>Entrar</span>
+                <button class="login-button" id="submitBtn">
+                    Entrar
                 </button>
+
             </form>
 
             @if (session('error'))
-                <div class="alert alert-danger">
+                <div class="alert alert-danger mt-3">
                     {{ session('error') }}
                 </div>
             @endif
 
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    @foreach ($errors->all() as $error)
-                        {{ $error }}<br>
-                    @endforeach
-                </div>
-            @endif
         </div>
-    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+
+
     <script>
-        // Script para simular el estado "procesando" del botón
-        document.getElementById('loginForm').addEventListener('submit', function() {
-            const btn = document.getElementById('submitBtn');
-            const originalContent = btn.innerHTML;
+        const sound = document.getElementById("heartbeatSound");
+        let audioEnabled = false;
 
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> <span>Procesando...</span>';
+        // activar audio cuando el usuario interactúe
+        document.addEventListener("click", () => {
+
+            if (!audioEnabled) {
+                sound.play().then(() => {
+
+                    audioEnabled = true;
+
+                    setInterval(() => {
+                        sound.currentTime = 0;
+                        sound.play();
+                    }, 1000);
+
+                }).catch(() => {});
+
+            }
+
+        }, {
+            once: true
         });
     </script>
+
 </body>
 
 </html>

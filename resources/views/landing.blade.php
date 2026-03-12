@@ -1054,23 +1054,86 @@
             }
         }
 
-        /*Boton WhatsApp
-.whatsapp-float {
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-  background: #25d366;
-  color: #fff;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,.3);
-  z-index: 3000;
-}*/
+        /* ===== CORAZÓN LATIENTE ===== */
+        @keyframes latido {
+            0% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.1);
+            }
+
+            35% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.15);
+            }
+
+            55% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .heart-beat {
+            animation: latido 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        /* Para el corazón del hero-badge */
+        .hero-badge i.fa-heart {
+            animation: latido 1.5s ease-in-out infinite;
+        }
+
+        /* Para el corazón del footer */
+        .footer-section .logo i.fa-heartbeat {
+            animation: latido 1.5s ease-in-out infinite;
+        }
+
+        /* Para el corazón de la tarjeta del hero */
+        .hero-card i.fa-heartbeat {
+            animation: latido 1.5s ease-in-out infinite;
+        }
+
+        /* Para el icono de cirugía de corazón en servicios */
+        .service-card i.fa-heart-pulse,
+        .service-card i.fa-heart {
+            animation: latido 2s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .service-card i.fa-heart-pulse:hover,
+        .service-card i.fa-heart:hover {
+            animation: latido 0.8s ease-in-out infinite;
+            color: var(--accent-color);
+        }
+
+        /* Clase helper para cualquier corazón que quieras que lata */
+        .latido {
+            animation: latido 1.5s ease-in-out infinite;
+        }
+
+        /* Versión más rápida para hover */
+        .latido-rapido {
+            animation: latido 0.8s ease-in-out infinite;
+        }
+
+        .logo-image-wrapper {
+            display: inline-block;
+            animation: latido 1.5s ease-in-out infinite;
+        }
+
+        .logo-image-wrapper img {
+            display: block;
+        }
+
+
     </style>
 </head>
 
@@ -1080,8 +1143,10 @@
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
-                        class="logo-icon" height="30" width="30" />
+                    <div class="logo-image-wrapper heart-beat">
+                        <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
+                            class="logo-icon" height="30" width="30" alt="logo" />
+                    </div>
                     <span class="logo-text">Dr. Lorenzo García</span>
                 </div>
 
@@ -1175,12 +1240,10 @@
                 </div>
 
                 <div class="service-card">
-                    <i class="fas fa-wave-square service-icon"></i>
-                    <h3>Cirugía Venosa con Láser</h3>
-                    <p>
-                        Manejo avanzado de patología venosa mediante técnicas mínimamente
-                        invasivas.
-                    </p>
+                    <i class="fas fa-brain service-icon"></i>
+                    <h3>Endarterectomía Carotídea</h3>
+                    <p>Cirugía para eliminar la placa de las arterias carótidas y reducir el riesgo de accidente
+                        cerebrovascular.</p>
                 </div>
 
                 <div class="service-card">
@@ -1200,11 +1263,14 @@
                     </p>
                 </div>
                 <div class="service-card">
-                    <i class="fas fa-brain service-icon"></i>
-                    <h3>Endarterectomía Carotídea</h3>
-                    <p>Cirugía para eliminar la placa de las arterias carótidas y reducir el riesgo de accidente
-                        cerebrovascular.</p>
+                    <i class="fas fa-wave-square service-icon"></i>
+                    <h3>Cirugía Venosa con Láser</h3>
+                    <p>
+                        Manejo avanzado de patología venosa mediante técnicas mínimamente
+                        invasivas.
+                    </p>
                 </div>
+
                 <div class="service-card">
                     <i class="fas fa-heartbeat service-icon"></i>
                     <h3>Aneurisma de Aorta Abdominal</h3>
@@ -1220,35 +1286,6 @@
         </div>
     </section>
 
-    <section class="section" id="doctor">
-        <div class="container">
-            <div class="doctor">
-                <div class="doctor-image">
-                    <img src="https://i.postimg.cc/Fsk5p3t4/Whats-App-Image-2026-03-07-at-9-44-53-PM-(1).jpg"
-                        alt="Dr. Lorenzo" />
-                </div>
-
-                <div class="doctor-info">
-                    <h2>Dr. Lorenzo García</h2>
-
-                    <p>
-                        Pionero en la cirugía cardiovascular del nordeste. Primer
-                        especialista en realizar procedimientos de corazón abierto en la
-                        región.
-                    </p>
-
-                    <p>
-                        Manejo avanzado de patología venosa con láser y procedimientos de
-                        última tecnología. Especialista en pacientes con insuficiencia
-                        renal, creación de fístula arteriovenosa, colocación de catéter
-                        permanente.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Dr. -->
     <section class="section" id="doctor">
         <div class="container">
             <div class="doctor">
