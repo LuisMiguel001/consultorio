@@ -340,12 +340,12 @@
             </div>
 
             <div class="menu">
-                @hasanyrole('admin|doctor')
+                @auth
                     <a href="{{ route('pacientes.inicio') }}">
                         <i class="bi bi-speedometer2"></i>
                         <span>Inicio</span>
                     </a>
-                @endhasanyrole
+                @endauth
 
                 @can('ver pacientes')
                     <a href="{{ route('pacientes.lista') }}">

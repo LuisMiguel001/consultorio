@@ -95,9 +95,17 @@
                                 </label>
                                 <select name="servicio_especifico" class="form-select form-select-lg">
                                     <option value="">-- Seleccione el procedimiento --</option>
-                                    <option value="Cirugía de Corazón Abierto"
-                                        {{ old('servicio_especifico') == 'Cirugía de Corazón Abierto' ? 'selected' : '' }}>
-                                        Cirugía de Corazón Abierto
+                                    <option value="Cirugía de las Válvulas Cardiacas"
+                                        {{ old('servicio_especifico') == 'Cirugía de las Válvulas Cardiacas' ? 'selected' : '' }}>
+                                        Cirugía de las Válvulas Cardiacas
+                                    </option>
+                                    <option value="Cirugía Bypass Coronario"
+                                        {{ old('servicio_especifico') == 'Cirugía Bypass Coronario' ? 'selected' : '' }}>
+                                        Cirugía Bypass Coronario
+                                    </option>
+                                    <option value="Endarterectomía Carotídea"
+                                        {{ old('servicio_especifico') == 'Endarterectomía Carotídea' ? 'selected' : '' }}>
+                                        Endarterectomía Carotídea
                                     </option>
                                     <option value="Cirugía Venosa con Láser"
                                         {{ old('servicio_especifico') == 'Cirugía Venosa con Láser' ? 'selected' : '' }}>
@@ -105,15 +113,19 @@
                                     </option>
                                     <option value="Insuficiencia Renal"
                                         {{ old('servicio_especifico') == 'Insuficiencia Renal' ? 'selected' : '' }}>
-                                        Insuficiencia Renal (Acceso vascular)
+                                        Insuficiencia Renal
+                                    </option>
+                                    <option value="Aneurisma de Aorta Abdominal"
+                                        {{ old('servicio_especifico') == 'Aneurisma de Aorta Abdominal' ? 'selected' : '' }}>
+                                        Aneurisma de Aorta Abdominal
+                                    </option>
+                                    <option value="Angioplastia de Miembros Inferiores"
+                                        {{ old('servicio_especifico') == 'Angioplastia de Miembros Inferiores' ? 'selected' : '' }}>
+                                        Angioplastia de Miembros Inferiores
                                     </option>
                                     <option value="Tratamiento de Várices"
                                         {{ old('servicio_especifico') == 'Tratamiento de Várices' ? 'selected' : '' }}>
                                         Tratamiento de Várices
-                                    </option>
-                                    <option value="Termodiálisis"
-                                        {{ old('servicio_especifico') == 'Termodiálisis' ? 'selected' : '' }}>
-                                        Termodiálisis
                                     </option>
                                 </select>
                                 <div class="alert alert-info mt-2 py-2" id="procedimiento-descripcion"
@@ -317,12 +329,12 @@
                                     </div>
 
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="suspender_anticoagulantes"
-                                            id="suspender_anticoagulantes" value="1"
-                                            {{ old('suspender_anticoagulantes') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="suspender_anticoagulantes">
+                                        <input class="form-check-input" type="checkbox" name="suspender_medicamentos"
+                                            id="suspender_medicamentos" value="1"
+                                            {{ old('suspender_medicamentos') ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="suspender_medicamentos">
                                             <i class="fas fa-pills me-2 text-warning"></i>
-                                            Suspender anticoagulantes
+                                            Suspender medicamentos
                                         </label>
                                     </div>
                                 </div>
@@ -350,14 +362,6 @@
                                             <i class="fas fa-phone-alt me-2 text-success"></i>
                                             Requiere confirmación de asistencia
                                         </label>
-                                    </div>
-
-                                    <hr class="my-3">
-
-                                    <div class="alert alert-warning py-2 mb-0" style="font-size: 0.9rem;">
-                                        <i class="fas fa-info-circle me-2"></i>
-                                        <strong>Nota:</strong> Los procedimientos quirúrgicos requieren evaluación
-                                        pre-anestésica.
                                     </div>
                                 </div>
                             </div>
@@ -465,8 +469,7 @@
 
                                 item.innerHTML = `
                         <strong>${paciente.nombre} ${paciente.apellido}</strong><br>
-                        <small>Cédula: ${paciente.cedula}</small>
-                    `;
+                        <small>Cédula: ${paciente.cedula}</small>`;
 
                                 item.onclick = () => {
 
@@ -476,7 +479,7 @@
 
                                     pacienteInfo.innerHTML =
                                         `<i class="fas fa-id-card"></i> ${paciente.cedula}
-                         <i class="fas fa-phone ms-2"></i> ${paciente.telefono ?? 'No registrado'}`;
+                                            <i class="fas fa-phone ms-2"></i> ${paciente.telefono ?? 'No registrado'}`;
 
                                     lista.innerHTML = "";
                                 };
@@ -484,10 +487,8 @@
                                 lista.appendChild(item);
 
                             });
-
                         });
-
-                }, 300); // espera 300ms antes de buscar
+                }, 200);
             });
         </script>
 

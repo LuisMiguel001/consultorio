@@ -24,31 +24,33 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $permissions = Permission::all();
+        $doctores = User::role('doctor')->get();
 
-        return view('usuarios.create', compact('roles', 'permissions'));
+        return view('usuarios.create', compact('roles', 'permissions', 'doctores'));
     }
 
-    // GUARDAR USUARIO
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|unique:users',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6',
+            'doctor_id' => 'nullable|exists:users,id'
         ]);
+
+        $esDoctor = in_array('doctor', $request->roles ?? []);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => Hash::make($request->password),
+            'doctor_id' => $esDoctor ? null : $request->doctor_id,
         ]);
 
-        // Asignar roles
         if ($request->roles) {
             $user->syncRoles($request->roles);
         }
 
-        // Asignar permisos individuales
         if ($request->permissions) {
             $user->syncPermissions($request->permissions);
         }
@@ -66,32 +68,29 @@ class UserController extends Controller
         return view('usuarios.edit', compact('user', 'roles', 'permissions'));
     }
 
-    // ACTUALIZAR
     public function update(Request $request, User $user)
     {
+        $esDoctor = in_array('doctor', $request->roles ?? []);
+
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'doctor_id' => $esDoctor ? null : $user->doctor_id,
         ]);
 
-        // Sincroniza roles
         $user->syncRoles($request->roles ?? []);
-
-        // Sincroniza permisos individuales
         $user->syncPermissions($request->permissions ?? []);
 
         return redirect()->route('usuarios.index')
             ->with('success', 'Usuario actualizado');
     }
 
-    // Mostrar perfil del usuario actual
     public function perfil()
     {
         $user = Auth::user();
         return view('usuarios.perfil', compact('user'));
     }
 
-    // Actualizar información básica
     public function updatePerfil(Request $request)
     {
         $user = $request->user();
@@ -109,7 +108,6 @@ class UserController extends Controller
         return back()->with('success', 'Perfil actualizado correctamente.');
     }
 
-    // Cambiar contraseña
     public function updatePassword(Request $request)
     {
         $user = $request->user();

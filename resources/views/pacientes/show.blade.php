@@ -27,6 +27,11 @@
                     </div>
 
                     <div class="col-md-4">
+                        <small class="fw-bold">Sexo</small>
+                        <div class="text-black">{{ $paciente->sexo }} </div>
+                    </div>
+
+                    <div class="col-md-4">
                         <small class="fw-bold">Teléfono</small>
                         <div class="text-black">{{ $paciente->telefono }}</div>
                     </div>

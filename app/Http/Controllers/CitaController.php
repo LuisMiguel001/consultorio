@@ -7,6 +7,7 @@ use App\Models\Paciente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CitaController extends Controller
 {
@@ -23,8 +24,10 @@ class CitaController extends Controller
             })
             ->update(['estado_cita' => 'Atrasada']);
 
+        $doctorId = Auth::user()->doctor_principal;
+
         $query = Cita::with('paciente')
-            ->where('doctor_id', Auth::id())
+            ->where('doctor_id', $doctorId)
             ->whereHas('paciente', function ($q) {
                 $q->whereNull('deleted_at');
             });
@@ -36,8 +39,8 @@ class CitaController extends Controller
 
             $query->whereHas('paciente', function ($q) use ($buscar) {
 
-                $q->whereRaw("LOWER(nombre) LIKE ?", ["%{$buscar}%"])
-                    ->orWhereRaw("LOWER(apellido) LIKE ?", ["%{$buscar}%"])
+                $q->whereRaw("LOWER(nombre) ILEKE ?", ["%{$buscar}%"])
+                    ->orWhereRaw("LOWER(apellido) ILIKE ?", ["%{$buscar}%"])
                     ->orWhereRaw("REPLACE(cedula,'-','') LIKE ?", ["%{$buscar}%"]);
             });
         }
@@ -74,7 +77,10 @@ class CitaController extends Controller
 
     public function create()
     {
+        $doctorId = Auth::user()->doctor_principal;
+
         $pacientes = Paciente::orderBy('nombre')
+            ->where('doctor_id', $doctorId)
             ->whereNull('deleted_at')
             ->get();
         return view('agenda.create', compact('pacientes'));
@@ -83,46 +89,63 @@ class CitaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'paciente_id' => 'required|exists:pacientes,id',
+            'paciente_id'        => 'required|exists:pacientes,id',
             'servicio_especifico' => 'nullable|string|max:255',
-            'fecha' => 'required|date|after_or_equal:today',
-            'hora' => 'required',
-            'duracion_minutos' => 'nullable|integer|min:15',
-            'prioridad' => 'nullable|in:Normal,Preferente,Urgente',
+            'fecha'              => 'required|date|after_or_equal:today',
+            'hora'               => 'required',
+            'duracion_minutos'   => 'nullable|integer|min:15',
+            'prioridad'          => 'nullable|in:Normal,Preferente,Urgente',
         ]);
 
-        // Verificar disponibilidad
-        $existe = Cita::where('fecha', $request->fecha)
-            ->where('hora', $request->hora)
-            ->where('doctor_id', Auth::id())
-            ->exists();
+        $doctorId = Auth::user()->doctor_principal;
 
+        // Verificar que el paciente pertenece al doctor
+        Paciente::where('id', $request->paciente_id)
+            ->where('doctor_id', $doctorId)
+            ->firstOrFail();
+
+        // Validar que no sea en el pasado
         $fechaHoraCita = Carbon::parse($request->fecha . ' ' . $request->hora);
-
         if ($fechaHoraCita->lt(Carbon::now())) {
             return back()->withErrors([
                 'hora' => 'No se pueden registrar citas en horas pasadas'
             ])->withInput();
         }
 
-        $existe = Cita::where('fecha', $request->fecha)
-            ->where('hora', $request->hora)
-            ->where('estado_cita', 'Programada') // o 'Pendiente'
+        $duracion = (int) ($request->duracion_minutos ?? $cita->duracion_minutos ?? 30);
+        $horaInicio = $request->hora;                                          // HH:MM nueva cita
+        $horaFin    = $fechaHoraCita->copy()->addMinutes($duracion)->format('H:i'); // HH:MM fin nueva cita
+
+        $solapamiento = Cita::where('doctor_id', $doctorId)
+            ->where('fecha', $request->fecha)
+            ->where('estado_cita', 'Programada')
+            ->where(function ($q) use ($horaInicio, $horaFin) {
+                // Cita existente empieza antes de que termine la nueva
+                // Y termina después de que empieza la nueva
+                $q->whereRaw("hora < ?", [$horaFin])
+                    ->whereRaw("(hora::time + (duracion_minutos || ' minutes')::interval)::time > ?::time", [$horaInicio]);
+            })
             ->exists();
 
+        if ($solapamiento) {
+            return back()->withErrors([
+                'hora' => 'El horario se solapa con otra cita programada en ese rango de tiempo.'
+            ])->withInput();
+        }
+
         $cita = Cita::create([
-            'paciente_id' => $request->paciente_id,
-            'doctor_id' => Auth::id(),
+            'paciente_id'         => $request->paciente_id,
+            'doctor_id'           => $doctorId,
             'servicio_especifico' => $request->servicio_especifico,
-            'fecha' => $request->fecha,
-            'hora' => $request->hora,
-            'duracion_minutos' => $request->duracion_minutos ?? 30,
-            'notas_previas' => $request->notas_previas,
-            'prioridad' => $request->prioridad ?? 'Normal',
-            'estado_cita' => 'Programada',
+            'fecha'               => $request->fecha,
+            'hora'                => $request->hora,
+            'duracion_minutos'    => $duracion,
+            'notas_previas'       => $request->notas_previas,
+            'prioridad'           => $request->prioridad ?? 'Normal',
+            'estado_cita'         => 'Programada',
             'recordatorio_enviado' => false,
-            'requiere_ayuno' => $request->has('requiere_ayuno'),
-            'estudios_previos' => $request->has('estudios_previos'),
+            'requiere_ayuno'      => $request->has('requiere_ayuno'),
+            'estudios_previos'    => $request->has('estudios_previos'),
         ]);
 
         return redirect()->route('citas.index')
@@ -131,7 +154,11 @@ class CitaController extends Controller
 
     public function realizar($id)
     {
-        $cita = Cita::findOrFail($id);
+        $doctorId = Auth::user()->doctor_principal;
+
+        $cita = Cita::where('id', $id)
+            ->where('doctor_id', $doctorId)
+            ->firstOrFail();
 
         $cita->estado_cita = "Realizada";
         $cita->save();
@@ -142,20 +169,31 @@ class CitaController extends Controller
 
     public function edit($id)
     {
-        $cita = Cita::findOrFail($id);
-        $pacientes = Paciente::orderBy('nombre')->get();
+        $doctorId = Auth::user()->doctor_principal;
+
+        $cita = Cita::where('id', $id)
+            ->where('doctor_id', $doctorId)
+            ->firstOrFail();
+
+        $pacientes = Paciente::where('doctor_id', $doctorId)
+            ->orderBy('nombre')
+            ->get();
 
         return view('agenda.edit', compact('cita', 'pacientes'));
     }
 
     public function update(Request $request, $id)
     {
-        $cita = Cita::findOrFail($id);
+        $doctorId = Auth::user()->doctor_principal;
+
+        $cita = Cita::where('id', $id)
+            ->where('doctor_id', $doctorId)
+            ->firstOrFail();
 
         $request->validate([
             'paciente_id' => 'required|exists:pacientes,id',
-            'fecha' => 'required|date|after_or_equal:today',
-            'hora' => 'required'
+            'fecha'       => 'required|date|after_or_equal:today',
+            'hora'        => 'required',
         ]);
 
         if ($request->fecha == now()->toDateString() && $request->hora < now()->format('H:i')) {
@@ -164,16 +202,42 @@ class CitaController extends Controller
             ])->withInput();
         }
 
+        $duracion = (int) ($request->duracion_minutos ?? $cita->duracion_minutos ?? 30);
+        $horaInicio    = $request->hora;
+        $horaFin       = Carbon::parse($request->fecha . ' ' . $request->hora)
+            ->addMinutes($duracion)
+            ->format('H:i');
+
+        $solapamiento = Cita::where('doctor_id', $doctorId)
+            ->where('fecha', $request->fecha)
+            ->where('estado_cita', 'Programada')
+            ->where('id', '!=', $id) // excluir la cita actual
+            ->where(function ($q) use ($horaInicio, $horaFin) {
+                $q->whereRaw("hora < ?", [$horaFin])
+                    ->whereRaw("(hora::time + (duracion_minutos || ' minutes')::interval)::time > ?::time", [$horaInicio]);
+            })
+            ->exists();
+
+        if ($solapamiento) {
+            return back()->withErrors([
+                'hora' => 'El horario se solapa con otra cita programada en ese rango de tiempo.'
+            ])->withInput();
+        }
+
         $cita->update($request->all());
 
-        return redirect()
-            ->route('citas.index')
+        return redirect()->route('citas.index')
             ->with('success', 'Cita actualizada correctamente');
     }
 
     public function destroy($id)
     {
-        $cita = Cita::findOrFail($id);
+
+        $doctorId = Auth::user()->doctor_principal;
+
+        $cita = Cita::where('id', $id)
+            ->where('doctor_id', $doctorId)
+            ->firstOrFail();
 
         $cita->estado_cita = 'Cancelada';
         $cita->save();
@@ -181,5 +245,24 @@ class CitaController extends Controller
         return redirect()
             ->route('citas.index')
             ->with('success', 'Cita cancelada correctamente');
+    }
+
+    public function buscarPacientes(Request $request)
+    {
+        $buscar = $request->buscar;
+
+        $doctorId = Auth::user()->doctor_principal;
+
+        return Paciente::where('doctor_id', $doctorId)
+            ->where(function ($q) use ($buscar) {
+
+                $q->where(DB::raw("CONCAT(nombre,' ',apellido)"), 'ILIKE', "%$buscar%")
+                    ->orWhere('nombre', 'ILIKE', "%$buscar%")
+                    ->orWhere('apellido', 'ILIKE', "%$buscar%")
+                    ->orWhere('cedula', 'ILIKE', "%$buscar%");
+            })
+            ->whereNull('deleted_at')
+            ->limit(10)
+            ->get();
     }
 }

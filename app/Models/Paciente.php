@@ -21,7 +21,8 @@ class Paciente extends Model
         'contactoEmergencia',
         'seguro_medico',
         'nss',
-        'estado_civil'
+        'estado_civil',
+        'doctor_id'
     ];
 
     public function consultas()
@@ -32,5 +33,10 @@ class Paciente extends Model
     public function antecedentes()
     {
         return $this->hasMany(Antecedente::class);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
     }
 }

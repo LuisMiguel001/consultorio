@@ -165,9 +165,7 @@
 </head>
 
 <body>
-
     <div class="login-card">
-
         <!-- LADO IZQUIERDO -->
         <div class="logo-side">
             <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png" class="heart"
@@ -204,9 +202,7 @@
                     {{ session('error') }}
                 </div>
             @endif
-
         </div>
-
     </div>
 
 
@@ -214,7 +210,6 @@
         const sound = document.getElementById("heartbeatSound");
         let audioEnabled = false;
 
-        // activar audio cuando el usuario interactúe
         document.addEventListener("click", () => {
 
             if (!audioEnabled) {

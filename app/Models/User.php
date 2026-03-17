@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'doctor_id'
     ];
 
     /**
@@ -56,5 +57,20 @@ class User extends Authenticatable
     public function antecedentes()
     {
         return $this->hasMany(Antecedente::class);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
+    }
+
+    public function empleados()
+    {
+        return $this->hasMany(User::class, 'doctor_id');
+    }
+
+    public function getDoctorPrincipalAttribute()
+    {
+        return $this->doctor_id ?? $this->id;
     }
 }

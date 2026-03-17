@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Cita;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PacienteController extends Controller
 {
@@ -23,7 +24,10 @@ class PacienteController extends Controller
             'nss' => 'nullable|max:9'
         ]);
 
-        Paciente::create($request->all());
+        $data = $request->all();
+        $data['doctor_id'] = Auth::user()->doctor_principal;
+
+        Paciente::create($data);
 
         if ($request->accion == 'nuevo') {
             return redirect()->route('pacientes.create')
@@ -41,16 +45,13 @@ class PacienteController extends Controller
 
     public function lista(Request $request)
     {
-        $query = Paciente::query();
+        $doctorId = Auth::user()->doctor_principal;
+        $query = Paciente::where('doctor_id', $doctorId);
 
         if ($request->filled('buscar')) {
 
             $buscar = strtolower($request->buscar);
-
-            // eliminar símbolos y guiones
             $buscar = preg_replace('/[^a-z0-9\s]/i', ' ', $buscar);
-
-            // dividir palabras
             $palabras = array_filter(explode(' ', $buscar));
 
             $query->where(function ($q) use ($palabras) {
@@ -79,7 +80,7 @@ class PacienteController extends Controller
         }
 
         $pacientes = $query
-            ->orderBy('created_at', 'asc') // más reciente primero
+            ->orderByRaw("COALESCE(updated_at, created_at, '1970-01-01') DESC")
             ->paginate(20)
             ->withQueryString();
 
@@ -88,12 +89,14 @@ class PacienteController extends Controller
 
     public function inicio()
     {
-        // --- MÉTRICAS EXISTENTES (las mantenemos) ---
-        $totalPacientes = Paciente::count();
+        $doctorId = Auth::user()->doctor_principal;
+
+        $totalPacientes = Paciente::where('doctor_id', $doctorId)->count();
 
         // 1️⃣ PACIENTES ATENDIDOS HOY (Citas con estado 'Realizada')
         $atendidosHoy = Cita::whereDate('fecha', Carbon::today())
             ->where('estado_cita', 'Realizada')
+            ->where('doctor_id', $doctorId)
             ->count();
 
         // NUEVA: 2️⃣ PACIENTES ATENDIDOS ESTA SEMANA (Lunes a Domingo)
@@ -101,12 +104,13 @@ class PacienteController extends Controller
         $finSemana = Carbon::now()->endOfWeek();      // Domingo
         $atendidosSemana = Cita::whereBetween('fecha', [$inicioSemana, $finSemana])
             ->where('estado_cita', 'Realizada')
+            ->where('doctor_id', $doctorId)
             ->count();
-
         // NUEVA: 3️⃣ PACIENTES ATENDIDOS ESTE MES
         $atendidosMes = Cita::whereMonth('fecha', Carbon::now()->month)
             ->whereYear('fecha', Carbon::now()->year)
             ->where('estado_cita', 'Realizada')
+            ->where('doctor_id', $doctorId)
             ->count();
 
         // 4️⃣ NUEVO PROMEDIO SEMANAL REAL (Promedio de las últimas 4 semanas completas)
@@ -123,6 +127,7 @@ class PacienteController extends Controller
         $totalesSemanas = [];
         foreach ($fechasSemanas as $semana) {
             $totalesSemanas[] = Cita::whereBetween('fecha', [$semana['inicio'], $semana['fin']])
+                ->where('doctor_id', $doctorId)
                 ->where('estado_cita', 'Realizada')
                 ->count();
         }
@@ -136,14 +141,19 @@ class PacienteController extends Controller
             DB::raw("COUNT(CASE WHEN estado_cita = 'Realizada' THEN 1 END) as realizadas"),
             DB::raw('COUNT(*) as totales')
         )
+            ->where('doctor_id', $doctorId)
             ->whereYear('fecha', Carbon::now()->year)
             ->groupBy('mes')
             ->orderBy('mes')
             ->get();
 
         // 6️⃣ TASA DE ASISTENCIA (%)
-        $citasProgramadas = Cita::where('estado_cita', 'Programada')->count();
-        $citasRealizadas = Cita::where('estado_cita', 'Realizada')->count();
+        $citasProgramadas = Cita::where('estado_cita', 'Programada')
+            ->where('doctor_id', $doctorId)
+            ->count();
+        $citasRealizadas = Cita::where('estado_cita', 'Realizada')
+            ->where('doctor_id', $doctorId)
+            ->count();
         $totalCitasConsideradas = $citasProgramadas + $citasRealizadas; // Evitar dividir por 0
         $tasaAsistencia = $totalCitasConsideradas > 0
             ? round(($citasRealizadas / $totalCitasConsideradas) * 100, 1)
@@ -154,6 +164,7 @@ class PacienteController extends Controller
             DB::raw('EXTRACT(MONTH FROM fecha) as mes'),
             DB::raw('COUNT(*) as total')
         )
+            ->where('doctor_id', $doctorId)
             ->whereYear('fecha', Carbon::now()->year)
             ->groupBy('mes')
             ->orderBy('mes')
@@ -162,6 +173,7 @@ class PacienteController extends Controller
         // --- PRÓXIMAS CITAS (igual) ---
         $ahora = Carbon::now();
         $proximasCitas = Cita::with('paciente')
+            ->where('doctor_id', $doctorId)
             ->where('estado_cita', 'Programada')
             ->where(function ($q) use ($ahora) {
                 $q->whereDate('fecha', '>', $ahora->toDateString())
@@ -178,7 +190,8 @@ class PacienteController extends Controller
             ->limit(6)
             ->get();
 
-        $citasUltimos6Meses = Cita::where('estado_cita', 'Realizada')
+        $citasUltimos6Meses = $citasUltimos6Meses = Cita::where('estado_cita', 'Realizada')
+            ->where('doctor_id', $doctorId)
             ->whereBetween('fecha', [
                 Carbon::now()->subMonths(6)->startOfDay(),
                 Carbon::now()->endOfDay()
@@ -201,6 +214,10 @@ class PacienteController extends Controller
 
     public function show(Paciente $paciente)
     {
+        if ($paciente->doctor_id != Auth::user()->doctor_principal) {
+            abort(404);
+        }
+
         $paciente->load([
             'consultas.doctor',
             'consultas.diagnosticos',
@@ -268,14 +285,13 @@ class PacienteController extends Controller
 
     public function edit($id)
     {
-        $paciente = Paciente::findOrFail($id);
+        $paciente = $this->obtenerPacienteSeguro($id);
         return view('editar_paciente', compact('paciente'));
     }
 
     public function update(Request $request, $id)
     {
-        $paciente = Paciente::findOrFail($id);
-
+        $paciente = $this->obtenerPacienteSeguro($id);
         $request->validate([
             'nombre' => 'required|string|max:100',
             'apellido' => 'required|string|max:100',
@@ -295,7 +311,8 @@ class PacienteController extends Controller
 
     public function destroy($id)
     {
-        $paciente = Paciente::findOrFail($id);
+        $paciente = $this->obtenerPacienteSeguro($id);
+
         $paciente->delete();
 
         return redirect()->route('pacientes.lista')
@@ -304,7 +321,10 @@ class PacienteController extends Controller
 
     public function archivados()
     {
+        $doctorId = Auth::user()->doctor_principal;
+
         $pacientes = Paciente::onlyTrashed()
+            ->where('doctor_id', $doctorId)
             ->orderBy('deleted_at', 'desc')
             ->paginate(20);
 
@@ -313,10 +333,25 @@ class PacienteController extends Controller
 
     public function restaurar($id)
     {
-        $paciente = Paciente::onlyTrashed()->findOrFail($id);
+        $doctorId = Auth::user()->doctor_principal;
+
+        $paciente = Paciente::onlyTrashed()
+            ->where('id', $id)
+            ->where('doctor_id', $doctorId)
+            ->firstOrFail();
+
         $paciente->restore();
 
         return redirect()->route('pacientes.lista')
             ->with('success', 'Paciente restaurado correctamente');
+    }
+
+    private function obtenerPacienteSeguro($id)
+    {
+        $doctorId = Auth::user()->doctor_principal;
+
+        return Paciente::where('id', $id)
+            ->where('doctor_id', $doctorId)
+            ->firstOrFail();
     }
 }

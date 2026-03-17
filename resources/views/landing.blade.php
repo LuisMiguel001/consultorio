@@ -145,29 +145,36 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            padding: 15px 0;
+            flex-wrap: wrap;
+            position: relative;
         }
 
         .logo {
             display: flex;
             align-items: center;
+            gap: 10px;
+            z-index: 1001;
         }
 
         .logo-icon {
             color: var(--primary-color);
             font-size: 2rem;
-            margin-right: 10px;
         }
 
         .logo-text {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--primary-color);
+            white-space: nowrap;
         }
 
         .nav-links {
             display: flex;
             list-style: none;
+            gap: 0;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-links li {
@@ -177,6 +184,7 @@
         .nav-links a {
             font-weight: 500;
             transition: var(--transition);
+            font-size: 0.95rem;
         }
 
         .nav-links a:hover {
@@ -190,6 +198,62 @@
             border: none;
             cursor: pointer;
             color: var(--primary-color);
+            z-index: 1001;
+            padding: 5px;
+        }
+
+        /* ===== RESPONSIVE NAVBAR ===== */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--text-on-dark);
+                padding: 10px 0 20px;
+                border-top: 1px solid #eee;
+                margin-top: 10px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 0;
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 12px 20px;
+                font-size: 1rem;
+                border-bottom: 1px solid #f0f0f0;
+                transition: background 0.2s ease;
+            }
+
+            .nav-links a:hover {
+                background-color: #f5f9ff;
+                color: var(--primary-color);
+                padding-left: 28px;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 1rem;
+            }
+
+            .navbar {
+                padding: 12px 0;
+            }
         }
 
         /* HERO MODERNO (FIGMA STYLE) */
@@ -1132,8 +1196,6 @@
         .logo-image-wrapper img {
             display: block;
         }
-
-
     </style>
 </head>
 

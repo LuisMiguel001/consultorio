@@ -15,10 +15,7 @@ use App\Http\Controllers\ExamenFisicoController;
 use App\Http\Controllers\EvolucionController;
 use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
-use App\Models\Paciente;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
 
 
 //Landing page
@@ -107,17 +104,7 @@ Route::middleware(['auth', 'nocache'])->group(function () {
 
     Route::post('/citas/{id}/realizar', [CitaController::class, 'realizar'])->name('citas.realizar');
 
-    Route::get('/buscar-pacientes', function (Request $request) {
-
-        $buscar = $request->buscar;
-
-        return Paciente::where(DB::raw("CONCAT(nombre,' ',apellido)"), 'ILIKE', "%$buscar%")
-            ->orWhere('nombre', 'ILIKE', "%$buscar%")
-            ->orWhere('apellido', 'ILIKE', "%$buscar%")
-            ->orWhere('cedula', 'ILIKE', "%$buscar%")
-            ->limit(10)
-            ->get();
-    });
+    Route::get('/buscar-pacientes', [CitaController::class, 'buscarPacientes']);
 
     /*Consulta*/
 
