@@ -5,7 +5,17 @@
 
         {{-- PRIMERA FILA: 4 tarjetas --}}
         <div class="row g-3 mb-4">
-            {{-- 1. Atendidos Hoy --}}
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm h-100"
+                    style="border-radius:15px; background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);">
+                    <div class="card-body text-white position-relative">
+                        <h6 class="text-white-50">Citas Para Hoy</h6>
+                        <h2 class="mb-0">{{ $citasHoy }}</h2>
+                        <i class="bi bi-calendar-day fs-1 opacity-50 position-absolute bottom-0 end-0 me-3 mb-3"></i>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm h-100"
                     style="border-radius:15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
@@ -17,7 +27,6 @@
                 </div>
             </div>
 
-            {{-- 2. Atendidos Semana --}}
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm h-100"
                     style="border-radius:15px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
@@ -29,7 +38,6 @@
                 </div>
             </div>
 
-            {{-- 3. Atendidos Mes --}}
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm h-100"
                     style="border-radius:15px; background: linear-gradient(135deg, #5f2c82 0%, #49a09d 100%);">
@@ -40,8 +48,10 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            {{-- 4. Promedio Semanal --}}
+        {{-- SEGUNDA FILA: 4 tarjetas --}}
+        <div class="row g-3 mb-4">
             <div class="col-md-3">
                 <div class="card border-0 shadow-sm h-100"
                     style="border-radius:15px; background: linear-gradient(135deg, #373b44 0%, #4286f4 100%);">
@@ -52,12 +62,8 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        {{-- SEGUNDA FILA: 3 tarjetas --}}
-        <div class="row g-3 mb-4">
-            {{-- 5. Promedio Mensual (NUEVO) --}}
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card border-0 shadow-sm h-100"
                     style="border-radius:15px; background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);">
                     <div class="card-body text-white position-relative">
@@ -68,8 +74,7 @@
                 </div>
             </div>
 
-            {{-- 6. Tasa Asistencia --}}
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card border-0 shadow-sm h-100"
                     style="border-radius:15px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
                     <div class="card-body text-white position-relative">
@@ -80,8 +85,7 @@
                 </div>
             </div>
 
-            {{-- 7. Total Pacientes --}}
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card border-0 shadow-sm h-100"
                     style="border-radius:15px; background: linear-gradient(135deg, #4568DC 0%, #B06AB3 100%);">
                     <div class="card-body text-white position-relative">

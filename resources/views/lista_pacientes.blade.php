@@ -82,12 +82,6 @@
                 </div>
 
                 <div class="card-body">
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
                     <!-- BUSCADOR SIMPLE -->
                     <form method="GET" action="{{ route('pacientes.lista') }}">
                         <div class="row gx-2 gy-2 mb-4">

@@ -165,7 +165,15 @@
                         <div class="row gx-2 gy-2 mb-4">
                             <div class="col-md-4">
                                 <input type="text" name="buscar" class="form-control"
-                                    placeholder="Buscar paciente o procedimiento..." value="{{ request('buscar') }}">
+                                    placeholder="Buscar paciente..." value="{{ request('buscar') }}">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="date" name="fecha_desde" class="form-control"
+                                    value="{{ request('fecha_desde') }}" placeholder="Desde">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="date" name="fecha_hasta" class="form-control"
+                                    value="{{ request('fecha_hasta') }}" placeholder="Hasta">
                             </div>
                             <div class="col-md-2">
                                 <select name="filtro_estado" class="form-select">
@@ -207,14 +215,6 @@
                         </div>
                     </form>
 
-                    @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="fas fa-check-circle me-2"></i>
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    @endif
-
                     @if ($citas->count() == 0)
                         <div class="alert alert-warning text-center">
                             <i class="fas fa-info-circle me-2"></i>
@@ -245,7 +245,8 @@
                                                     {{ \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') }}</div>
                                                 <small class="text-muted">
                                                     <i class="far fa-clock me-1"></i>
-                                                    {{ $cita->hora }} ({{ $cita->duracion_minutos }} min)
+                                                    {{ \Carbon\Carbon::parse($cita->hora)->format('h:i A') }}
+                                                    ({{ $cita->duracion_minutos }} min)
                                                 </small>
                                             </td>
                                             <td>
@@ -296,8 +297,9 @@
                                                                 class="fas fa-stethoscope"></i></a>
                                                     @endif
                                                     @if ($cita->estado_cita != 'Realizada' && $cita->estado_cita != 'Cancelada')
-                                                        <a href="{{ route('citas.edit', $cita->id) }}" title="Editar cita"
-                                                            class="btn btn-sm btn-edit"><i class="fas fa-edit"></i></a>
+                                                        <a href="{{ route('citas.edit', $cita->id) }}"
+                                                            title="Editar cita" class="btn btn-sm btn-edit"><i
+                                                                class="fas fa-edit"></i></a>
                                                     @endif
                                                     @if ($cita->estado_cita != 'Realizada' && $cita->estado_cita != 'Cancelada')
                                                         <form action="{{ route('citas.destroy', $cita->id) }}"

@@ -93,6 +93,12 @@ class PacienteController extends Controller
 
         $totalPacientes = Paciente::where('doctor_id', $doctorId)->count();
 
+        // Citas programadas para hoy
+        $citasHoy = Cita::whereDate('fecha', Carbon::today())
+            ->where('doctor_id', $doctorId)
+            ->where('estado_cita', 'Programada')
+            ->count();
+
         // 1️⃣ PACIENTES ATENDIDOS HOY (Citas con estado 'Realizada')
         $atendidosHoy = Cita::whereDate('fecha', Carbon::today())
             ->where('estado_cita', 'Realizada')
@@ -200,15 +206,16 @@ class PacienteController extends Controller
 
         return view('inicio', compact(
             'totalPacientes',
-            'atendidosHoy',          // Actualizado
-            'atendidosSemana',        // Nuevo
-            'atendidosMes',            // Nuevo
+            'atendidosHoy',
+            'atendidosSemana',
+            'atendidosMes',
             'citasPorMes',
+            'citasHoy',
             'promedioMensual',
-            'promedioSemanaReal',      // Nuevo (reemplaza al anterior)
+            'promedioSemanaReal',
             'proximasCitas',
-            'citasPorMesComparativo',  // Nuevo
-            'tasaAsistencia'           // Nuevo
+            'citasPorMesComparativo',
+            'tasaAsistencia'
         ));
     }
 

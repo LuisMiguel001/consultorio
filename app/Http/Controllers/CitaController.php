@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\EnviarRecordatorioCita;
 
 class CitaController extends Controller
 {
@@ -53,6 +54,15 @@ class CitaController extends Controller
         // 🎯 FILTRO POR PRIORIDAD
         if ($request->filled('filtro_prioridad')) {
             $query->where('prioridad', $request->filtro_prioridad);
+        }
+
+        // 📅 FILTRO POR RANGO DE FECHAS
+        if ($request->filled('fecha_desde')) {
+            $query->where('fecha', '>=', $request->fecha_desde);
+        }
+
+        if ($request->filled('fecha_hasta')) {
+            $query->where('fecha', '<=', $request->fecha_hasta);
         }
 
         // 📊 JERARQUÍA DE ESTADOS
@@ -113,15 +123,13 @@ class CitaController extends Controller
         }
 
         $duracion = (int) ($request->duracion_minutos ?? $cita->duracion_minutos ?? 30);
-        $horaInicio = $request->hora;                                          // HH:MM nueva cita
-        $horaFin    = $fechaHoraCita->copy()->addMinutes($duracion)->format('H:i'); // HH:MM fin nueva cita
+        $horaInicio = $request->hora;
+        $horaFin    = $fechaHoraCita->copy()->addMinutes($duracion)->format('H:i');
 
         $solapamiento = Cita::where('doctor_id', $doctorId)
             ->where('fecha', $request->fecha)
             ->where('estado_cita', 'Programada')
             ->where(function ($q) use ($horaInicio, $horaFin) {
-                // Cita existente empieza antes de que termine la nueva
-                // Y termina después de que empieza la nueva
                 $q->whereRaw("hora < ?", [$horaFin])
                     ->whereRaw("(hora::time + (duracion_minutos || ' minutes')::interval)::time > ?::time", [$horaInicio]);
             })
@@ -141,12 +149,37 @@ class CitaController extends Controller
             'hora'                => $request->hora,
             'duracion_minutos'    => $duracion,
             'notas_previas'       => $request->notas_previas,
+            'motivo_consulta'     => $request->motivo_consulta,
+            'tipo_consulta'            => $request->tipo_consulta,
             'prioridad'           => $request->prioridad ?? 'Normal',
             'estado_cita'         => 'Programada',
             'recordatorio_enviado' => false,
-            'requiere_ayuno'      => $request->has('requiere_ayuno'),
-            'estudios_previos'    => $request->has('estudios_previos'),
+            'requiere_ayuno'         => $request->has('requiere_ayuno'),
+            'estudios_previos'       => $request->has('estudios_previos'),
         ]);
+
+        // ✅ Despachar recordatorio según elección del usuario
+        if ($request->has('enviar_recordatorio')) {
+            $horasAntes = (int) ($request->horas_recordatorio ?? 24);
+
+            $fechaCita = Carbon::createFromFormat(
+                'Y-m-d H:i',
+                Carbon::parse($cita->fecha)->format('Y-m-d') . ' ' .
+                    Carbon::parse($cita->hora)->format('H:i')
+            );
+
+            $horasDiff = Carbon::now()->diffInHours($fechaCita, false);
+
+            if ($horasDiff > 1) {
+                // Si la cita está más lejos que el tiempo elegido → enviar en el momento correcto
+                // Si la cita está más cerca → enviar en 5 minutos
+                $delay = $horasDiff > $horasAntes
+                    ? $fechaCita->copy()->subHours($horasAntes)
+                    : Carbon::now()->addMinutes(5);
+
+                EnviarRecordatorioCita::dispatch($cita)->delay($delay);
+            }
+        }
 
         return redirect()->route('citas.index')
             ->with('success', 'Procedimiento agendado correctamente para ' . $cita->paciente->nombre);
@@ -202,21 +235,19 @@ class CitaController extends Controller
             ])->withInput();
         }
 
-        $duracion = (int) ($request->duracion_minutos ?? $cita->duracion_minutos ?? 30);
-        $horaInicio    = $request->hora;
-        $horaFin       = Carbon::parse($request->fecha . ' ' . $request->hora)
-            ->addMinutes($duracion)
-            ->format('H:i');
+        $duracion   = (int) ($request->duracion_minutos ?? $cita->duracion_minutos ?? 30);
+        $horaInicio = $request->hora;
+        $horaFin    = Carbon::parse($request->fecha . ' ' . $request->hora)
+            ->addMinutes($duracion)->format('H:i');
 
         $solapamiento = Cita::where('doctor_id', $doctorId)
             ->where('fecha', $request->fecha)
             ->where('estado_cita', 'Programada')
-            ->where('id', '!=', $id) // excluir la cita actual
+            ->where('id', '!=', $id)
             ->where(function ($q) use ($horaInicio, $horaFin) {
                 $q->whereRaw("hora < ?", [$horaFin])
                     ->whereRaw("(hora::time + (duracion_minutos || ' minutes')::interval)::time > ?::time", [$horaInicio]);
-            })
-            ->exists();
+            })->exists();
 
         if ($solapamiento) {
             return back()->withErrors([
@@ -224,7 +255,41 @@ class CitaController extends Controller
             ])->withInput();
         }
 
-        $cita->update($request->all());
+        $cita->update([
+            'paciente_id'         => $request->paciente_id,
+            'servicio_especifico' => $request->servicio_especifico,
+            'fecha'               => $request->fecha,
+            'hora'                => $request->hora,
+            'duracion_minutos'    => $duracion,
+            'notas_previas'       => $request->notas_previas,
+            'motivo_consulta'     => $request->motivo_consulta,
+            'tipo_consulta'            => $request->tipo_consulta,
+            'prioridad'           => $request->prioridad ?? 'Normal',
+            'requiere_ayuno'         => $request->has('requiere_ayuno'),
+            'estudios_previos'       => $request->has('estudios_previos'),
+            'recordatorio_enviado' => false, // ← resetear siempre al editar
+        ]);
+
+        // Re-despachar recordatorio si el usuario lo eligió
+        if ($request->has('enviar_recordatorio')) {
+            $horasAntes = (int) ($request->horas_recordatorio ?? 24);
+
+            $fechaCita = Carbon::createFromFormat(
+                'Y-m-d H:i',
+                Carbon::parse($cita->fecha)->format('Y-m-d') . ' ' .
+                    Carbon::parse($cita->hora)->format('H:i')
+            );
+
+            $horasDiff = Carbon::now()->diffInHours($fechaCita, false);
+
+            if ($horasDiff > 1) {
+                $delay = $horasDiff > $horasAntes
+                    ? $fechaCita->copy()->subHours($horasAntes)
+                    : Carbon::now()->addMinutes(5);
+
+                EnviarRecordatorioCita::dispatch($cita->fresh())->delay($delay);
+            }
+        }
 
         return redirect()->route('citas.index')
             ->with('success', 'Cita actualizada correctamente');

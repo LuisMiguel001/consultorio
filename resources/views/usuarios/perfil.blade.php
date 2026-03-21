@@ -95,6 +95,18 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="fab fa-whatsapp me-1 text-success"></i>
+                                    WhatsApp (para recibir recordatorios)
+                                </label>
+                                <input type="text" name="telefono" class="form-control" value="{{ $user->telefono }}"
+                                    placeholder="809-000-0000">
+                                @error('telefono')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
                             <div class="mt-3">
                                 <button class="btn btn-primary">
                                     Actualizar
@@ -146,3 +158,27 @@
         </RadzenCard>
     </div>
 @endsection
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const input = document.querySelector('input[name="telefono"]');
+
+        if (input) {
+            input.addEventListener("input", function() {
+                let value = input.value.replace(/\D/g, ""); // solo números
+
+                // Limitar a 10 dígitos (RD)
+                value = value.substring(0, 10);
+
+                // Formato 809-555-1234
+                if (value.length > 6) {
+                    value = value.replace(/(\d{3})(\d{3})(\d{1,4})/, "$1-$2-$3");
+                } else if (value.length > 3) {
+                    value = value.replace(/(\d{3})(\d{1,3})/, "$1-$2");
+                }
+
+                input.value = value;
+            });
+        }
+    });
+</script>

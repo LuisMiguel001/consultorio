@@ -49,6 +49,8 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     Route::middleware('permission:editar usuarios')->group(function () {
         Route::get('/usuarios/{user}/edit', [UserController::class, 'edit'])->name('usuarios.edit');
         Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('usuarios.update');
+        Route::post('/usuarios/{user}/toggle-activo', [UserController::class, 'toggleActivo'])->name('usuarios.toggle-activo');
+        Route::post('/usuarios/{user}/reset-password', [UserController::class, 'resetPassword'])->name('usuarios.reset-password');
     });
 
     Route::middleware('permission:eliminar usuarios')->group(function () {

@@ -86,6 +86,7 @@
                                 <th class="px-4">Nombre</th>
                                 <th>Usuario</th>
                                 <th>Rol</th>
+                                <th>Estado</th>
                                 <th class="text-center">Acción</th>
                             </tr>
                         </thead>
@@ -111,12 +112,42 @@
                                             </span>
                                         @endforeach
                                     </td>
+                                    <td>
+                                        @if ($user->activo)
+                                            <span class="badge bg-success">Activo</span>
+                                        @else
+                                            <span class="badge bg-danger">Inactivo</span>
+                                        @endif
+                                    </td>
 
                                     <td class="text-center">
-                                        <a href="{{ route('usuarios.edit', $user) }}" class="btn btn-sm btn-edit">
-                                            <i class="fas fa-edit"></i>
-                                            Editar
-                                        </a>
+                                        <div class="d-flex gap-1 justify-content-center">
+                                            <a href="{{ route('usuarios.edit', $user) }}" class="btn btn-sm btn-edit">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+
+                                            {{-- Activar / Desactivar --}}
+                                            @if ($user->id !== auth()->id())
+                                                <form action="{{ route('usuarios.toggle-activo', $user) }}" method="POST"
+                                                    onsubmit="return confirm('¿Confirmar cambio de estado?')">
+                                                    @csrf
+                                                    <button
+                                                        class="btn btn-sm {{ $user->activo ? 'btn-warning' : 'btn-success' }}">
+                                                        <i class="fas fa-{{ $user->activo ? 'ban' : 'check' }}"></i>
+                                                        {{ $user->activo ? 'Desactivar' : 'Activar' }}
+                                                    </button>
+                                                </form>
+
+                                                {{-- Restablecer contraseña --}}
+                                                <form action="{{ route('usuarios.reset-password', $user) }}" method="POST"
+                                                    onsubmit="return confirm('¿Restablecer contraseña a Temporal123?')">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-key"></i> Reset
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

@@ -442,6 +442,104 @@
 
     @yield('scripts')
 
+    <!-- Toast Container -->
+    <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
+
+    <script>
+        function mostrarToast(mensaje, tipo = 'success') {
+            const colores = {
+                success: {
+                    bg: '#198754',
+                    icon: 'bi-check-circle-fill'
+                },
+                danger: {
+                    bg: '#dc3545',
+                    icon: 'bi-x-circle-fill'
+                },
+                warning: {
+                    bg: '#ffc107',
+                    icon: 'bi-exclamation-triangle-fill'
+                },
+                info: {
+                    bg: '#0dcaf0',
+                    icon: 'bi-info-circle-fill'
+                },
+            };
+            const c = colores[tipo] || colores.success;
+            const id = 'toast-' + Date.now();
+
+            const toast = document.createElement('div');
+            toast.id = id;
+            toast.style.cssText = `
+        background: ${c.bg};
+        color: white;
+        padding: 10px 16px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease;
+        max-width: 320px;
+        min-width: 220px;
+    `;
+            toast.innerHTML = `<i class="bi ${c.icon}"></i><span>${mensaje}</span>`;
+            document.getElementById('toast-container').appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Disparar automáticamente los flash de Laravel
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                mostrarToast("{{ session('success') }}", 'success');
+            @endif
+            @if (session('error'))
+                mostrarToast("{{ session('error') }}", 'danger');
+            @endif
+            @if (session('warning'))
+                mostrarToast("{{ session('warning') }}", 'warning');
+            @endif
+            @if (session('info'))
+                mostrarToast("{{ session('info') }}", 'info');
+            @endif
+            @if ($errors->any())
+                mostrarToast("{{ $errors->first() }}", 'danger');
+            @endif
+        });
+    </script>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+        }
+    </style>
+
 </body>
 
 </html>

@@ -224,29 +224,71 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: #4a2c6d;">
                                     <i class="fas fa-question-circle me-1" style="color: #a97bc9;"></i>
-                                    Motivo de Consulta
+                                    Motivo de Consulta <small class="text-muted">(Opcional)</small>
                                 </label>
                                 <select name="motivo_consulta" class="form-select">
                                     <option value="">-- Seleccione motivo --</option>
-                                    <option value="Dolor torácico"
-                                        {{ old('motivo_consulta') == 'Dolor torácico' ? 'selected' : '' }}>Dolor torácico
-                                    </option>
-                                    <option value="Disnea" {{ old('motivo_consulta') == 'Disnea' ? 'selected' : '' }}>
-                                        Falta de aire (Disnea)</option>
-                                    <option value="Palpitaciones"
-                                        {{ old('motivo_consulta') == 'Palpitaciones' ? 'selected' : '' }}>Palpitaciones
-                                    </option>
-                                    <option value="Hipertensión"
-                                        {{ old('motivo_consulta') == 'Hipertensión' ? 'selected' : '' }}>Hipertensión
-                                        arterial</option>
-                                    <option value="Edema" {{ old('motivo_consulta') == 'Edema' ? 'selected' : '' }}>Edema
-                                        en miembros inferiores</option>
-                                    <option value="Control post-operatorio"
-                                        {{ old('motivo_consulta') == 'Control post-operatorio' ? 'selected' : '' }}>Control
-                                        post-operatorio</option>
                                     <option value="Primera evaluación"
                                         {{ old('motivo_consulta') == 'Primera evaluación' ? 'selected' : '' }}>Primera
                                         evaluación</option>
+                                    <option value="Angina estable"
+                                        {{ old('motivo_consulta') == 'Angina estable' ? 'selected' : '' }}>Angina estable
+                                    </option>
+                                    <option value="Angina inestable"
+                                        {{ old('motivo_consulta') == 'Angina inestable' ? 'selected' : '' }}>Angina
+                                        inestable</option>
+                                    <option value="Estenosis valvular"
+                                        {{ old('motivo_consulta') == 'Estenosis valvular' ? 'selected' : '' }}>Estenosis
+                                        valvular</option>
+                                    <option value="Insuficiencia valvular"
+                                        {{ old('motivo_consulta') == 'Insuficiencia valvular' ? 'selected' : '' }}>
+                                        Insuficiencia valvular</option>
+                                    <option value="Estenosis carotídea"
+                                        {{ old('motivo_consulta') == 'Estenosis carotídea' ? 'selected' : '' }}>Estenosis
+                                        carotídea</option>
+                                    <option value="AIT previo"
+                                        {{ old('motivo_consulta') == 'AIT previo' ? 'selected' : '' }}>AIT previo</option>
+                                    <option value="ACV previo"
+                                        {{ old('motivo_consulta') == 'ACV previo' ? 'selected' : '' }}>ACV previo</option>
+                                    <option value="Insuficiencia venosa crónica"
+                                        {{ old('motivo_consulta') == 'Insuficiencia venosa crónica' ? 'selected' : '' }}>
+                                        Insuficiencia venosa crónica</option>
+                                    <option value="Várices sintomáticas"
+                                        {{ old('motivo_consulta') == 'Várices sintomáticas' ? 'selected' : '' }}>Várices
+                                        sintomáticas</option>
+                                    <option value="Tromboflebitis superficial"
+                                        {{ old('motivo_consulta') == 'Tromboflebitis superficial' ? 'selected' : '' }}>
+                                        Tromboflebitis superficial</option>
+                                    <option value="Control de función renal"
+                                        {{ old('motivo_consulta') == 'Control de función renal' ? 'selected' : '' }}>
+                                        Control de función renal</option>
+                                    <option value="Hipertensión refractaria"
+                                        {{ old('motivo_consulta') == 'Hipertensión refractaria' ? 'selected' : '' }}>
+                                        Hipertensión refractaria</option>
+                                    <option value="Diabetes con nefropatía"
+                                        {{ old('motivo_consulta') == 'Diabetes con nefropatía' ? 'selected' : '' }}>
+                                        Diabetes con nefropatía</option>
+                                    <option value="Aneurisma en seguimiento"
+                                        {{ old('motivo_consulta') == 'Aneurisma en seguimiento' ? 'selected' : '' }}>
+                                        Aneurisma en seguimiento</option>
+                                    <option value="Claudicación intermitente"
+                                        {{ old('motivo_consulta') == 'Claudicación intermitente' ? 'selected' : '' }}>
+                                        Claudicación intermitente</option>
+                                    <option value="Isquemia crítica de miembro"
+                                        {{ old('motivo_consulta') == 'Isquemia crítica de miembro' ? 'selected' : '' }}>
+                                        Isquemia crítica de miembro</option>
+                                    <option value="Úlcera varicosa o isquémica"
+                                        {{ old('motivo_consulta') == 'Úlcera varicosa o isquémica' ? 'selected' : '' }}>
+                                        Úlcera varicosa o isquémica</option>
+                                    <option value="Post-infarto"
+                                        {{ old('motivo_consulta') == 'Post-infarto' ? 'selected' : '' }}>Post-infarto
+                                    </option>
+                                    <option value="Control post-operatorio"
+                                        {{ old('motivo_consulta') == 'Control post-operatorio' ? 'selected' : '' }}>Control
+                                        post-operatorio</option>
+                                    <option value="Preparación para cirugía"
+                                        {{ old('motivo_consulta') == 'Preparación para cirugía' ? 'selected' : '' }}>
+                                        Preparación para cirugía</option>
                                 </select>
                             </div>
 
@@ -254,21 +296,85 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: #4a2c6d;">
                                     <i class="fas fa-thermometer-half me-1" style="color: #a97bc9;"></i>
-                                    Síntomas Asociados
+                                    Síntomas Asociados <small class="text-muted">(Opcional)</small>
                                 </label>
-                                <select name="sintomas" class="form-select">
+                                <select name="tipo_consulta" class="form-select">
                                     <option value="">-- Seleccione síntoma --</option>
                                     <option value="Asintomático"
-                                        {{ old('sintomas') == 'Asintomático' ? 'selected' : '' }}>Asintomático</option>
-                                    <option value="Dolor en pecho"
-                                        {{ old('sintomas') == 'Dolor en pecho' ? 'selected' : '' }}>Dolor en pecho</option>
-                                    <option value="Mareos" {{ old('sintomas') == 'Mareos' ? 'selected' : '' }}>Mareos
+                                        {{ old('tipo_consulta') == 'Asintomático' ? 'selected' : '' }}>Asintomático</option>
+                                    <option value="Dolor torácico"
+                                        {{ old('tipo_consulta') == 'Dolor torácico' ? 'selected' : '' }}>Dolor torácico</option>
+                                    <option value="Disnea de esfuerzo"
+                                        {{ old('tipo_consulta') == 'Disnea de esfuerzo' ? 'selected' : '' }}>Disnea de esfuerzo
                                     </option>
-                                    <option value="Fatiga" {{ old('sintomas') == 'Fatiga' ? 'selected' : '' }}>Fatiga
+                                    <option value="Disnea en reposo"
+                                        {{ old('tipo_consulta') == 'Disnea en reposo' ? 'selected' : '' }}>Disnea en reposo
                                     </option>
-                                    <option value="Cianosis" {{ old('sintomas') == 'Cianosis' ? 'selected' : '' }}>
+                                    <option value="Palpitaciones"
+                                        {{ old('tipo_consulta') == 'Palpitaciones' ? 'selected' : '' }}>Palpitaciones</option>
+                                    <option value="Fatiga" {{ old('tipo_consulta') == 'Fatiga' ? 'selected' : '' }}>Fatiga
+                                    </option>
+                                    <option value="Síncope" {{ old('tipo_consulta') == 'Síncope' ? 'selected' : '' }}>Síncope
+                                    </option>
+                                    <option value="Mareos" {{ old('tipo_consulta') == 'Mareos' ? 'selected' : '' }}>Mareos
+                                    </option>
+                                    <option value="Edema en miembros inferiores"
+                                        {{ old('tipo_consulta') == 'Edema en miembros inferiores' ? 'selected' : '' }}>Edema en
+                                        miembros inferiores</option>
+                                    <option value="Cianosis" {{ old('tipo_consulta') == 'Cianosis' ? 'selected' : '' }}>
                                         Cianosis</option>
-                                    <option value="Síncope" {{ old('sintomas') == 'Síncope' ? 'selected' : '' }}>Síncope
+                                    <option value="Soplo cardíaco"
+                                        {{ old('tipo_consulta') == 'Soplo cardíaco' ? 'selected' : '' }}>Soplo cardíaco</option>
+                                    <option value="Claudicación al caminar"
+                                        {{ old('tipo_consulta') == 'Claudicación al caminar' ? 'selected' : '' }}>Claudicación
+                                        al caminar</option>
+                                    <option value="Dolor en reposo en extremidades"
+                                        {{ old('tipo_consulta') == 'Dolor en reposo en extremidades' ? 'selected' : '' }}>Dolor
+                                        en reposo en extremidades</option>
+                                    <option value="Frialdad en extremidades"
+                                        {{ old('tipo_consulta') == 'Frialdad en extremidades' ? 'selected' : '' }}>Frialdad en
+                                        extremidades</option>
+                                    <option value="Úlceras en pies o piernas"
+                                        {{ old('tipo_consulta') == 'Úlceras en pies o piernas' ? 'selected' : '' }}>Úlceras en
+                                        pies o piernas</option>
+                                    <option value="Pesadez en piernas"
+                                        {{ old('tipo_consulta') == 'Pesadez en piernas' ? 'selected' : '' }}>Pesadez en piernas
+                                    </option>
+                                    <option value="Calambres nocturnos"
+                                        {{ old('tipo_consulta') == 'Calambres nocturnos' ? 'selected' : '' }}>Calambres
+                                        nocturnos</option>
+                                    <option value="Várices visibles"
+                                        {{ old('tipo_consulta') == 'Várices visibles' ? 'selected' : '' }}>Várices visibles
+                                    </option>
+                                    <option value="Debilidad en extremidades"
+                                        {{ old('tipo_consulta') == 'Debilidad en extremidades' ? 'selected' : '' }}>Debilidad en
+                                        extremidades</option>
+                                    <option value="Pérdida transitoria de visión"
+                                        {{ old('tipo_consulta') == 'Pérdida transitoria de visión' ? 'selected' : '' }}>Pérdida
+                                        transitoria de visión</option>
+                                    <option value="Dificultad para hablar"
+                                        {{ old('tipo_consulta') == 'Dificultad para hablar' ? 'selected' : '' }}>Dificultad para
+                                        hablar</option>
+                                    <option value="Náuseas y vómitos"
+                                        {{ old('tipo_consulta') == 'Náuseas y vómitos' ? 'selected' : '' }}>Náuseas y vómitos
+                                    </option>
+                                    <option value="Prurito generalizado"
+                                        {{ old('tipo_consulta') == 'Prurito generalizado' ? 'selected' : '' }}>Prurito
+                                        generalizado</option>
+                                    <option value="Disminución de orina"
+                                        {{ old('tipo_consulta') == 'Disminución de orina' ? 'selected' : '' }}>Disminución de
+                                        orina</option>
+                                    <option value="Dolor abdominal pulsátil"
+                                        {{ old('tipo_consulta') == 'Dolor abdominal pulsátil' ? 'selected' : '' }}>Dolor
+                                        abdominal pulsátil</option>
+                                    <option value="Masa abdominal palpable"
+                                        {{ old('tipo_consulta') == 'Masa abdominal palpable' ? 'selected' : '' }}>Masa abdominal
+                                        palpable</option>
+                                    <option value="Hiperpigmentación en piernas"
+                                        {{ old('tipo_consulta') == 'Hiperpigmentación en piernas' ? 'selected' : '' }}>
+                                        Hiperpigmentación en piernas</option>
+                                    <option value="Sudoración fría"
+                                        {{ old('tipo_consulta') == 'Sudoración fría' ? 'selected' : '' }}>Sudoración fría
                                     </option>
                                 </select>
                             </div>
@@ -277,7 +383,7 @@
                             <div class="col-12 mb-3">
                                 <label class="form-label fw-semibold" style="color: #4a2c6d;">
                                     <i class="fas fa-notes-medical me-1" style="color: #a97bc9;"></i>
-                                    Notas / Indicaciones Especiales
+                                    Notas / Indicaciones Especiales  <small class="text-muted">(Opcional)</small>
                                 </label>
                                 <textarea name="notas_previas" class="form-control" rows="3"
                                     placeholder="Describa aquí el motivo detallado, indicaciones pre-operatorias, medicamentos que debe suspender, etc.">{{ old('notas_previas') }}</textarea>
@@ -317,26 +423,6 @@
                                             Traer estudios previos
                                         </label>
                                     </div>
-
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" name="requiere_acompanante"
-                                            id="requiere_acompanante" value="1"
-                                            {{ old('requiere_acompanante') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="requiere_acompanante">
-                                            <i class="fas fa-users me-2 text-success"></i>
-                                            Requiere acompañante
-                                        </label>
-                                    </div>
-
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="suspender_medicamentos"
-                                            id="suspender_medicamentos" value="1"
-                                            {{ old('suspender_medicamentos') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="suspender_medicamentos">
-                                            <i class="fas fa-pills me-2 text-warning"></i>
-                                            Suspender medicamentos
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
 
@@ -347,14 +433,36 @@
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="checkbox" name="enviar_recordatorio"
                                             id="enviar_recordatorio" value="1"
-                                            {{ old('enviar_recordatorio', true) ? 'checked' : '' }}>
+                                            {{ old('enviar_recordatorio', true) ? 'checked' : '' }}
+                                            onchange="toggleRecordatorio(this)">
                                         <label class="form-check-label" for="enviar_recordatorio">
                                             <i class="fas fa-bell me-2 text-primary"></i>
-                                            Enviar recordatorio 24h antes
+                                            Enviar recordatorio por WhatsApp
                                         </label>
                                     </div>
 
-                                    <div class="form-check">
+                                    <!-- ✅ NUEVO: Selector de tiempo -->
+                                    <div id="recordatorio_opciones" class="mt-2">
+                                        <label class="form-label small fw-semibold" style="color:#4a2c6d;">
+                                            <i class="fab fa-whatsapp me-1 text-success"></i>
+                                            ¿Con cuánta anticipación?
+                                        </label>
+                                        <div class="d-flex gap-2 flex-wrap">
+                                            @foreach ([24 => '24 horas', 48 => '48 horas', 72 => '72 horas'] as $horas => $label)
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="horas_recordatorio" id="horas_{{ $horas }}"
+                                                        value="{{ $horas }}"
+                                                        {{ old('horas_recordatorio', 24) == $horas ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="horas_{{ $horas }}">
+                                                        {{ $label }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check mt-2">
                                         <input class="form-check-input" type="checkbox" name="confirmar_asistencia"
                                             id="confirmar_asistencia" value="1"
                                             {{ old('confirmar_asistencia') ? 'checked' : '' }}>
@@ -488,7 +596,16 @@
 
                             });
                         });
-                }, 200);
+                }, 300);
+            });
+
+            function toggleRecordatorio(checkbox) {
+                document.getElementById('recordatorio_opciones').style.display = checkbox.checked ? 'block' : 'none';
+            }
+            // Aplicar estado inicial
+            document.addEventListener('DOMContentLoaded', function() {
+                const cb = document.getElementById('enviar_recordatorio');
+                if (cb) toggleRecordatorio(cb);
             });
         </script>
 

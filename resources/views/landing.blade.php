@@ -2,12 +2,44 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dr. Lorenzo - Tu Salud es Nuestra Prioridad</title>
+
+    <!-- SEO Principal -->
+    <title>Dr. Lorenzo García | Cirujano Cardiovascular - San Francisco de Macorís - Santo Domingo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/healthicons@2.0.0/font/healthicons.css" rel="stylesheet">
+
+    <meta name="description"
+        content="Especialista en cirugía cardiovascular, bypass coronario, várices con láser, aneurisma de aorta y paciente renal. Más de 10,000 pacientes atendidos. San Francisco de Macorís y Santo Domingo.">
+    <meta name="keywords"
+        content="cirujano cardiovascular San Francisco de Macorís, cirugía corazón República Dominicana, bypass coronario, tratamiento várices láser, aneurisma aorta abdominal, endarterectomía carotídea, fístula arteriovenosa hemodiálisis, cirujano vascular nordeste dominicano, Dr Lorenzo García cardiólogo">
+    <meta name="author" content="Dr. Lorenzo García">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://drlorenzogarcia.com/">
+
+    <!-- Open Graph (WhatsApp, Facebook) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Dr. Lorenzo García | Cirujano Cardiovascular">
+    <meta property="og:description"
+        content="Pionero en cirugía cardiovascular del nordeste dominicano. Bypass coronario, várices, aneurisma de aorta y más.">
+    <meta property="og:image" content="https://i.postimg.cc/VNsTbCzP/Whats-App-Image-2026-03-07-at-9-49-59-AM-(1).jpg">
+    <meta property="og:url" content="https://drlorenzogarcia.com/">
+    <meta property="og:locale" content="es_DO">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dr. Lorenzo García | Cirujano Cardiovascular">
+    <meta name="twitter:description"
+        content="Especialista en cirugía cardiovascular. San Francisco de Macorís y Santo Domingo.">
+    <meta name="twitter:image" content="https://i.postimg.cc/VNsTbCzP/Whats-App-Image-2026-03-07-at-9-49-59-AM-(1).jpg">
+
+    <!-- Geo -->
+    <meta name="geo.region" content="DO">
+    <meta name="geo.placename" content="San Francisco de Macorís, República Dominicana">
+
     <style>
         /* Variables de colores y fuentes */
         :root {
@@ -1029,27 +1061,19 @@
         }
 
         /* Instagram DESTACADO - más grande y con estilo especial */
-        .social-link-footer.instagram {
-            width: 48px;
-            height: 48px;
-            font-size: 1.5rem;
-            background: radial-gradient(circle at 30% 30%, #fdf497, #fd5949, #d6249f, #285AEB);
-            box-shadow: 0 5px 15px rgba(225, 48, 108, 0.4);
-        }
-
         .social-link-footer.instagram:hover {
-            transform: translateY(-8px) scale(1.1);
-            box-shadow: 0 10px 25px rgba(225, 48, 108, 0.6);
+            background: radial-gradient(circle at 30% 30%, #fdf497, #fd5949, #d6249f, #285AEB);
+            transform: translateY(-5px);
         }
 
-        /* Otros iconos de redes */
-        .social-link-footer.facebook:hover {
-            background-color: #1877f2;
+        .social-link-footer.tiktok:hover {
+            background-color: #010101;
             transform: translateY(-5px);
         }
 
         .social-link-footer.linkedin:hover {
-            background-color: #0077b5;
+            background-color: #0A66C2;
+            /* Nuevo color oficial de LinkedIn */
             transform: translateY(-5px);
         }
 
@@ -1207,7 +1231,8 @@
                 <div class="logo">
                     <div class="logo-image-wrapper heart-beat">
                         <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
-                            class="logo-icon" height="30" width="30" alt="logo" />
+                            class="logo-icon" height="30" width="30"
+                            alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" />
                     </div>
                     <span class="logo-text">Dr. Lorenzo García</span>
                 </div>
@@ -1246,7 +1271,7 @@
 
                 <div class="hero-buttons">
                     <a href="#contacto" class="btn">
-                        <i class="far fa-calendar-alt"></i> Agendar Cita
+                        <i class="far fa-calendar-alt"></i> Agendar Consulta
                     </a>
                     <a href="#servicios" class="btn btn-secondary">
                         Ver Procedimientos
@@ -1287,13 +1312,15 @@
         </div>
     </section>
 
+    <!--Procedimientos-->
     <section class="section services" id="servicios">
         <div class="container">
             <h2 class="section-title">Procedimientos Especializados</h2>
-
             <div class="services-grid">
+
+                <!-- Cirugía de Corazón -->
                 <div class="service-card">
-                    <i class="fas fa-heart service-icon"></i>
+                    <i class="fas fa-heart-pulse service-icon"></i>
                     <h3>Cirugía de Corazón</h3>
                     <p>
                         Cirugía de las Válvulas Cardiacas.<br />
@@ -1301,6 +1328,7 @@
                     </p>
                 </div>
 
+                <!-- Endarterectomía Carotídea -->
                 <div class="service-card">
                     <i class="fas fa-brain service-icon"></i>
                     <h3>Endarterectomía Carotídea</h3>
@@ -1308,36 +1336,78 @@
                         cerebrovascular.</p>
                 </div>
 
+                <!-- Paciente Renal -->
                 <div class="service-card">
-                    <i class="fas fa-procedures service-icon"></i>
-                    <h3>Insuficiencia Renal</h3>
+                    <i class="fas fa-droplet service-icon"></i>
+                    <h3>Paciente Renal</h3>
                     <p>
                         Creación de fístula arteriovenosa, colocación de catéter
                         permanente y manejo de acceso para hemodiálisis.
                     </p>
                 </div>
 
+                <!-- Tratamiento de Várices -->
                 <div class="service-card">
-                    <i class="fas fa-band-aid service-icon"></i>
+                    <i class="bi bi-virus service-icon"></i>
                     <h3>Tratamiento de Várices</h3>
                     <p>
                         Procedimientos modernos y efectivos para la corrección de várices.
                     </p>
                 </div>
+
+                <!-- Cirugía Venosa con Láser -->
                 <div class="service-card">
-                    <i class="fas fa-wave-square service-icon"></i>
+                    <i class="fas fa-bolt service-icon"></i>
                     <h3>Cirugía Venosa con Láser</h3>
                     <p>
-                        Manejo avanzado de patología venosa mediante técnicas mínimamente
-                        invasivas.
+                        Manejo avanzado de patología venosa mediante técnicas mínimamente invasivas.
                     </p>
                 </div>
 
+                <!-- Aneurisma de Aorta Abdominal -->
                 <div class="service-card">
-                    <i class="fas fa-heartbeat service-icon"></i>
+                    <svg class="service-icon" viewBox="0 0 100 100" width="50" height="50">
+
+                        <!-- Tronco principal -->
+                        <path d="M50 15
+                 C46 30, 46 45, 50 55
+                 C54 45, 54 30, 50 15" stroke="#3b82c4" stroke-width="14" fill="none" stroke-linecap="round" />
+
+                        <!-- Arteria lateral izquierda -->
+                        <path d="M50 40 L30 40" stroke="#3b82c4" stroke-width="10" fill="none"
+                            stroke-linecap="round" />
+
+                        <!-- Arteria lateral derecha -->
+                        <path d="M50 40 L70 40" stroke="#3b82c4" stroke-width="10" fill="none"
+                            stroke-linecap="round" />
+
+                        <!-- Panza (aneurisma) -->
+                        <ellipse cx="50" cy="60" rx="12" ry="10" stroke="#3b82c4"
+                            stroke-width="14" fill="none" />
+
+                        <!-- Bifurcación principal -->
+                        <path d="M50 70 L35 90" stroke="#3b82c4" stroke-width="14" fill="none"
+                            stroke-linecap="round" />
+
+                        <path d="M50 70 L65 90" stroke="#3b82c4" stroke-width="14" fill="none"
+                            stroke-linecap="round" />
+
+                        <!-- Ramitas secundarias -->
+                        <path d="M38 78 L30 85" stroke="#3b82c4" stroke-width="6" fill="none"
+                            stroke-linecap="round" />
+
+                        <path d="M62 78 L70 85" stroke="#3b82c4" stroke-width="6" fill="none"
+                            stroke-linecap="round" />
+
+                    </svg>
+
                     <h3>Aneurisma de Aorta Abdominal</h3>
-                    <p>Tratamiento quirúrgico y endovascular para la corrección de aneurismas de la aorta abdominal.</p>
+                    <p>
+                        Tratamiento quirúrgico y endovascular para la corrección de aneurismas de la aorta abdominal.
+                    </p>
                 </div>
+
+                <!-- Angioplastia de Miembros Inferiores -->
                 <div class="service-card">
                     <i class="fas fa-walking service-icon"></i>
                     <h3>Angioplastia de Miembros Inferiores</h3>
@@ -1367,8 +1437,8 @@
 
                     <p>
                         Manejo avanzado de patología venosa con láser y procedimientos de
-                        última tecnología. Especialista en pacientes con insuficiencia
-                        renal, creación de fístula arteriovenosa, colocación de catéter
+                        última tecnología. Especialista en acceso vasculares en pacientes renales,
+                        creación de fístula arteriovenosa, colocación de catéter
                         permanente.
                     </p>
                 </div>
@@ -1380,18 +1450,24 @@
     <section class="section" id="consultorio">
         <div class="container">
             <h2 class="section-title">Encargado de su Cuidado</h2>
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <img src="https://i.postimg.cc/k4tMbZy4/Whats-App-Image-2026-03-07-at-9-44-53-PM.jpg"
+                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" class="clinic-image"
+                    style="max-width: calc(33.33% - 14px);" />
+            </div>
 
             <div class="clinic-images">
                 <img src="https://i.postimg.cc/ZKLbp667/Whats-App-Image-2026-03-07-at-9-49-59-AM.jpg"
-                    alt="Consultorio 1" class="clinic-image" />
+                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" class="clinic-image" />
                 <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
-                    alt="Consultorio 2" class="clinic-image" />
+                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís"class="clinic-image" />
                 <img src="https://i.postimg.cc/nrJxQLzy/DSC-6927.jpg" alt="Consultorio 3" class="clinic-image" />
             </div>
 
             <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <img src="https://i.postimg.cc/k4tMbZy4/Whats-App-Image-2026-03-07-at-9-44-53-PM.jpg"
-                    alt="Consultorio 4" class="clinic-image" style="max-width: calc(33.33% - 14px);" />
+                <img src="https://i.postimg.cc/QxZ1YkVF/Opera.jpg"
+                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" class="clinic-image"
+                    style="max-width: calc(33.33% - 14px);" />
             </div>
         </div>
     </section>
@@ -1413,17 +1489,10 @@
                         <i class="fas fa-phone contact-icon"></i>
                         <div>
                             <h4>Teléfono</h4>
-                            <p>+1 (809) 588-5601</p>
+                            <p>+1 (809) 588-5601 - San Francisco de Macorís</p>
+                            <p>+1 (829) 378-1976 ext 224 240 - Santo Domingo</p>
                         </div>
                     </div>
-
-                    <!-- <div class="contact-item">
-              <i class="fas fa-envelope contact-icon"></i>
-              <div>
-                <h4>Email</h4>
-                <p>do@gmail.com</p>
-              </div>
-            </div-->
 
                     <div class="contact-item">
                         <i class="far fa-clock contact-icon"></i>
@@ -1446,6 +1515,20 @@
                     <div class="map-container">
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d941.3922733279405!2d-70.25859704849792!3d19.301096363614818!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eae2deeb606e03d%3A0xd3b901431e39fb92!2sEdificio%20Medico%20Dr.Almanzar%20(Siglo%2021)!5e0!3m2!1ses-419!2sdo!4v1773155131750!5m2!1ses-419!2sdo"
+                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <div>
+                            <h4>Dirección</h4>
+                            <p>Grupo Médico Mac Center</p>
+                        </div>
+                    </div>
+                    <div class="map-container">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d946.1523292626038!2d-69.95754218065501!3d18.456039431621484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ea561db57f454cd%3A0xbdd9cb94abe987ed!2sGrupo%20M%C3%A9dico%20Mac%20Center!5e0!3m2!1ses-419!2sdo!4v1774011906508!5m2!1ses-419!2sdo"
                             width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
@@ -1507,11 +1590,11 @@
                     <h3>Procedimientos</h3>
                     <ul class="footer-links">
                         <li><a href="#servicios">Cirugía de Corazón</a></li>
-                        <li><a href="#servicios">Cirugía Venosa con Láser</a></li>
-                        <li><a href="#servicios">Insuficiencia Renal</a></li>
-                        <li><a href="#servicios">Tratamiento de Várices</a></li>
                         <li><a href="#servicios">Endarterectomía Carotídea</a></li>
+                        <li><a href="#servicios">Paciente Renal</a></li>
+                        <li><a href="#servicios">Cirugía Venosa con Láser</a></li>
                         <li><a href="#servicios">Aneurisma de Aorta</a></li>
+                        <li><a href="#servicios">Tratamiento de Várices</a></li>
                     </ul>
                 </div>
 
@@ -1521,11 +1604,19 @@
                     <ul class="footer-links contact-info">
                         <li>
                             <i class="fas fa-phone contact-icon-footer"></i>
-                            <span>1 (809) 588-5601</span>
+                            <span>+1 (809) 588-5601 - San Francisco de Macorís</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone contact-icon-footer"></i>
+                            <span>+1 (829) 378-1976 ext 224 240 - Santo Domingo</span>
                         </li>
                         <li>
                             <i class="fas fa-map-marker-alt contact-icon-footer"></i>
                             <span>C/. Duarte, Edif. Dr. Reynaldo Almanzar, 2do Nivel<br>San Francisco de Macorís</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt contact-icon-footer"></i>
+                            <span>Grupo Médico Mac Center<br>Santo Domingo</span>
                         </li>
                         <li>
                             <i class="far fa-clock contact-icon-footer"></i>
@@ -1542,18 +1633,18 @@
                                 target="_blank" class="social-link-footer instagram" aria-label="Instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="https://facebook.com/" target="_blank" class="social-link-footer facebook"
-                                aria-label="Facebook">
-                                <i class="fab fa-facebook-f"></i>
+                             <!--<a href="https://tiktok.com/" target="_blank" class="social-link-footer tiktok"
+                                aria-label="TikTok">
+                                <i class="fab fa-tiktok"></i>
                             </a>
-                            <a href="https://linkedin.com/" target="_blank" class="social-link-footer linkedin"
+                           <a href="https://linkedin.com/" target="_blank" class="social-link-footer linkedin"
                                 aria-label="LinkedIn">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                             <a href="https://youtube.com/" target="_blank" class="social-link-footer youtube"
                                 aria-label="YouTube">
                                 <i class="fab fa-youtube"></i>
-                            </a>
+                            </a>-->
                         </div>
                     </div>
                 </div>
@@ -1614,7 +1705,7 @@
                 const name = document.getElementById("name").value.trim();
                 const message = document.getElementById("message").value.trim();
 
-                const whatsappNumber = "18095885601"; ///18095885601
+                const whatsappNumber = "18095885601";
 
                 const text = `
                         *SOLICITUD DE CITA MÉDICA*
@@ -1693,4 +1784,5 @@
     window.onbeforeunload = () => "¿Estás seguro de salir de la página?";
 
     document.getElementById("year").textContent = new Date().getFullYear();
+
 </script>

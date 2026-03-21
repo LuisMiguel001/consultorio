@@ -98,11 +98,13 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => "required|string|unique:users,email,{$user->id}",
+            'telefono' => 'nullable|string|max:20',
         ]);
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'telefono' => $request->telefono,
         ]);
 
         return back()->with('success', 'Perfil actualizado correctamente.');
@@ -126,5 +128,25 @@ class UserController extends Controller
         $user->save();
 
         return back()->with('success', 'Contraseña actualizada correctamente.');
+    }
+
+    public function toggleActivo(User $user)
+    {
+        if ($user->id === Auth::id()) {
+            return back()->with('error', 'No puedes desactivarte a ti mismo.');
+        }
+
+        $user->update(['activo' => !$user->activo]);
+
+        $estado = $user->activo ? 'activado' : 'desactivado';
+        return back()->with('success', "Usuario {$estado} correctamente.");
+    }
+
+    public function resetPassword(User $user)
+    {
+        $nuevaPassword = 'Temporal123';
+        $user->update(['password' => Hash::make($nuevaPassword)]);
+
+        return back()->with('success', "Contraseña restablecida a: {$nuevaPassword}");
     }
 }

@@ -17,6 +17,15 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
+
+            // Verificar DESPUÉS de autenticar
+            if (!Auth::user()->activo) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Tu cuenta está desactivada. Contacta al administrador.'
+                ]);
+            }
+
             return redirect()->route('pacientes.inicio');
         }
 

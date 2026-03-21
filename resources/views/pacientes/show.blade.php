@@ -63,6 +63,13 @@
                     </div>
 
                     <div class="col-md-4">
+                        <small class="fw-bold">Edad</small>
+                        <div class="text-black">
+                            {{ \Carbon\Carbon::parse($paciente->fecha_nacimiento)->age }} años
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
                         <small class="fw-bold">Dirección</small>
                         <div class="text-black">{{ $paciente->direccion }}</div>
                     </div>

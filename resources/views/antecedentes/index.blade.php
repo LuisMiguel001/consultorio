@@ -5,12 +5,6 @@
 <div class="container">
     <h3>Antecedentes de {{ $paciente->nombre }}</h3>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <form method="POST" action="/pacientes/{{ $paciente->id }}/antecedentes">
         @csrf
 
