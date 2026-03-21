@@ -2,7 +2,18 @@
 <html lang="es">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HRMT4GM4M4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-HRMT4GM4M4');
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -1633,7 +1644,7 @@
                                 target="_blank" class="social-link-footer instagram" aria-label="Instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                             <!--<a href="https://tiktok.com/" target="_blank" class="social-link-footer tiktok"
+                            <!--<a href="https://tiktok.com/" target="_blank" class="social-link-footer tiktok"
                                 aria-label="TikTok">
                                 <i class="fab fa-tiktok"></i>
                             </a>
@@ -1784,5 +1795,4 @@
     window.onbeforeunload = () => "¿Estás seguro de salir de la página?";
 
     document.getElementById("year").textContent = new Date().getFullYear();
-
 </script>
