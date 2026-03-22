@@ -28,7 +28,6 @@ class EnviarRecordatorioCita implements ShouldQueue
         $p = $this->cita->paciente;
         $doctor = \App\Models\User::find($this->cita->doctor_id);
 
-        // ── Fecha en español sin depender de locale ──────────
         $meses = [
             1 => 'enero',
             2 => 'febrero',
@@ -43,90 +42,86 @@ class EnviarRecordatorioCita implements ShouldQueue
             11 => 'noviembre',
             12 => 'diciembre'
         ];
-        $dias = [
-            0 => 'domingo',
-            1 => 'lunes',
-            2 => 'martes',
-            3 => 'miércoles',
-            4 => 'jueves',
-            5 => 'viernes',
-            6 => 'sábado'
-        ];
+        $dias  = [0 => 'domingo', 1 => 'lunes', 2 => 'martes', 3 => 'miércoles', 4 => 'jueves', 5 => 'viernes', 6 => 'sábado'];
+
         $fc    = Carbon::parse($this->cita->fecha);
         $fecha = $dias[$fc->dayOfWeek] . ' ' . $fc->day . ' de ' . $meses[$fc->month] . ' de ' . $fc->year;
         $hora  = Carbon::parse($this->cita->hora)->format('h:i A');
 
-        // ── Mensaje al PACIENTE ──────────────────────────────
-        $msgPaciente  = "👋 Hola *{$p->nombre} {$p->apellido}*,\n\n";
-        $msgPaciente .= "Le recordamos su cita médica con el Dr. *{$doctor->name}*:\n\n";
-        $msgPaciente .= "📅 *Fecha:* {$fecha}\n";
-        $msgPaciente .= "🕐 *Hora:* {$hora}\n";
+        $esSandbox = config('services.twilio.whatsapp_from') === 'whatsapp:+14155238886';
 
-        if ($this->cita->servicio_especifico)
-            $msgPaciente .= "🩺 *Servicio:* {$this->cita->servicio_especifico}\n";
-
-        // Indicaciones especiales
+        // ── Variable {{6}} paciente — indicaciones ───────────
         $indicaciones = [];
-        if ($this->cita->requiere_ayuno)         $indicaciones[] = "⚠️ Debe asistir *en ayunas* (8-12 horas)";
-        if ($this->cita->estudios_previos)       $indicaciones[] = "📋 Traiga sus *estudios previos*";
+        if ($this->cita->requiere_ayuno)   $indicaciones[] = "⚠️ Debe asistir en ayunas (8-12 horas)";
+        if ($this->cita->estudios_previos) $indicaciones[] = "📋 Traiga sus estudios previos";
+        if ($this->cita->notas_previas)    $indicaciones[] = "📝 Nota: {$this->cita->notas_previas}";
+        $var6Paciente = !empty($indicaciones) ? implode("\n", $indicaciones) : '';
 
-        if (!empty($indicaciones)) {
-            $msgPaciente .= "\n📢 *Indicaciones importantes:*\n";
-            foreach ($indicaciones as $ind) {
-                $msgPaciente .= "  • {$ind}\n";
-            }
-        }
-
-        if ($this->cita->notas_previas)
-            $msgPaciente .= "\n📝 *Notas del médico:*\n_{$this->cita->notas_previas}_\n";
-
-        $msgPaciente .= "\nPara reprogramar o cancelar, por favor contáctenos.\n";
-        $msgPaciente .= "_Mensaje automático — no responder._";
-
-        // ── Mensaje al DOCTOR ────────────────────────────────
-        $msgDoctor  = "🗓️ *Recordatorio de cita*\n\n";
-
-        $msgDoctor .= "📅 *Fecha:* {$fecha}\n";
-        $msgDoctor .= "🕐 *Hora:* {$hora}\n";
-        $msgDoctor .= "⚡ *Prioridad:* {$this->cita->prioridad}\n";
-
-        $msgDoctor .= "👤 *Paciente:* {$p->nombre} {$p->apellido}\n";
-        if ($p->cedula)   $msgDoctor .= "🪪 *Cédula:* {$p->cedula}\n";
-        if ($p->telefono) $msgDoctor .= "📞 *Teléfono:* {$p->telefono}\n";
-
-        if ($this->cita->servicio_especifico)
-            $msgDoctor .= "🩺 *Servicio:* {$this->cita->servicio_especifico}\n";
-
-        if ($this->cita->motivo_consulta)
-            $msgDoctor .= "📌 *Motivo:* {$this->cita->motivo_consulta}\n";
-
-        if ($this->cita->tipo_consulta)
-            $msgDoctor .= "🤒 *Síntoma:* {$this->cita->tipo_consulta}\n";
-
+        // ── Variable {{7}} doctor — indicaciones ─────────────
         $indDoc = [];
-        if ($this->cita->requiere_ayuno)         $indDoc[] = "⚠️ Paciente en ayunas";
-        if ($this->cita->estudios_previos)       $indDoc[] = "📋 Trae estudios previos";
+        if ($this->cita->requiere_ayuno)   $indDoc[] = "⚠️ Paciente en ayunas";
+        if ($this->cita->estudios_previos) $indDoc[] = "📋 Trae estudios previos";
+        if ($this->cita->notas_previas)    $indDoc[] = "📝 Notas: {$this->cita->notas_previas}";
+        $var7Doctor = !empty($indDoc) ? implode("\n", $indDoc) : '';
 
-        if (!empty($indDoc)) {
-            $msgDoctor .= "\n📋 *Indicaciones:*\n";
-            foreach ($indDoc as $ind) {
-                $msgDoctor .= "  • {$ind}\n";
-            }
-        }
-
-        if ($this->cita->notas_previas)
-            $msgDoctor .= "\n📝 *Notas:* {$this->cita->notas_previas}\n";
-
-        $msgDoctor .= "\n_Sistema de gestión de citas._";
-
-        // ── Envíos ───────────────────────────────────────────
         $enviado = false;
 
-        if ($p->telefono)
-            $enviado = $whatsapp->enviar($p->telefono, $msgPaciente);
+        // ── Envío al PACIENTE ─────────────────────────────────
+        if ($p->telefono) {
+            if ($esSandbox) {
+                // Sandbox — mensaje libre
+                $msg  = "👋 Hola *{$p->nombre} {$p->apellido}*,\n\n";
+                $msg .= "Le recordamos su cita con el Dr. *{$doctor->name}*:\n\n";
+                $msg .= "📅 *Fecha:* {$fecha}\n🕐 *Hora:* {$hora}\n";
+                if ($this->cita->servicio_especifico) $msg .= "🩺 *Servicio:* {$this->cita->servicio_especifico}\n";
+                if ($var6Paciente) $msg .= "\n{$var6Paciente}\n";
+                $msg .= "\nPara reprogramar contáctenos.\n_Mensaje automático — no responder._";
+                $enviado = $whatsapp->enviar($p->telefono, $msg);
+            } else {
+                // Producción — plantilla aprobada
+                $enviado = $whatsapp->enviarConPlantilla(
+                    $p->telefono,
+                    config('services.twilio.template_paciente'),
+                    [
+                        '1' => "{$p->nombre} {$p->apellido}",
+                        '2' => $doctor->name,
+                        '3' => $fecha,
+                        '4' => $hora,
+                        '5' => $this->cita->servicio_especifico ?? 'No especificado',
+                        '6' => $var6Paciente ?: 'Sin indicaciones especiales',
+                    ]
+                );
+            }
+        }
 
-        if ($doctor && $doctor->telefono)
-            $whatsapp->enviar($doctor->telefono, $msgDoctor);
+        // ── Envío al DOCTOR ───────────────────────────────────
+        if ($doctor && $doctor->telefono) {
+            if ($esSandbox) {
+                $msg  = "🗓️ *Recordatorio de cita*\n\n";
+                $msg .= "📅 *Fecha:* {$fecha}\n🕐 *Hora:* {$hora}\n";
+                $msg .= "⚡ *Prioridad:* {$this->cita->prioridad}\n";
+                $msg .= "👤 *Paciente:* {$p->nombre} {$p->apellido}\n";
+                if ($p->telefono) $msg .= "📞 *Teléfono:* {$p->telefono}\n";
+                if ($this->cita->servicio_especifico) $msg .= "🩺 *Servicio:* {$this->cita->servicio_especifico}\n";
+                if ($var7Doctor) $msg .= "\n{$var7Doctor}\n";
+                $msg .= "\n_Sistema de gestión de citas._";
+                $whatsapp->enviar($doctor->telefono, $msg);
+            } else {
+                $whatsapp->enviarConPlantilla(
+                    $doctor->telefono,
+                    config('services.twilio.template_doctor'),
+                    [
+                        '1' => $fecha,
+                        '2' => $hora,
+                        '3' => $this->cita->prioridad,
+                        '4' => "{$p->nombre} {$p->apellido}",
+                        '5' => $p->telefono ?? 'No registrado',
+                        '6' => $this->cita->servicio_especifico ?? 'No especificado',
+                        '7' => $var7Doctor ?: 'Sin indicaciones',
+                    ]
+                );
+            }
+        }
 
         if ($enviado)
             $this->cita->update(['recordatorio_enviado' => true]);
