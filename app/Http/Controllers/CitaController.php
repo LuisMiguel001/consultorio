@@ -229,7 +229,8 @@ class CitaController extends Controller
             'hora'        => 'required',
         ]);
 
-        if ($request->fecha == now()->toDateString() && $request->hora < now()->format('H:i')) {
+        $fechaHoraCita = Carbon::parse($request->fecha . ' ' . $request->hora);
+        if ($fechaHoraCita->lt(Carbon::now())) {
             return back()->withErrors([
                 'hora' => 'No se pueden registrar citas en horas pasadas'
             ])->withInput();
@@ -263,21 +264,22 @@ class CitaController extends Controller
             'duracion_minutos'    => $duracion,
             'notas_previas'       => $request->notas_previas,
             'motivo_consulta'     => $request->motivo_consulta,
-            'tipo_consulta'            => $request->tipo_consulta,
+            'tipo_consulta'       => $request->tipo_consulta,
             'prioridad'           => $request->prioridad ?? 'Normal',
-            'requiere_ayuno'         => $request->has('requiere_ayuno'),
-            'estudios_previos'       => $request->has('estudios_previos'),
-            'recordatorio_enviado' => false, // ← resetear siempre al editar
+            'requiere_ayuno'      => $request->has('requiere_ayuno'),
+            'estudios_previos'    => $request->has('estudios_previos'),
+            'recordatorio_enviado' => false,
+            'estado_cita'         => 'Programada',
         ]);
 
-        // Re-despachar recordatorio si el usuario lo eligió
+        // Re-despachar recordatorio
         if ($request->has('enviar_recordatorio')) {
             $horasAntes = (int) ($request->horas_recordatorio ?? 24);
 
+            // ✅ Usar $request->fecha y $request->hora directamente, no $cita->fecha
             $fechaCita = Carbon::createFromFormat(
                 'Y-m-d H:i',
-                Carbon::parse($cita->fecha)->format('Y-m-d') . ' ' .
-                    Carbon::parse($cita->hora)->format('H:i')
+                $request->fecha . ' ' . $request->hora
             );
 
             $horasDiff = Carbon::now()->diffInHours($fechaCita, false);
