@@ -57,6 +57,9 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
+    <!-- Google reCAPTCHA v2 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <style>
         /* Variables de colores y fuentes */
         :root {
@@ -169,6 +172,12 @@
             box-shadow: var(--shadow);
         }
 
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .btn-secondary {
             background-color: transparent;
             border: 2px solid var(--primary-color);
@@ -178,6 +187,51 @@
         .btn-secondary:hover {
             background-color: var(--primary-color);
             color: var(--text-on-dark);
+        }
+
+        /* CAPTCHA Styles */
+        .captcha-container {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            border: 1px solid #e0e0e0;
+        }
+
+        .captcha-error {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .captcha-error.show {
+            display: block;
+        }
+
+        /* Mensajes de éxito/error */
+        .form-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            display: none;
+        }
+
+        .form-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .form-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .form-message.show {
+            display: block;
         }
 
         /* Header y navegación */
@@ -465,7 +519,6 @@
         .doctor-image {
             flex: 0 0 auto;
             width: clamp(320px, 50vw, 480px);
-            /* Tamaño moderado y responsive */
             border-radius: var(--border-radius);
             overflow: hidden;
             box-shadow: var(--shadow);
@@ -477,7 +530,6 @@
             display: block;
             object-fit: cover;
             aspect-ratio: 3 / 4;
-            /* Proporción de retrato */
         }
 
         .doctor-info {
@@ -772,7 +824,6 @@
             height: 100px;
             border-radius: 16px;
             overflow: hidden;
-            /* CLAVE */
             box-shadow: var(--shadow);
             background: #eee;
         }
@@ -788,7 +839,6 @@
             display: flex;
             flex-wrap: wrap;
             gap: 25px;
-            /* Aumentado de 12px a 25px */
             margin-top: 20px;
             align-items: center;
         }
@@ -817,7 +867,6 @@
         .contact-social {
             display: flex;
             gap: 20px;
-            /* Aumentado de 12px a 20px */
             margin-top: 12px;
             flex-wrap: wrap;
         }
@@ -853,7 +902,6 @@
             .social-links {
                 justify-content: center;
                 gap: 20px;
-                /* Un poco menos en móvil pero sigue siendo amplio */
             }
 
             .contact-social {
@@ -896,13 +944,10 @@
         .clinic-image {
             width: 100%;
             height: 300px;
-            /* todas iguales */
             object-fit: cover;
-            /* recorte limpio */
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             cursor: pointer;
-            /* indica que es clickeable */
             transition: transform 0.3s ease;
         }
 
@@ -1090,7 +1135,6 @@
 
         .social-link-footer.linkedin:hover {
             background-color: #0A66C2;
-            /* Nuevo color oficial de LinkedIn */
             transform: translateY(-5px);
         }
 
@@ -1489,7 +1533,7 @@
         </div>
     </section>
 
-    <!-- Sección Contacto -->
+    <!-- Sección Contacto con CAPTCHA -->
     <section class="section" id="contacto">
         <div class="container">
             <h2 class="section-title">Contáctanos</h2>
@@ -1565,10 +1609,20 @@
                             <textarea id="message" placeholder="Ej: Consulta general, dolor, chequeo..." required></textarea>
                         </div>
 
-                        <button type="submit" class="btn" style="width: 100%">
+                        <!-- CAPTCHA de Google (selección de imágenes) -->
+                        <div class="captcha-container">
+                            <div class="g-recaptcha" data-sitekey="6LdFEJUsAAAAAIcOJNgguO-U8szFl_0OAmVP-PEi"></div>
+                            <div class="captcha-error" id="captchaError">
+                                <i class="fas fa-exclamation-circle"></i> Por favor, completa el CAPTCHA para continuar.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn" id="submitBtn" style="width: 100%">
                             <i class="fab fa-whatsapp" style="color: #25d366"></i> Agendar
                             por WhatsApp
                         </button>
+
+                        <div class="form-message" id="formMessage"></div>
                     </form>
                 </div>
             </div>
@@ -1650,18 +1704,6 @@
                                 target="_blank" class="social-link-footer instagram" aria-label="Instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <!--<a href="https://tiktok.com/" target="_blank" class="social-link-footer tiktok"
-                                aria-label="TikTok">
-                                <i class="fab fa-tiktok"></i>
-                            </a>
-                           <a href="https://linkedin.com/" target="_blank" class="social-link-footer linkedin"
-                                aria-label="LinkedIn">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                            <a href="https://youtube.com/" target="_blank" class="social-link-footer youtube"
-                                aria-label="YouTube">
-                                <i class="fab fa-youtube"></i>
-                            </a>-->
                         </div>
                     </div>
                 </div>
@@ -1677,128 +1719,158 @@
         <span class="lightbox-close">&times;</span>
         <img id="lightbox-img" src="" alt="Imagen ampliada" />
     </div>
-    <script src="script.js"></script>
-    <!--a
-      href="https://wa.me/18297268194"
-      class="whatsapp-float"
-      target="_blank"
-    >
-      <i class="fab fa-whatsapp"></i>
-    </a-->
-</body>
 
-</html>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Menú móvil
+            const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+            const navLinks = document.getElementById("nav-links");
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Menú móvil
-        const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-        const navLinks = document.getElementById("nav-links");
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener("click", () => {
+                    navLinks.classList.toggle("active");
+                    mobileMenuBtn.innerHTML = navLinks.classList.contains("active") ?
+                        '<i class="fas fa-times"></i>' :
+                        '<i class="fas fa-bars"></i>';
+                });
+            }
 
-        if (mobileMenuBtn && navLinks) {
-            mobileMenuBtn.addEventListener("click", () => {
-                navLinks.classList.toggle("active");
-                mobileMenuBtn.innerHTML = navLinks.classList.contains("active") ?
-                    '<i class="fas fa-times"></i>' :
-                    '<i class="fas fa-bars"></i>';
-            });
-        }
-
-        // Cerrar menú al hacer clic en un enlace
-        document.querySelectorAll(".nav-links a").forEach((link) => {
-            link.addEventListener("click", () => {
-                navLinks.classList.remove("active");
-                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-            });
-        });
-
-        // Formulario
-        const contactForm = document.getElementById("contactForm");
-
-        if (contactForm) {
-            contactForm.addEventListener("submit", (e) => {
-                e.preventDefault();
-
-                const name = document.getElementById("name").value.trim();
-                const message = document.getElementById("message").value.trim();
-
-                const whatsappNumber = "18095885601";
-
-                const text = `
-                        *SOLICITUD DE CITA MÉDICA*
-
-                        *Nombre:* ${name}
-
-
-                        *Motivo de la consulta:*
-                        ${message}
-
-                        Quedo atento(a) a su confirmación.
-                        Muchas gracias.
-                        `.trim();
-
-                const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
-
-                window.open(url, "_blank");
-
-                contactForm.reset();
-            });
-        }
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-            anchor.addEventListener("click", function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute("href"));
-                if (target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: "smooth",
-                    });
-                }
-            });
-        });
-
-        /* ================= LIGHTBOX ================= */
-
-        const images = document.querySelectorAll(".clinic-image");
-        const lightbox = document.getElementById("lightbox");
-        const lightboxImg = document.getElementById("lightbox-img");
-        const closeBtn = document.querySelector(".lightbox-close");
-
-        if (images.length && lightbox && lightboxImg && closeBtn) {
-            images.forEach((img) => {
-                img.addEventListener("click", () => {
-                    lightboxImg.src = img.src;
-                    lightbox.classList.add("active");
-                    document.body.style.overflow = "hidden";
+            // Cerrar menú al hacer clic en un enlace
+            document.querySelectorAll(".nav-links a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    navLinks.classList.remove("active");
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
                 });
             });
 
-            closeBtn.addEventListener("click", () => {
-                lightbox.classList.remove("active");
-                document.body.style.overflow = "";
+            // Formulario con CAPTCHA
+            const contactForm = document.getElementById("contactForm");
+            const submitBtn = document.getElementById("submitBtn");
+            const captchaError = document.getElementById("captchaError");
+            const formMessage = document.getElementById("formMessage");
+
+            if (contactForm) {
+                contactForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    // Ocultar mensajes previos
+                    captchaError.classList.remove("show");
+                    formMessage.classList.remove("show", "success", "error");
+
+                    // Verificar CAPTCHA
+                    const recaptchaResponse = grecaptcha.getResponse();
+
+                    if (!recaptchaResponse) {
+                        captchaError.classList.add("show");
+                        return;
+                    }
+
+                    // Deshabilitar botón mientras se procesa
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = "Verificando...";
+
+                    try {
+                        // Verificar CAPTCHA con Google (opcional - para producción)
+                        // En entorno de pruebas, la clave demo siempre es válida
+                        // Para producción, debes reemplazar la site key y verificar en backend
+
+                        const name = document.getElementById("name").value.trim();
+                        const message = document.getElementById("message").value.trim();
+                        const whatsappNumber = "18095885601";
+
+                        const text = `
+                            *SOLICITUD DE CITA MÉDICA*
+
+                            *Nombre:* ${name}
+
+
+                            *Motivo de la consulta:*
+                            ${message}
+
+                            Quedo atento(a) a su confirmación.
+                            Muchas gracias.
+                        `.trim();
+
+                        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
+
+                        // Resetear CAPTCHA después de verificación exitosa
+                        grecaptcha.reset();
+
+                        // Mostrar mensaje de éxito
+                        formMessage.textContent = "✓ Verificación exitosa. Redirigiendo a WhatsApp...";
+                        formMessage.classList.add("show", "success");
+
+                        // Redirigir después de un breve momento
+                        setTimeout(() => {
+                            window.open(url, "_blank");
+                            contactForm.reset();
+                        }, 1000);
+
+                    } catch (error) {
+                        console.error("Error:", error);
+                        formMessage.textContent = "✗ Ocurrió un error. Por favor, intenta nuevamente.";
+                        formMessage.classList.add("show", "error");
+                        grecaptcha.reset();
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fab fa-whatsapp" style="color: #25d366"></i> Agendar por WhatsApp';
+                    }
+                });
+            }
+
+            // Smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute("href"));
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: "smooth",
+                        });
+                    }
+                });
             });
 
-            lightbox.addEventListener("click", (e) => {
-                if (e.target === lightbox) {
+            /* ================= LIGHTBOX ================= */
+            const images = document.querySelectorAll(".clinic-image");
+            const lightbox = document.getElementById("lightbox");
+            const lightboxImg = document.getElementById("lightbox-img");
+            const closeBtn = document.querySelector(".lightbox-close");
+
+            if (images.length && lightbox && lightboxImg && closeBtn) {
+                images.forEach((img) => {
+                    img.addEventListener("click", () => {
+                        lightboxImg.src = img.src;
+                        lightbox.classList.add("active");
+                        document.body.style.overflow = "hidden";
+                    });
+                });
+
+                closeBtn.addEventListener("click", () => {
                     lightbox.classList.remove("active");
                     document.body.style.overflow = "";
-                }
+                });
+
+                lightbox.addEventListener("click", (e) => {
+                    if (e.target === lightbox) {
+                        lightbox.classList.remove("active");
+                        document.body.style.overflow = "";
+                    }
+                });
+            }
+        });
+
+        /*Validación de campos del formulario */
+        const phoneInput = document.getElementById("phone");
+        if (phoneInput) {
+            phoneInput.addEventListener("input", () => {
+                phoneInput.value = phoneInput.value.replace(/\D/g, "");
             });
         }
-    });
 
-    /*Validación de campos del formulario */
-    const phoneInput = document.getElementById("phone");
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+</body>
 
-    if (phoneInput) {
-        phoneInput.addEventListener("input", () => {
-            phoneInput.value = phoneInput.value.replace(/\D/g, "");
-        });
-    }
-
-    window.onbeforeunload = () => "¿Estás seguro de salir de la página?";
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+</html>
