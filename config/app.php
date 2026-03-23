@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'America/Santo_Domingo',
+    'timezone' => env('APP_TIMEZONE', 'America/Santo_Domingo'),
 
     /*
     |--------------------------------------------------------------------------

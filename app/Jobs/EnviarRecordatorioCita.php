@@ -21,7 +21,8 @@ class EnviarRecordatorioCita implements ShouldQueue
 
     public function handle(WhatsAppService $whatsapp): void
     {
-        if ($this->cita->recordatorio_enviado || $this->cita->estado_cita !== 'Programada') {
+        // ✅ Después — solo cancela si ya fue enviado o está Cancelada/Realizada
+        if ($this->cita->recordatorio_enviado || in_array($this->cita->estado_cita, ['Cancelada', 'Realizada'])) {
             return;
         }
 
