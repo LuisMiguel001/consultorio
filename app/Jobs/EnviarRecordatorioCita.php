@@ -53,17 +53,21 @@ class EnviarRecordatorioCita implements ShouldQueue
 
         // ── Variable {{6}} paciente — indicaciones ───────────
         $indicaciones = [];
-        if ($this->cita->requiere_ayuno)   $indicaciones[] = "⚠️ Debe asistir en ayunas (8-12 horas)";
-        if ($this->cita->estudios_previos) $indicaciones[] = "📋 Traiga sus estudios previos";
-        if ($this->cita->notas_previas)    $indicaciones[] = "📝 Nota: {$this->cita->notas_previas}";
-        $var6Paciente = !empty($indicaciones) ? implode("\n", $indicaciones) : '';
+        if ($this->cita->requiere_ayuno)   $indicaciones[] = "Debe asistir en ayunas (8-12 horas)";
+        if ($this->cita->estudios_previos) $indicaciones[] = "Traiga sus estudios previos";
+        if ($this->cita->notas_previas)    $indicaciones[] = "Nota: {$this->cita->notas_previas}";
+        $var6Paciente = !empty($indicaciones)
+            ? implode(' | ', $indicaciones)
+            : 'Sin indicaciones especiales';
 
         // ── Variable {{7}} doctor — indicaciones ─────────────
         $indDoc = [];
-        if ($this->cita->requiere_ayuno)   $indDoc[] = "⚠️ Paciente en ayunas";
-        if ($this->cita->estudios_previos) $indDoc[] = "📋 Trae estudios previos";
-        if ($this->cita->notas_previas)    $indDoc[] = "📝 Notas: {$this->cita->notas_previas}";
-        $var7Doctor = !empty($indDoc) ? implode("\n", $indDoc) : '';
+        if ($this->cita->requiere_ayuno)   $indDoc[] = "Paciente en ayunas";
+        if ($this->cita->estudios_previos) $indDoc[] = "Trae estudios previos";
+        if ($this->cita->notas_previas)    $indDoc[] = "Notas: {$this->cita->notas_previas}";
+        $var7Doctor = !empty($indDoc)
+            ? implode(' | ', $indDoc)
+            : 'Sin indicaciones';
 
         $enviado = false;
 
@@ -71,9 +75,9 @@ class EnviarRecordatorioCita implements ShouldQueue
         if ($p->telefono) {
             if ($esSandbox) {
                 // Sandbox — mensaje libre
-                $msg  = "👋 Hola *{$p->nombre} {$p->apellido}*,\n\n";
+                $msg  = "Hola *{$p->nombre} {$p->apellido}*,\n\n";
                 $msg .= "Le recordamos su cita con el Dr. *{$doctor->name}*:\n\n";
-                $msg .= "📅 *Fecha:* {$fecha}\n🕐 *Hora:* {$hora}\n";
+                $msg .= "*Fecha:* {$fecha}\n *Hora:* {$hora}\n";
                 if ($this->cita->servicio_especifico) $msg .= "🩺 *Servicio:* {$this->cita->servicio_especifico}\n";
                 if ($var6Paciente) $msg .= "\n{$var6Paciente}\n";
                 $msg .= "\nPara reprogramar contáctenos.\n_Mensaje automático — no responder._";
@@ -98,11 +102,11 @@ class EnviarRecordatorioCita implements ShouldQueue
         // ── Envío al DOCTOR ───────────────────────────────────
         if ($doctor && $doctor->telefono) {
             if ($esSandbox) {
-                $msg  = "🗓️ *Recordatorio de cita*\n\n";
-                $msg .= "📅 *Fecha:* {$fecha}\n🕐 *Hora:* {$hora}\n";
-                $msg .= "⚡ *Prioridad:* {$this->cita->prioridad}\n";
-                $msg .= "👤 *Paciente:* {$p->nombre} {$p->apellido}\n";
-                if ($p->telefono) $msg .= "📞 *Teléfono:* {$p->telefono}\n";
+                $msg  = "*Recordatorio de cita*\n\n";
+                $msg .= "*Fecha:* {$fecha}\n *Hora:* {$hora}\n";
+                $msg .= "*Prioridad:* {$this->cita->prioridad}\n";
+                $msg .= "*Paciente:* {$p->nombre} {$p->apellido}\n";
+                if ($p->telefono) $msg .= "*Teléfono:* {$p->telefono}\n";
                 if ($this->cita->servicio_especifico) $msg .= "🩺 *Servicio:* {$this->cita->servicio_especifico}\n";
                 if ($var7Doctor) $msg .= "\n{$var7Doctor}\n";
                 $msg .= "\n_Sistema de gestión de citas._";
