@@ -39,10 +39,9 @@ class CitaController extends Controller
             $buscar = strtolower($request->buscar);
 
             $query->whereHas('paciente', function ($q) use ($buscar) {
-
-                $q->whereRaw("LOWER(nombre) ILEKE ?", ["%{$buscar}%"])
-                    ->orWhereRaw("LOWER(apellido) ILIKE ?", ["%{$buscar}%"])
-                    ->orWhereRaw("REPLACE(cedula,'-','') LIKE ?", ["%{$buscar}%"]);
+                $q->whereRaw("LOWER(nombre) LIKE ?", ["%{$buscar}%"])
+                    ->orWhereRaw("LOWER(apellido) LIKE ?", ["%{$buscar}%"])
+                    ->orWhereRaw("REPLACE(cedula,'-','') LIKE ?", ["%" . str_replace('-', '', $buscar) . "%"]);
             });
         }
 

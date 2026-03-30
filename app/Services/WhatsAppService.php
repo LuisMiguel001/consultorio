@@ -36,8 +36,8 @@ class WhatsAppService
 
     private function normalizarTelefono(string $tel): string
     {
-        $tel = preg_replace('/\D/', '', $tel); // quitar todo lo que no sea número
-        if (strlen($tel) === 10) $tel = '1' . $tel; // agregar código RD/USA
+        $tel = preg_replace('/\D/', '', $tel);
+        if (strlen($tel) === 10) $tel = '1' . $tel;
         return '+' . $tel;
     }
 
