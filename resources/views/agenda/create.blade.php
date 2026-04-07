@@ -176,6 +176,8 @@
                                     Duración Estimada
                                 </label>
                                 <select name="duracion_minutos" class="form-select" id="duracion_select">
+                                    <option value="15" {{ old('duracion_minutos') == '15' ? 'selected' : '' }}>15 min
+                                        (Consulta rápida)</option>
                                     <option value="30" {{ old('duracion_minutos') == '30' ? 'selected' : '' }}>30 min
                                         (Consulta rápida)</option>
                                     <option value="45" {{ old('duracion_minutos') == '45' ? 'selected' : '' }}>45 min

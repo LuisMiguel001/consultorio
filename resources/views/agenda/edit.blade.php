@@ -208,6 +208,7 @@
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Duración</label>
                             <select name="duracion_minutos" class="form-select">
+                                <option value="15" {{ $cita->duracion_minutos == 15 ? 'selected' : '' }}>15</option>
                                 <option value="30" {{ $cita->duracion_minutos == 30 ? 'selected' : '' }}>30</option>
                                 <option value="45" {{ $cita->duracion_minutos == 45 ? 'selected' : '' }}>45</option>
                                 <option value="60" {{ $cita->duracion_minutos == 60 ? 'selected' : '' }}>60</option>
