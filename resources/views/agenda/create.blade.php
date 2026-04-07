@@ -195,7 +195,6 @@
                                 </select>
                             </div>
 
-                            <!-- Prioridad -->
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-semibold" style="color: #4a2c6d;">
                                     <i class="fas fa-exclamation-triangle me-1" style="color: #a97bc9;"></i>
