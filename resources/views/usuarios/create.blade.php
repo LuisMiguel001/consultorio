@@ -31,6 +31,16 @@
             </select>
         </div>
 
+        <div class="mb-3" id="especialidadDiv">
+            <label>Especialidad</label>
+            <select name="especialidad_id" class="form-control">
+                <option value="">--Seleccione--</option>
+                @foreach ($especialidades as $esp)
+                    <option value="{{ $esp->id }}">{{ $esp->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <hr>
 
         <h5>Roles</h5>
@@ -68,5 +78,29 @@
         function togglePermisos(marcar) {
             document.querySelectorAll('.perm-checkbox').forEach(cb => cb.checked = marcar);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const rolesCheckbox = document.querySelectorAll('input[name="roles[]"]');
+            const especialidadDiv = document.getElementById('especialidadDiv');
+
+            function toggleEspecialidad() {
+                let esDoctor = false;
+
+                rolesCheckbox.forEach(cb => {
+                    if (cb.value === 'doctor' && cb.checked) {
+                        esDoctor = true;
+                    }
+                });
+
+                especialidadDiv.style.display = esDoctor ? 'block' : 'none';
+            }
+
+            // Escuchar cambios
+            rolesCheckbox.forEach(cb => cb.addEventListener('change', toggleEspecialidad));
+
+            // Ejecutar al cargar
+            toggleEspecialidad();
+        });
     </script>
 @endsection

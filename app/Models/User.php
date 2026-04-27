@@ -76,4 +76,9 @@ class User extends Authenticatable
     {
         return $this->doctor_id ?? $this->id;
     }
+
+    public function especialidad()
+    {
+        return $this->belongsTo(Especialidad::class);
+    }
 }

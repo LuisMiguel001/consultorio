@@ -26,22 +26,31 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
 
-            RateLimiter::clear($key); // limpiar intentos si login exitoso
+            RateLimiter::clear($key);
 
             $request->session()->regenerate();
 
-            if (!Auth::user()->activo) {
+            $user = Auth::user();
+
+            if (!$user->activo) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Tu cuenta está desactivada.'
+                ]);
+            }
+
+            if ($user->roles->contains('name', 'doctor') && !$user->especialidad_id) {
                 Auth::logout();
 
                 return back()->withErrors([
-                    'email' => 'Tu cuenta está desactivada.'
+                    'email' => 'El doctor no tiene especialidad asignada. Contacte al administrador.'
                 ]);
             }
 
             return redirect()->route('pacientes.inicio');
         }
 
-        RateLimiter::hit($key, 60); // bloquear por 60 segundos
+        RateLimiter::hit($key, 60);
 
         return back()->with('error', 'Credenciales incorrectas');
     }

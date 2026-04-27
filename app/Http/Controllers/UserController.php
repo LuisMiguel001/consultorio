@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Especialidad;
 
 class UserController extends Controller
 {
@@ -19,14 +19,14 @@ class UserController extends Controller
         return view('usuarios.index', compact('users'));
     }
 
-    // FORM CREAR
     public function create()
     {
         $roles = Role::all();
         $permissions = Permission::all();
         $doctores = User::role('doctor')->get();
+        $especialidades = Especialidad::all();
 
-        return view('usuarios.create', compact('roles', 'permissions', 'doctores'));
+        return view('usuarios.create', compact('roles', 'permissions', 'doctores', 'especialidades'));
     }
 
     public function store(Request $request)
@@ -35,16 +35,24 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|string|unique:users',
             'password' => 'required|min:6',
-            'doctor_id' => 'nullable|exists:users,id'
+            'doctor_id' => 'nullable|exists:users,id',
+            'especialidad_id' => 'nullable|exists:especialidades,id'
         ]);
 
         $esDoctor = in_array('doctor', $request->roles ?? []);
+
+        if ($esDoctor && !$request->especialidad_id) {
+            return back()->withErrors([
+                'especialidad_id' => 'El doctor debe tener una especialidad.'
+            ]);
+        }
 
         $user = User::create([
             'name'      => $request->name,
             'email'     => $request->email,
             'password'  => Hash::make($request->password),
             'doctor_id' => $esDoctor ? null : $request->doctor_id,
+            'especialidad_id' => $esDoctor ? $request->especialidad_id : null,
         ]);
 
         if ($request->roles) {
@@ -76,6 +84,7 @@ class UserController extends Controller
             'name'      => $request->name,
             'email'     => $request->email,
             'doctor_id' => $esDoctor ? null : $user->doctor_id,
+            'especialidad_id' => $esDoctor ? $request->especialidad_id : null,
         ]);
 
         $user->syncRoles($request->roles ?? []);
