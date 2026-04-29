@@ -62,4 +62,9 @@ class Consulta extends Model
     {
         return $this->hasMany(Evolucion::class);
     }
+
+    public function ginecologia()
+    {
+        return $this->hasOne(ConsultaGinecologica::class);
+    }
 }

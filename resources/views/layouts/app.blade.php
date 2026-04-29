@@ -330,9 +330,9 @@
 
             <div class="logo">
                 <div class="logo-content">
-                    <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png" height="30"
-                        width="30" alt="logo" />
-                    <span>Dr. Lorenzo</span>
+                    <!--img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png" height="30"
+                        width="30" alt="logo" /-->
+                    <span>Consultorio</span>
                 </div>
                 <button class="toggle-btn" onclick="toggleSidebar()">
                     <i class="bi bi-list"></i>

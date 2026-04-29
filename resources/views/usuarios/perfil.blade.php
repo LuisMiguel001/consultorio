@@ -95,16 +95,24 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    <i class="fab fa-whatsapp me-1 text-success"></i>
-                                    WhatsApp (para recibir recordatorios)
-                                </label>
-                                <input type="text" name="telefono" class="form-control" value="{{ $user->telefono }}"
-                                    placeholder="809-000-0000">
-                                @error('telefono')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        <i class="fab fa-whatsapp me-1 text-success"></i>
+                                        WhatsApp (para recibir recordatorios)
+                                    </label>
+                                    <input type="text" name="telefono" class="form-control" value="{{ $user->telefono }}"
+                                        placeholder="809-000-0000">
+                                    @error('telefono')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Especialidad</label>
+                                    <input type="text" class="form-control"
+                                        value="{{ $user->especialidad->nombre ?? 'No asignada' }}" readonly disabled>
+                                </div>
                             </div>
 
                             <div class="mt-3">

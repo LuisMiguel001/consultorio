@@ -7,6 +7,7 @@ use App\Models\Consulta;
 use App\Models\Paciente;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cita;
+use App\Models\ConsultaGinecologica;
 
 class ConsultaController extends Controller
 {
@@ -34,15 +35,11 @@ class ConsultaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'paciente_id' => 'required|exists:pacientes,id',
-            'fecha_consulta' => 'required|date',
-            'tipo_consulta' => 'required'
-        ]);
+        $user = Auth::user();
 
         $consulta = Consulta::create([
             'paciente_id' => $request->paciente_id,
-            'doctor_id' => Auth::id(),
+            'doctor_id' => $user->id,
             'fecha_consulta' => $request->fecha_consulta,
             'tipo_consulta' => $request->tipo_consulta,
             'motivo_consulta' => $request->motivo_consulta,
@@ -50,6 +47,25 @@ class ConsultaController extends Controller
             'plan' => $request->plan,
             'observaciones' => $request->observaciones,
         ]);
+
+        if ($user->especialidad->slug === 'ginecologia') {
+
+            ConsultaGinecologica::create([
+                'consulta_id' => $consulta->id,
+                'fecha_ultima_menstruacion' => $request->fum,
+                'ciclo_menstrual' => $request->ciclo,
+                'gestas' => $request->gestas,
+                'partos' => $request->partos,
+                'abortos' => $request->abortos,
+                'cesareas' => $request->cesareas,
+                'embarazo_actual' => $request->embarazo,
+                'semanas_gestacion' => $request->semanas,
+                'metodo_anticonceptivo' => $request->metodo,
+                'vida_sexual' => $request->vida_sexual,
+                'examen_pelvico' => $request->examen_pelvico,
+                'mamas' => $request->mamas,
+            ]);
+        }
 
         $cita = Cita::where('paciente_id', $request->paciente_id)
             ->where('estado_cita', 'Programada')

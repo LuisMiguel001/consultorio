@@ -96,10 +96,8 @@
                 especialidadDiv.style.display = esDoctor ? 'block' : 'none';
             }
 
-            // Escuchar cambios
             rolesCheckbox.forEach(cb => cb.addEventListener('change', toggleEspecialidad));
 
-            // Ejecutar al cargar
             toggleEspecialidad();
         });
     </script>

@@ -18,6 +18,14 @@ class ExamenFisicoController extends Controller
             'extremidades' => 'nullable|string',
             'neurologico' => 'nullable|string',
             'otros' => 'nullable|string',
+
+            //GINECOLOGÍA
+            'genitales_externos' => 'nullable|string',
+            'especuloscopia' => 'nullable|string',
+            'tacto_vaginal' => 'nullable|string',
+            'flujo_vaginal' => 'nullable|string',
+            'dolor_pelvico' => 'nullable|string',
+            'hallazgos_gineco' => 'nullable|string',
         ]);
 
         $consulta->examenFisico()->updateOrCreate(

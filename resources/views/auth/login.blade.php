@@ -13,85 +13,57 @@
         body {
             background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
             height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: system-ui;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
 
-        /* CARD PRINCIPAL */
-
+        /* CARD PRINCIPAL - MÁS PEQUEÑA */
         .login-card {
-            width: 850px;
+            width: 400px;
+            max-width: 90%;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            display: flex;
-            animation: fadeIn .6s ease;
+            animation: fadeIn 0.5s ease;
+            transition: transform 0.3s ease;
         }
 
-        /* LADO IZQUIERDO */
-
-        .logo-side {
-            flex: 1;
-            background: linear-gradient(135deg, #0ea5a5, #0f766e);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+        .login-card:hover {
+            transform: translateY(-5px);
         }
 
-        /* CORAZON */
-
-        .heart {
-            width: 260px;
-            animation: heartbeat 1s infinite;
-            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+        /* HEADER OPCIONAL */
+        .login-header {
+            background: linear-gradient(135deg, #0f766e, #115e59);
+            padding: 20px;
+            text-align: center;
         }
 
-        /* LATIDO */
-
-        @keyframes heartbeat {
-
-            0% {
-                transform: scale(1);
-            }
-
-            25% {
-                transform: scale(1.07);
-            }
-
-            40% {
-                transform: scale(1);
-            }
-
-            60% {
-                transform: scale(1.12);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-
+        .login-header h4 {
+            margin: 0;
+            color: white;
+            font-weight: 600;
+            font-size: 1.25rem;
         }
 
-        /* LADO DERECHO */
-
+        /* LADO DERECHO - FORMULARIO */
         .form-side {
-            flex: 1;
-            padding: 45px 40px;
+            padding: 35px 30px;
         }
 
         .form-side h3 {
             font-weight: 700;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             text-align: center;
             color: #1e293b;
+            font-size: 1.5rem;
         }
 
-        /* INPUT */
-
+        /* INPUT ESTILO MODERNO */
         .user-box {
             position: relative;
             margin-bottom: 30px;
@@ -102,25 +74,26 @@
             border: none;
             border-bottom: 2px solid #e2e8f0;
             outline: none;
-            padding: 8px 3px;
+            padding: 10px 5px 5px 5px;
             font-size: 15px;
             background: transparent;
+            transition: border-color 0.3s ease;
         }
 
         .user-box label {
             position: absolute;
-            top: 8px;
-            left: 2px;
-            color: #64748b;
+            top: 10px;
+            left: 5px;
+            color: #94a3b8;
             font-size: 14px;
-            transition: .3s;
+            transition: all 0.3s ease;
             pointer-events: none;
         }
 
-        .user-box input:focus~label,
-        .user-box input:not(:placeholder-shown)~label {
-            top: -14px;
-            font-size: 12px;
+        .user-box input:focus ~ label,
+        .user-box input:not(:placeholder-shown) ~ label {
+            top: -12px;
+            font-size: 11px;
             color: #0f766e;
             font-weight: 600;
         }
@@ -129,36 +102,60 @@
             border-bottom: 2px solid #0f766e;
         }
 
-        /* BOTON */
-
+        /* BOTÓN MODERNO */
         .login-button {
             width: 100%;
             padding: 12px;
             border: none;
             border-radius: 12px;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 15px;
             color: white;
             background: linear-gradient(135deg, #0f766e, #115e59);
-            transition: .3s;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .login-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(13, 71, 161, 0.2);
+            background: linear-gradient(135deg, #115e59, #0f766e);
         }
 
-        /* ANIMACION */
+        .login-button:active {
+            transform: translateY(0);
+        }
 
+        /* ALERTAS */
+        .alert {
+            border-radius: 12px;
+            font-size: 13px;
+            padding: 10px;
+            margin-top: 20px;
+            margin-bottom: 0;
+        }
+
+        /* ANIMACIÓN */
         @keyframes fadeIn {
-
             from {
                 opacity: 0;
-                transform: translateY(15px);
+                transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .form-side {
+                padding: 25px 20px;
+            }
+
+            .form-side h3 {
+                font-size: 1.3rem;
+                margin-bottom: 25px;
             }
         }
     </style>
@@ -166,23 +163,21 @@
 
 <body>
     <div class="login-card">
-        <!-- LADO IZQUIERDO -->
-        <div class="logo-side">
-            <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png" class="heart"
-                id="heart">
+        <!-- HEADER OPCIONAL (COMENTADO SI NO LO QUIERES)
+        <div class="login-header">
+            <h4>Sistema Médico</h4>
         </div>
+        -->
 
-
-        <!-- LADO DERECHO -->
+        <!-- FORMULARIO -->
         <div class="form-side">
-
             <h3>Iniciar Sesión</h3>
 
             <form method="POST" action="{{ route('login.post') }}" id="loginForm">
                 @csrf
 
                 <div class="user-box">
-                    <input type="text" name="email" required placeholder=" " value="{{ old('email') }}">
+                    <input type="text" name="email" required placeholder=" " value="{{ old('email') }}" autocomplete="email" autofocus>
                     <label>Usuario</label>
                 </div>
 
@@ -191,46 +186,38 @@
                     <label>Contraseña</label>
                 </div>
 
-                <button class="login-button" id="submitBtn">
-                    Entrar
+                <button type="submit" class="login-button" id="submitBtn">
+                    Ingresar
                 </button>
 
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
             </form>
-
-            @if (session('error'))
-                <div class="alert alert-danger mt-3">
-                    {{ session('error') }}
-                </div>
-            @endif
         </div>
     </div>
 
-
     <script>
+        // Sonido de latido (opcional, descomentar si quieres)
+        /*
         const sound = document.getElementById("heartbeatSound");
         let audioEnabled = false;
 
         document.addEventListener("click", () => {
-
             if (!audioEnabled) {
                 sound.play().then(() => {
-
                     audioEnabled = true;
-
                     setInterval(() => {
                         sound.currentTime = 0;
                         sound.play();
                     }, 1000);
-
                 }).catch(() => {});
-
             }
-
-        }, {
-            once: true
-        });
+        }, { once: true });
+        */
     </script>
-
 </body>
 
 </html>
