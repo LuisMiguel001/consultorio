@@ -9,13 +9,16 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Especialidad;
+use App\Models\Consultorio;
 
 class UserController extends Controller
 {
     // LISTAR USUARIOS
     public function index()
     {
-        $users = User::with('roles', 'permissions')->get();
+        $users = User::with('roles', 'permissions')
+            ->where('consultorio_id', Auth::user()->consultorio_id)
+            ->get();
         return view('usuarios.index', compact('users'));
     }
 
@@ -25,8 +28,9 @@ class UserController extends Controller
         $permissions = Permission::all();
         $doctores = User::role('doctor')->get();
         $especialidades = Especialidad::all();
+        $consultorios = Consultorio::all();
 
-        return view('usuarios.create', compact('roles', 'permissions', 'doctores', 'especialidades'));
+        return view('usuarios.create', compact('roles', 'permissions', 'doctores', 'especialidades', 'consultorios'));
     }
 
     public function store(Request $request)
@@ -36,6 +40,7 @@ class UserController extends Controller
             'email' => 'required|string|unique:users',
             'password' => 'required|min:6',
             'doctor_id' => 'nullable|exists:users,id',
+            'consultorio_id' => 'required|exists:consultorios,id', // NUEVO
             'especialidad_id' => 'nullable|exists:especialidades,id'
         ]);
 
@@ -47,11 +52,18 @@ class UserController extends Controller
             ]);
         }
 
+        if ($esDoctor && !$request->consultorio_id) {
+            return back()->withErrors([
+                'consultorio_id' => 'El doctor debe tener un consultorio asignado.'
+            ]);
+        }
+
         $user = User::create([
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
             'doctor_id' => $esDoctor ? null : $request->doctor_id,
+            'consultorio_id' => $esDoctor ? $request->consultorio_id : Auth::user()->consultorio_id,
             'especialidad_id' => $esDoctor ? $request->especialidad_id : null,
         ]);
 
@@ -72,8 +84,11 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $permissions = Permission::all();
+        $doctores = User::role('doctor')->get();
+        $especialidades = Especialidad::all();
+        $consultorios = Consultorio::all();
 
-        return view('usuarios.edit', compact('user', 'roles', 'permissions'));
+        return view('usuarios.edit', compact('user', 'roles', 'permissions', 'doctores', 'especialidades', 'consultorios'));
     }
 
     public function update(Request $request, User $user)
@@ -81,10 +96,11 @@ class UserController extends Controller
         $esDoctor = in_array('doctor', $request->roles ?? []);
 
         $user->update([
-            'name'      => $request->name,
-            'email'     => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
             'doctor_id' => $esDoctor ? null : $user->doctor_id,
             'especialidad_id' => $esDoctor ? $request->especialidad_id : null,
+            'consultorio_id' => $esDoctor ? $request->consultorio_id : null,
         ]);
 
         $user->syncRoles($request->roles ?? []);

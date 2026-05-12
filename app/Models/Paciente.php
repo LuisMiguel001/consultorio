@@ -22,7 +22,8 @@ class Paciente extends Model
         'seguro_medico',
         'nss',
         'estado_civil',
-        'doctor_id'
+        'doctor_id',
+        'consultorio_id',
     ];
 
     public function consultas()
@@ -38,5 +39,10 @@ class Paciente extends Model
     public function doctor()
     {
         return $this->belongsTo(User::class, 'doctor_id');
+    }
+
+    public function consultorio()
+    {
+        return $this->belongsTo(Consultorio::class);
     }
 }

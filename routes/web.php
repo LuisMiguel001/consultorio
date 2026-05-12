@@ -15,7 +15,7 @@ use App\Http\Controllers\ExamenFisicoController;
 use App\Http\Controllers\EvolucionController;
 use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\ConsultorioController;
 
 
 //Landing page
@@ -217,5 +217,54 @@ Route::middleware(['auth', 'nocache'])->group(function () {
             '/consultas/{consulta}/receta/pdf',
             [RecetaController::class, 'generar']
         )->name('receta.pdf');
+    });
+
+    /*Consultorios*/
+
+    Route::middleware('permission:ver consultorios')->group(function () {
+
+        Route::get(
+            '/consultorios',
+            [ConsultorioController::class, 'index']
+        )->name('consultorios.index');
+    });
+
+    Route::middleware('permission:crear consultorios')->group(function () {
+
+        Route::get(
+            '/consultorios/create',
+            [ConsultorioController::class, 'create']
+        )->name('consultorios.create');
+
+        Route::post(
+            '/consultorios',
+            [ConsultorioController::class, 'store']
+        )->name('consultorios.store');
+    });
+
+    Route::middleware('permission:editar consultorios')->group(function () {
+
+        Route::get(
+            '/consultorios/{consultorio}/edit',
+            [ConsultorioController::class, 'edit']
+        )->name('consultorios.edit');
+
+        Route::put(
+            '/consultorios/{consultorio}',
+            [ConsultorioController::class, 'update']
+        )->name('consultorios.update');
+
+        Route::post(
+            '/consultorios/{consultorio}/toggle',
+            [ConsultorioController::class, 'toggleActivo']
+        )->name('consultorios.toggle');
+    });
+
+    Route::middleware('permission:eliminar consultorios')->group(function () {
+
+        Route::delete(
+            '/consultorios/{consultorio}',
+            [ConsultorioController::class, 'destroy']
+        )->name('consultorios.destroy');
     });
 });

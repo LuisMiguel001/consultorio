@@ -24,6 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'doctor_id',
+        'consultorio_id',
+        'especialidad_id',
         'telefono',
         'activo',
     ];
@@ -80,5 +82,10 @@ class User extends Authenticatable
     public function especialidad()
     {
         return $this->belongsTo(Especialidad::class);
+    }
+
+    public function consultorio()
+    {
+        return $this->belongsTo(Consultorio::class);
     }
 }

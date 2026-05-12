@@ -1,0 +1,201 @@
+@extends('layouts.app')
+
+@section('content')
+    <style>
+        :root {
+            --primary-color: #0d47a1;
+            --primary-dark: #002171;
+            --primary-light: #e8f1fb;
+            --primary-soft: #f4f8fd;
+            --primary-border: #90caf9;
+            --text-primary: #0a1a2f;
+            --text-secondary: #1565c0;
+        }
+
+        body {
+            background: var(--primary-soft);
+        }
+
+        .paciente-card {
+            border-radius: 18px;
+            background: var(--primary-light);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .07);
+        }
+
+        .paciente-card .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border-radius: 18px 18px 0 0;
+            padding: 1.5rem;
+        }
+
+        .paciente-card input.form-control,
+        .paciente-card select.form-select,
+        .paciente-card textarea.form-control {
+            border-radius: 8px;
+            border: 1px solid var(--primary-border);
+        }
+
+        .paciente-card button.btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .paciente-card .btn-secondary {
+            border-radius: 8px;
+        }
+
+        .alert-success {
+            background-color: #d0f0fd;
+            color: var(--primary-dark);
+            border-radius: 6px;
+        }
+
+        .alert-danger {
+            background-color: #fdd0d0;
+            color: #a70000;
+            border-radius: 6px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+    </style>
+
+    <div class="container py-4">
+
+        <div class="card shadow border-0 paciente-card">
+
+            <div class="card-header text-center">
+                <h5 class="mb-0">
+                    @if (isset($consultorio))
+                        Editar Consultorio
+                    @else
+                        Nuevo Consultorio
+                    @endif
+                </h5>
+            </div>
+
+            <div class="card-body">
+
+                <form
+                    action="{{ isset($consultorio) ? route('consultorios.update', $consultorio) : route('consultorios.store') }}"
+                    method="POST">
+
+                    @csrf
+
+                    @if (isset($consultorio))
+                        @method('PUT')
+                    @endif
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Nombre
+                            </label>
+
+                            <input type="text" name="nombre" class="form-control"
+                                value="{{ old('nombre', $consultorio->nombre ?? '') }}" required>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Teléfono
+                            </label>
+
+                            <input type="text" name="telefono" class="form-control"
+                                value="{{ old('telefono', $consultorio->telefono ?? '') }}">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Email
+                            </label>
+
+                            <input type="email" name="email" class="form-control"
+                                value="{{ old('email', $consultorio->email ?? '') }}">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                RNC / RUC
+                            </label>
+
+                            <input type="text" name="ruc" class="form-control"
+                                value="{{ old('ruc', $consultorio->ruc ?? '') }}">
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <label class="form-label">
+                                Dirección
+                            </label>
+
+                            <input type="text" name="direccion" class="form-control"
+                                value="{{ old('direccion', $consultorio->direccion ?? '') }}">
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <label class="form-label">
+                                Descripción
+                            </label>
+
+                            <textarea name="descripcion" rows="4" class="form-control">{{ old('descripcion', $consultorio->descripcion ?? '') }}</textarea>
+
+                        </div>
+
+                        @if (isset($consultorio))
+                            <div class="col-md-4">
+
+                                <label class="form-label">
+                                    Estado
+                                </label>
+
+                                <select name="activo" class="form-select">
+                                    <option value="1" {{ old('activo', $consultorio->activo) ? 'selected' : '' }}>
+                                        Activo
+                                    </option>
+
+                                    <option value="0" {{ !old('activo', $consultorio->activo) ? 'selected' : '' }}>
+                                        Inactivo
+                                    </option>
+                                </select>
+
+                            </div>
+                        @endif
+
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>
+                            @if (isset($consultorio))
+                                Actualizar
+                            @else
+                                Guardar
+                            @endif
+                        </button>
+
+                        <a href="{{ route('consultorios.index') }}" class="btn btn-secondary">
+                            Volver
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection

@@ -396,8 +396,13 @@
                     </a>
                 @endrole
 
+                @can('ver consultorios')
+                    <a href="{{ route('consultorios.index') }}">
+                        <i class="bi bi-hospital"></i>
+                        <span>Consultorios</span>
+                    </a>
+                @endcan
 
-                <!-- USER BOX -->
                 <div class="user-box">
                     @auth
                         <div class="fw-bold">

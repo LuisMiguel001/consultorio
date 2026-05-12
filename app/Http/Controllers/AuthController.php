@@ -16,13 +16,22 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $key = Str::lower($request->input('email')) . '|' . $request->ip();
+        $key = Str::lower(
+            $request->input('email')
+        ) . '|' . $request->ip();
 
         if (RateLimiter::tooManyAttempts($key, 5)) {
-            return back()->with('error', 'Demasiados intentos. Intenta en 1 minuto.');
+
+            return back()->with(
+                'error',
+                'Demasiados intentos. Intenta en 1 minuto.'
+            );
         }
 
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only(
+            'email',
+            'password'
+        );
 
         if (Auth::attempt($credentials)) {
 
@@ -33,26 +42,50 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if (!$user->activo) {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'Tu cuenta está desactivada.'
-                ]);
-            }
 
-            if ($user->roles->contains('name', 'doctor') && !$user->especialidad_id) {
                 Auth::logout();
 
                 return back()->withErrors([
-                    'email' => 'El doctor no tiene especialidad asignada. Contacte al administrador.'
+                    'email' =>
+                    'Tu cuenta está desactivada.'
                 ]);
             }
 
-            return redirect()->route('pacientes.inicio');
+            if (!$user->consultorio_id && !$user->roles->contains('name', 'admin'))
+            {
+
+                Auth::logout();
+
+                return back()->withErrors([
+                    'email' =>
+                    'Tu cuenta no tiene consultorio asignado. Contacte al administrador.'
+                ]);
+            }
+
+            if (
+                $user->roles->contains('name', 'doctor') &&
+                !$user->especialidad_id
+            ) {
+
+                Auth::logout();
+
+                return back()->withErrors([
+                    'email' =>
+                    'El doctor no tiene especialidad asignada. Contacte al administrador.'
+                ]);
+            }
+
+            return redirect()->route(
+                'pacientes.inicio'
+            );
         }
 
         RateLimiter::hit($key, 60);
 
-        return back()->with('error', 'Credenciales incorrectas');
+        return back()->with(
+            'error',
+            'Credenciales incorrectas'
+        );
     }
 
     public function logout(Request $request)
@@ -60,6 +93,7 @@ class AuthController extends Controller
         Auth::logout();
 
         $request->session()->invalidate();
+
         $request->session()->regenerateToken();
 
         return redirect()->route('login');

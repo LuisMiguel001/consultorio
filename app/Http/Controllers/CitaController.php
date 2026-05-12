@@ -14,8 +14,14 @@ class CitaController extends Controller
 {
     public function index(Request $request)
     {
-        // Marcar citas atrasadas
-        Cita::where('estado_cita', 'Programada')
+        $user = Auth::user();
+
+        $doctorId = $user->doctor_principal;
+        $consultorioId = $user->consultorio_id;
+
+        // Marcar citas atrasadas SOLO del consultorio actual
+        Cita::where('consultorio_id', $consultorioId)
+            ->where('estado_cita', 'Programada')
             ->where(function ($q) {
                 $q->where('fecha', '<', now()->toDateString())
                     ->orWhere(function ($q2) {
@@ -23,11 +29,12 @@ class CitaController extends Controller
                             ->where('hora', '<', now()->format('H:i'));
                     });
             })
-            ->update(['estado_cita' => 'Atrasada']);
+            ->update([
+                'estado_cita' => 'Atrasada'
+            ]);
 
-        $doctorId = Auth::user()->doctor_principal;
-
-        $query = Cita::with('paciente')
+        $query = Cita::with(['paciente', 'doctor'])
+            ->where('consultorio_id', $consultorioId)
             ->where('doctor_id', $doctorId)
             ->whereHas('paciente', function ($q) {
                 $q->whereNull('deleted_at');
@@ -39,43 +46,46 @@ class CitaController extends Controller
             $buscar = strtolower($request->buscar);
 
             $query->whereHas('paciente', function ($q) use ($buscar) {
+
                 $q->whereRaw("LOWER(nombre) LIKE ?", ["%{$buscar}%"])
                     ->orWhereRaw("LOWER(apellido) LIKE ?", ["%{$buscar}%"])
-                    ->orWhereRaw("REPLACE(cedula,'-','') LIKE ?", ["%" . str_replace('-', '', $buscar) . "%"]);
+                    ->orWhereRaw(
+                        "REPLACE(cedula,'-','') LIKE ?",
+                        ["%" . str_replace('-', '', $buscar) . "%"]
+                    );
             });
         }
 
-        // 🎯 FILTRO POR ESTADO
+        // 🎯 FILTRO ESTADO
         if ($request->filled('filtro_estado')) {
             $query->where('estado_cita', $request->filtro_estado);
         }
 
-        // 🎯 FILTRO POR PRIORIDAD
+        // 🎯 FILTRO PRIORIDAD
         if ($request->filled('filtro_prioridad')) {
             $query->where('prioridad', $request->filtro_prioridad);
         }
 
-        // 📅 FILTRO POR RANGO DE FECHAS
+        // 📅 FILTRO FECHAS
         if ($request->filled('fecha_desde')) {
-            $query->where('fecha', '>=', $request->fecha_desde);
+            $query->whereDate('fecha', '>=', $request->fecha_desde);
         }
 
         if ($request->filled('fecha_hasta')) {
-            $query->where('fecha', '<=', $request->fecha_hasta);
+            $query->whereDate('fecha', '<=', $request->fecha_hasta);
         }
 
-        // 📊 JERARQUÍA DE ESTADOS
+        // 📊 ORDEN DE ESTADOS
         $query->orderByRaw("
-        CASE
-            WHEN estado_cita = 'Programada' THEN 1
-            WHEN estado_cita = 'Realizada' THEN 2
-            WHEN estado_cita = 'Atrasada' THEN 3
-            WHEN estado_cita = 'Cancelada' THEN 4
-            ELSE 5
-        END
-    ");
+            CASE
+                WHEN estado_cita = 'Programada' THEN 1
+                WHEN estado_cita = 'Realizada' THEN 2
+                WHEN estado_cita = 'Atrasada' THEN 3
+                WHEN estado_cita = 'Cancelada' THEN 4
+                ELSE 5
+            END
+        ");
 
-        // luego ordenar por fecha y hora
         $query->orderBy('fecha', 'asc')
             ->orderBy('hora', 'asc');
 
@@ -86,61 +96,92 @@ class CitaController extends Controller
 
     public function create()
     {
-        $doctorId = Auth::user()->doctor_principal;
+        $user = Auth::user();
 
-        $pacientes = Paciente::orderBy('nombre')
+        $doctorId = $user->doctor_principal;
+        $consultorioId = $user->consultorio_id;
+
+        $pacientes = Paciente::where('consultorio_id', $consultorioId)
             ->where('doctor_id', $doctorId)
             ->whereNull('deleted_at')
+            ->orderBy('nombre')
             ->get();
+
         return view('agenda.create', compact('pacientes'));
     }
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+
+        $doctorId = $user->doctor_principal;
+        $consultorioId = $user->consultorio_id;
+
         $request->validate([
-            'paciente_id'        => 'required|exists:pacientes,id',
+            'paciente_id'         => 'required|exists:pacientes,id',
             'servicio_especifico' => 'nullable|string|max:255',
-            'fecha'              => 'required|date|after_or_equal:today',
-            'hora'               => 'required',
-            'duracion_minutos'   => 'nullable|integer|min:15',
-            'prioridad'          => 'nullable|in:Normal,Preferente,Urgente',
+            'fecha'               => 'required|date|after_or_equal:today',
+            'hora'                => 'required',
+            'duracion_minutos'    => 'nullable|integer|min:15',
+            'prioridad'           => 'nullable|in:Normal,Preferente,Urgente',
         ]);
 
-        $doctorId = Auth::user()->doctor_principal;
-
-        // Verificar que el paciente pertenece al doctor
+        // Validar paciente del consultorio y doctor
         Paciente::where('id', $request->paciente_id)
+            ->where('consultorio_id', $consultorioId)
             ->where('doctor_id', $doctorId)
             ->firstOrFail();
 
-        // Validar que no sea en el pasado
-        $fechaHoraCita = Carbon::parse($request->fecha . ' ' . $request->hora);
-        if ($fechaHoraCita->lt(Carbon::now())) {
-            return back()->withErrors([
-                'hora' => 'No se pueden registrar citas en horas pasadas'
-            ])->withInput();
+        // Validar fecha pasada
+        $fechaHoraCita = Carbon::parse(
+            $request->fecha . ' ' . $request->hora
+        );
+
+        if ($fechaHoraCita->lt(now())) {
+
+            return back()
+                ->withErrors([
+                    'hora' => 'No se pueden registrar citas en horas pasadas'
+                ])
+                ->withInput();
         }
 
-        $duracion = (int) ($request->duracion_minutos ?? $cita->duracion_minutos ?? 30);
-        $horaInicio = $request->hora;
-        $horaFin    = $fechaHoraCita->copy()->addMinutes($duracion)->format('H:i');
+        $duracion = (int) ($request->duracion_minutos ?? 30);
 
-        $solapamiento = Cita::where('doctor_id', $doctorId)
+        $horaInicio = $request->hora;
+
+        $horaFin = $fechaHoraCita
+            ->copy()
+            ->addMinutes($duracion)
+            ->format('H:i');
+
+        // VALIDAR SOLAPAMIENTO SOLO DEL DOCTOR
+        $solapamiento = Cita::where('consultorio_id', $consultorioId)
+            ->where('doctor_id', $doctorId)
             ->where('fecha', $request->fecha)
             ->where('estado_cita', 'Programada')
             ->where(function ($q) use ($horaInicio, $horaFin) {
+
                 $q->whereRaw("hora < ?", [$horaFin])
-                    ->whereRaw("(hora::time + (duracion_minutos || ' minutes')::interval)::time > ?::time", [$horaInicio]);
+                    ->whereRaw("
+                        (hora::time +
+                        (duracion_minutos || ' minutes')::interval)::time
+                        > ?::time
+                    ", [$horaInicio]);
             })
             ->exists();
 
         if ($solapamiento) {
-            return back()->withErrors([
-                'hora' => 'El horario se solapa con otra cita programada en ese rango de tiempo.'
-            ])->withInput();
+
+            return back()
+                ->withErrors([
+                    'hora' => 'El horario se solapa con otra cita.'
+                ])
+                ->withInput();
         }
 
         $cita = Cita::create([
+            'consultorio_id'      => $consultorioId,
             'paciente_id'         => $request->paciente_id,
             'doctor_id'           => $doctorId,
             'servicio_especifico' => $request->servicio_especifico,
@@ -149,65 +190,60 @@ class CitaController extends Controller
             'duracion_minutos'    => $duracion,
             'notas_previas'       => $request->notas_previas,
             'motivo_consulta'     => $request->motivo_consulta,
-            'tipo_consulta'            => $request->tipo_consulta,
+            'tipo_consulta'       => $request->tipo_consulta,
             'prioridad'           => $request->prioridad ?? 'Normal',
             'estado_cita'         => 'Programada',
             'recordatorio_enviado' => false,
-            'requiere_ayuno'         => $request->has('requiere_ayuno'),
-            'estudios_previos'       => $request->has('estudios_previos'),
+            'requiere_ayuno'      => $request->has('requiere_ayuno'),
+            'estudios_previos'    => $request->has('estudios_previos'),
         ]);
 
-        // ✅ Despachar recordatorio según elección del usuario
+        // RECORDATORIOS
         if ($request->has('enviar_recordatorio')) {
+
             $horasAntes = (int) ($request->horas_recordatorio ?? 24);
 
             $fechaCita = Carbon::createFromFormat(
                 'Y-m-d H:i',
-                Carbon::parse($cita->fecha)->format('Y-m-d') . ' ' .
-                    Carbon::parse($cita->hora)->format('H:i')
+                $request->fecha . ' ' . $request->hora
             );
 
-            $horasDiff = Carbon::now()->diffInHours($fechaCita, false);
+            $horasDiff = now()->diffInHours($fechaCita, false);
 
             if ($horasDiff > 1) {
-                // Si la cita está más lejos que el tiempo elegido → enviar en el momento correcto
-                // Si la cita está más cerca → enviar en 5 minutos
+
                 $delay = $horasDiff > $horasAntes
                     ? $fechaCita->copy()->subHours($horasAntes)
-                    : Carbon::now()->addMinutes(5);
+                    : now()->addMinutes(5);
 
-                EnviarRecordatorioCita::dispatch($cita)->delay($delay);
+                EnviarRecordatorioCita::dispatch($cita)
+                    ->delay($delay);
             }
         }
 
-        return redirect()->route('citas.index')
-            ->with('success', 'Procedimiento agendado correctamente para ' . $cita->paciente->nombre);
-    }
-
-    public function realizar($id)
-    {
-        $doctorId = Auth::user()->doctor_principal;
-
-        $cita = Cita::where('id', $id)
-            ->where('doctor_id', $doctorId)
-            ->firstOrFail();
-
-        $cita->estado_cita = "Realizada";
-        $cita->save();
-
-        return redirect()->back()
-            ->with('success', 'Cita marcada como realizada');
+        return redirect()
+            ->route('citas.index')
+            ->with(
+                'success',
+                'Cita registrada correctamente.'
+            );
     }
 
     public function edit($id)
     {
-        $doctorId = Auth::user()->doctor_principal;
+        $user = Auth::user();
 
-        $cita = Cita::where('id', $id)
+        $doctorId = $user->doctor_principal;
+        $consultorioId = $user->consultorio_id;
+
+        $cita = Cita::where('consultorio_id', $consultorioId)
             ->where('doctor_id', $doctorId)
+            ->where('id', $id)
             ->firstOrFail();
 
-        $pacientes = Paciente::where('doctor_id', $doctorId)
+        $pacientes = Paciente::where('consultorio_id', $consultorioId)
+            ->where('doctor_id', $doctorId)
+            ->whereNull('deleted_at')
             ->orderBy('nombre')
             ->get();
 
@@ -216,10 +252,14 @@ class CitaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $doctorId = Auth::user()->doctor_principal;
+        $user = Auth::user();
 
-        $cita = Cita::where('id', $id)
+        $doctorId = $user->doctor_principal;
+        $consultorioId = $user->consultorio_id;
+
+        $cita = Cita::where('consultorio_id', $consultorioId)
             ->where('doctor_id', $doctorId)
+            ->where('id', $id)
             ->firstOrFail();
 
         $request->validate([
@@ -228,101 +268,142 @@ class CitaController extends Controller
             'hora'        => 'required',
         ]);
 
-        $fechaHoraCita = Carbon::parse($request->fecha . ' ' . $request->hora);
-        if ($fechaHoraCita->lt(Carbon::now())) {
-            return back()->withErrors([
-                'hora' => 'No se pueden registrar citas en horas pasadas'
-            ])->withInput();
+        $fechaHoraCita = Carbon::parse(
+            $request->fecha . ' ' . $request->hora
+        );
+
+        if ($fechaHoraCita->lt(now())) {
+
+            return back()
+                ->withErrors([
+                    'hora' => 'No se permiten horas pasadas'
+                ])
+                ->withInput();
         }
 
-        $duracion   = (int) ($request->duracion_minutos ?? $cita->duracion_minutos ?? 30);
-        $horaInicio = $request->hora;
-        $horaFin    = Carbon::parse($request->fecha . ' ' . $request->hora)
-            ->addMinutes($duracion)->format('H:i');
+        $duracion = (int) ($request->duracion_minutos ?? 30);
 
-        $solapamiento = Cita::where('doctor_id', $doctorId)
+        $horaInicio = $request->hora;
+
+        $horaFin = $fechaHoraCita
+            ->copy()
+            ->addMinutes($duracion)
+            ->format('H:i');
+
+        $solapamiento = Cita::where('consultorio_id', $consultorioId)
+            ->where('doctor_id', $doctorId)
             ->where('fecha', $request->fecha)
-            ->where('estado_cita', 'Programada')
             ->where('id', '!=', $id)
+            ->where('estado_cita', 'Programada')
             ->where(function ($q) use ($horaInicio, $horaFin) {
+
                 $q->whereRaw("hora < ?", [$horaFin])
-                    ->whereRaw("(hora::time + (duracion_minutos || ' minutes')::interval)::time > ?::time", [$horaInicio]);
-            })->exists();
+                    ->whereRaw("
+                        (hora::time +
+                        (duracion_minutos || ' minutes')::interval)::time
+                        > ?::time
+                    ", [$horaInicio]);
+            })
+            ->exists();
 
         if ($solapamiento) {
-            return back()->withErrors([
-                'hora' => 'El horario se solapa con otra cita programada en ese rango de tiempo.'
-            ])->withInput();
+
+            return back()
+                ->withErrors([
+                    'hora' => 'Existe conflicto con otra cita.'
+                ])
+                ->withInput();
         }
 
         $cita->update([
-            'paciente_id'         => $request->paciente_id,
-            'servicio_especifico' => $request->servicio_especifico,
-            'fecha'               => $request->fecha,
-            'hora'                => $request->hora,
-            'duracion_minutos'    => $duracion,
-            'notas_previas'       => $request->notas_previas,
-            'motivo_consulta'     => $request->motivo_consulta,
-            'tipo_consulta'       => $request->tipo_consulta,
-            'prioridad'           => $request->prioridad ?? 'Normal',
-            'requiere_ayuno'      => $request->has('requiere_ayuno'),
-            'estudios_previos'    => $request->has('estudios_previos'),
+            'paciente_id'          => $request->paciente_id,
+            'servicio_especifico'  => $request->servicio_especifico,
+            'fecha'                => $request->fecha,
+            'hora'                 => $request->hora,
+            'duracion_minutos'     => $duracion,
+            'notas_previas'        => $request->notas_previas,
+            'motivo_consulta'      => $request->motivo_consulta,
+            'tipo_consulta'        => $request->tipo_consulta,
+            'prioridad'            => $request->prioridad ?? 'Normal',
+            'estado_cita'          => 'Programada',
             'recordatorio_enviado' => false,
-            'estado_cita'         => 'Programada',
+            'requiere_ayuno'       => $request->has('requiere_ayuno'),
+            'estudios_previos'     => $request->has('estudios_previos'),
         ]);
 
-        // Re-despachar recordatorio
-        if ($request->has('enviar_recordatorio')) {
-            $horasAntes = (int) ($request->horas_recordatorio ?? 24);
-
-            // ✅ Usar $request->fecha y $request->hora directamente, no $cita->fecha
-            $fechaCita = Carbon::createFromFormat(
-                'Y-m-d H:i',
-                $request->fecha . ' ' . $request->hora
+        return redirect()
+            ->route('citas.index')
+            ->with(
+                'success',
+                'Cita actualizada correctamente.'
             );
-
-            $horasDiff = Carbon::now()->diffInHours($fechaCita, false);
-
-            if ($horasDiff > 1) {
-                $delay = $horasDiff > $horasAntes
-                    ? $fechaCita->copy()->subHours($horasAntes)
-                    : Carbon::now()->addMinutes(5);
-
-                EnviarRecordatorioCita::dispatch($cita->fresh())->delay($delay);
-            }
-        }
-
-        return redirect()->route('citas.index')
-            ->with('success', 'Cita actualizada correctamente');
     }
 
     public function destroy($id)
     {
+        $user = Auth::user();
 
-        $doctorId = Auth::user()->doctor_principal;
+        $doctorId = $user->doctor_principal;
+        $consultorioId = $user->consultorio_id;
 
-        $cita = Cita::where('id', $id)
+        $cita = Cita::where('consultorio_id', $consultorioId)
             ->where('doctor_id', $doctorId)
+            ->where('id', $id)
             ->firstOrFail();
 
-        $cita->estado_cita = 'Cancelada';
-        $cita->save();
+        $cita->update([
+            'estado_cita' => 'Cancelada'
+        ]);
 
         return redirect()
             ->route('citas.index')
-            ->with('success', 'Cita cancelada correctamente');
+            ->with(
+                'success',
+                'Cita cancelada correctamente.'
+            );
+    }
+
+    public function realizar($id)
+    {
+        $user = Auth::user();
+
+        $doctorId = $user->doctor_principal;
+        $consultorioId = $user->consultorio_id;
+
+        $cita = Cita::where('consultorio_id', $consultorioId)
+            ->where('doctor_id', $doctorId)
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $cita->update([
+            'estado_cita' => 'Realizada'
+        ]);
+
+        return back()
+            ->with(
+                'success',
+                'Cita marcada como realizada.'
+            );
     }
 
     public function buscarPacientes(Request $request)
     {
+        $user = Auth::user();
+
+        $doctorId = $user->doctor_principal;
+        $consultorioId = $user->consultorio_id;
+
         $buscar = $request->buscar;
 
-        $doctorId = Auth::user()->doctor_principal;
-
-        return Paciente::where('doctor_id', $doctorId)
+        return Paciente::where('consultorio_id', $consultorioId)
+            ->where('doctor_id', $doctorId)
             ->where(function ($q) use ($buscar) {
 
-                $q->where(DB::raw("CONCAT(nombre,' ',apellido)"), 'ILIKE', "%$buscar%")
+                $q->where(
+                    DB::raw("CONCAT(nombre,' ',apellido)"),
+                    'ILIKE',
+                    "%$buscar%"
+                )
                     ->orWhere('nombre', 'ILIKE', "%$buscar%")
                     ->orWhere('apellido', 'ILIKE', "%$buscar%")
                     ->orWhere('cedula', 'ILIKE', "%$buscar%");
