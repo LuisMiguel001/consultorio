@@ -95,7 +95,7 @@
                                 </div>
                             </div>
 
-                            <div class="row g-3">
+                            <div class="row g-4 mt-1">
                                 <div class="col-md-6">
                                     <label class="form-label">
                                         <i class="fab fa-whatsapp me-1 text-success"></i>
@@ -112,6 +112,12 @@
                                     <label class="form-label">Especialidad</label>
                                     <input type="text" class="form-control"
                                         value="{{ $user->especialidad->nombre ?? 'No asignada' }}" readonly disabled>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Consultorio</label>
+                                    <input type="text" class="form-control"
+                                        value="{{ $user->consultorio->nombre ?? 'No asignado' }}" readonly disabled>
                                 </div>
                             </div>
 

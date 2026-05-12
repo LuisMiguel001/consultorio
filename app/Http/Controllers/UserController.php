@@ -13,12 +13,18 @@ use App\Models\Consultorio;
 
 class UserController extends Controller
 {
-    // LISTAR USUARIOS
     public function index()
     {
-        $users = User::with('roles', 'permissions')
-            ->where('consultorio_id', Auth::user()->consultorio_id)
-            ->get();
+        $user = Auth::user();
+
+        $query = User::with('roles', 'permissions');
+
+        if (!$user->roles->contains('name', 'admin')) {
+            $query->where('consultorio_id', $user->consultorio_id);
+        }
+
+        $users = $query->get();
+
         return view('usuarios.index', compact('users'));
     }
 
@@ -63,7 +69,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'doctor_id' => $esDoctor ? null : $request->doctor_id,
-            'consultorio_id' => $esDoctor ? $request->consultorio_id : Auth::user()->consultorio_id,
+            'consultorio_id' => $request->consultorio_id,
             'especialidad_id' => $esDoctor ? $request->especialidad_id : null,
         ]);
 
@@ -100,7 +106,7 @@ class UserController extends Controller
             'email' => $request->email,
             'doctor_id' => $esDoctor ? null : $user->doctor_id,
             'especialidad_id' => $esDoctor ? $request->especialidad_id : null,
-            'consultorio_id' => $esDoctor ? $request->consultorio_id : null,
+            'consultorio_id' => $request->consultorio_id,
         ]);
 
         $user->syncRoles($request->roles ?? []);

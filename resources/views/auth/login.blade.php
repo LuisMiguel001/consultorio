@@ -90,8 +90,8 @@
             pointer-events: none;
         }
 
-        .user-box input:focus ~ label,
-        .user-box input:not(:placeholder-shown) ~ label {
+        .user-box input:focus~label,
+        .user-box input:not(:placeholder-shown)~label {
             top: -12px;
             font-size: 11px;
             color: #0f766e;
@@ -141,6 +141,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -177,7 +178,8 @@
                 @csrf
 
                 <div class="user-box">
-                    <input type="text" name="email" required placeholder=" " value="{{ old('email') }}" autocomplete="email" autofocus>
+                    <input type="text" name="email" required placeholder=" " value="{{ old('email') }}"
+                        autocomplete="email" autofocus>
                     <label>Usuario</label>
                 </div>
 
@@ -190,8 +192,22 @@
                     Ingresar
                 </button>
 
+                {{-- ERRORES DE VALIDACIÓN --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger mt-3">
+
+                        @foreach ($errors->all() as $error)
+                            <div>
+                                • {{ $error }}
+                            </div>
+                        @endforeach
+
+                    </div>
+                @endif
+
+                {{-- ERROR SIMPLE --}}
                 @if (session('error'))
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger mt-3">
                         {{ session('error') }}
                     </div>
                 @endif
