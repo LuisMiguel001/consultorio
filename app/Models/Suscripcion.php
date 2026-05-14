@@ -70,4 +70,35 @@ class Suscripcion extends Model
         $this->estado = 'activa';
         $this->save();
     }
+
+    public function tienePagoCompletado()
+    {
+        return $this->pagos()
+            ->where('estado', 'completado')
+            ->exists();
+    }
+
+    public function ultimoPagoCompletado()
+    {
+        return $this->pagos()
+            ->where('estado', 'completado')
+            ->latest('fecha_pago')
+            ->first();
+    }
+
+    public function estaEnPeriodoGracia()
+    {
+        if ($this->estado !== 'activa') {
+            return false;
+        }
+
+        $diasPasados = now()->diffInDays($this->fecha_fin, false);
+        return $diasPasados < 0 && abs($diasPasados) <= 7;
+    }
+
+    public function puedeRenovar()
+    {
+        return in_array($this->estado, ['activa', 'expirada']) &&
+            $this->diasRestantes() <= 30;
+    }
 }

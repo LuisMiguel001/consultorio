@@ -4,21 +4,117 @@ namespace App\Http\Controllers;
 
 use App\Models\Consultorio;
 use Illuminate\Http\Request;
+use App\Models\Pago;
 
 class ConsultorioController extends Controller
 {
     public function index()
     {
-        $consultorios = Consultorio::withCount([
-            'usuarios',
-            'doctores'
+        $consultorios = Consultorio::with([
+            'suscripcionActiva.plan',
+            'suscripcionActiva.pagos'
         ])
+            ->withCount([
+                'usuarios',
+                'doctores',
+                'secretarias',
+                'enfermeras'
+            ])
             ->latest()
             ->paginate(15);
 
+        // =========================
+        // ESTADÍSTICAS
+        // =========================
+
+        $consultoriosActivos = Consultorio::where(
+            'activo',
+            true
+        )->count();
+
+        $suscripcionesVencidas = \App\Models\Suscripcion::whereDate(
+            'fecha_fin',
+            '<',
+            now()
+        )->count();
+
+        $ingresosMes = Pago::where(
+            'estado',
+            'aprobado'
+        )
+            ->whereMonth('fecha_pago', now()->month)
+            ->whereYear('fecha_pago', now()->year)
+            ->sum('monto');
+
+        $proximosVencer = \App\Models\Suscripcion::where(
+            'estado',
+            'activa'
+        )
+            ->whereBetween(
+                'fecha_fin',
+                [
+                    now(),
+                    now()->addDays(7)
+                ]
+            )
+            ->count();
+
         return view(
             'consultorios.index',
-            compact('consultorios')
+            compact(
+                'consultorios',
+                'consultoriosActivos',
+                'suscripcionesVencidas',
+                'ingresosMes',
+                'proximosVencer'
+            )
+        );
+    }
+
+    public function show(Consultorio $consultorio)
+    {
+        $consultorio->load([
+            'usuarios.roles',
+            'suscripciones.plan',
+            'suscripciones.pagos',
+        ]);
+
+        $suscripcion = $consultorio
+            ->suscripcionActiva;
+
+        $plan = optional($suscripcion)->plan;
+
+        $ultimoPago = Pago::where(
+            'consultorio_id',
+            $consultorio->id
+        )
+            ->latest('fecha_pago')
+            ->first();
+
+        $estadisticas = [
+            'usuarios' => $consultorio->usuarios()->count(),
+            'doctores' => $consultorio->doctores()->count(),
+            'secretarias' => $consultorio->secretarias()->count(),
+            'enfermeras' => $consultorio->enfermeras()->count(),
+        ];
+
+        $pagos = Pago::where(
+            'consultorio_id',
+            $consultorio->id
+        )
+            ->latest()
+            ->paginate(10);
+
+        return view(
+            'consultorios.show',
+            compact(
+                'consultorio',
+                'suscripcion',
+                'plan',
+                'ultimoPago',
+                'estadisticas',
+                'pagos'
+            )
         );
     }
 

@@ -10,3 +10,5 @@ Artisan::command('inspire', function () {
 
 Schedule::command('citas:recordatorios --horas=24')->dailyAt('08:00');
 Schedule::command('citas:recordatorios --horas=2')->everyThirtyMinutes();
+
+ Schedule::command('suscripciones:verificar')->daily();

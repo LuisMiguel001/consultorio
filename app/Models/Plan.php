@@ -19,6 +19,10 @@ class Plan extends Model
         'max_enfermeras',
         'max_pacientes',
         'caracteristicas',
+        'modulos',
+        'max_citas',
+        'max_mensajes_whatsapp',
+        'permite_archivar',
         'activo',
     ];
 
@@ -26,6 +30,7 @@ class Plan extends Model
         'precio_mensual' => 'decimal:2',
         'precio_anual' => 'decimal:2',
         'caracteristicas' => 'array',
+        'modulos' => 'array',
         'activo' => 'boolean',
     ];
 

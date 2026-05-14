@@ -66,7 +66,37 @@
             </div>
 
             <div class="card-body">
+                <div class="row mb-4">
 
+                    <div class="col-md-3">
+                        <div class="card p-3">
+                            <h6>Consultorios activos</h6>
+                            <h3>{{ $consultoriosActivos }}</h3>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card p-3">
+                            <h6>Suscripciones vencidas</h6>
+                            <h3>{{ $suscripcionesVencidas }}</h3>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card p-3">
+                            <h6>Ingresos del mes</h6>
+                            <h3>RD$ {{ number_format($ingresosMes, 2) }}</h3>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card p-3">
+                            <h6>Próximos a vencer</h6>
+                            <h3>{{ $proximosVencer }}</h3>
+                        </div>
+                    </div>
+
+                </div>
                 <div class="table-responsive">
 
                     <table class="table table-hover align-middle">
@@ -74,10 +104,12 @@
                         <thead>
                             <tr>
                                 <th>Consultorio</th>
-                                <th>Teléfono</th>
-                                <th>Email</th>
+                                <th>Plan</th>
+                                <th>Estado Suscripción</th>
+                                <th>Vence</th>
+                                <th>Días</th>
                                 <th>Usuarios</th>
-                                <th>Doctores</th>
+                                <th>Último Pago</th>
                                 <th>Estado</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
@@ -86,30 +118,126 @@
                         <tbody>
 
                             @foreach ($consultorios as $consultorio)
+                                @php
+                                    $suscripcion = $consultorio->suscripcionActiva;
+
+                                    $estado = $consultorio->estadoSuscripcion();
+
+                                    $plan = optional($suscripcion)->plan;
+
+                                    $ultimoPago = optional($suscripcion)->pagos()?->latest()?->first();
+                                @endphp
+
                                 <tr>
 
+                                    {{-- CONSULTORIO --}}
                                     <td>
-                                        <strong>
+                                        <div class="fw-bold">
                                             {{ $consultorio->nombre }}
-                                        </strong>
+                                        </div>
+
+                                        <small class="text-muted">
+                                            {{ $consultorio->email }}
+                                        </small>
+                                    </td>
+
+                                    {{-- PLAN --}}
+                                    <td>
+
+                                        @if ($plan)
+                                            <span class="badge bg-primary">
+                                                {{ $plan->nombre }}
+                                            </span>
+                                        @else
+                                            <span class="badge bg-danger">
+                                                Sin plan
+                                            </span>
+                                        @endif
+
+                                    </td>
+
+                                    {{-- ESTADO SUSCRIPCIÓN --}}
+                                    <td>
+
+                                        <span class="badge bg-{{ $estado['clase'] }}">
+                                            {{ $estado['icono'] }}
+                                            {{ $estado['mensaje'] }}
+                                        </span>
+
+                                    </td>
+
+                                    {{-- FECHA VENCIMIENTO --}}
+                                    <td>
+
+                                        @if ($suscripcion)
+                                            {{ $suscripcion->fecha_fin->format('d/m/Y') }}
+                                        @else
+                                            —
+                                        @endif
+
+                                    </td>
+
+                                    {{-- DÍAS RESTANTES --}}
+                                    <td>
+
+                                        @if ($suscripcion)
+                                            <strong>
+                                                {{ $suscripcion->diasRestantes() }}
+                                            </strong> días
+                                        @else
+                                            —
+                                        @endif
+
+                                    </td>
+
+                                    {{-- USUARIOS --}}
+                                    <td>
+
+                                        <div class="small">
+
+                                            <div>
+                                                👨‍⚕️
+                                                {{ $consultorio->doctores()->count() }}
+                                                /
+                                                {{ optional($plan)->max_doctores ?? '∞' }}
+                                            </div>
+
+                                            <div>
+                                                👩‍💼
+                                                {{ $consultorio->secretarias()->count() }}
+                                                /
+                                                {{ optional($plan)->max_secretarias ?? '∞' }}
+                                            </div>
+
+                                            <div>
+                                                👩‍⚕️
+                                                {{ $consultorio->enfermeras()->count() }}
+                                                /
+                                                {{ optional($plan)->max_enfermeras ?? '∞' }}
+                                            </div>
+
+                                        </div>
+
                                     </td>
 
                                     <td>
-                                        {{ $consultorio->telefono }}
+                                        @if ($ultimoPago)
+                                            <div>
+                                                RD$
+                                                {{ number_format($ultimoPago->monto, 2) }}
+                                            </div>
+
+                                            <small class="text-muted">
+                                                {{ $ultimoPago->fecha_pago?->format('d/m/Y') }}
+                                            </small>
+                                        @else
+                                            <span class="text-danger">
+                                                Sin pagos
+                                            </span>
+                                        @endif
                                     </td>
 
-                                    <td>
-                                        {{ $consultorio->email }}
-                                    </td>
-
-                                    <td>
-                                        {{ $consultorio->usuarios_count }}
-                                    </td>
-
-                                    <td>
-                                        {{ $consultorio->doctores_count }}
-                                    </td>
-
+                                    {{-- ESTADO CONSULTORIO --}}
                                     <td>
 
                                         @if ($consultorio->activo)
@@ -124,33 +252,55 @@
 
                                     </td>
 
+                                    {{-- ACCIONES --}}
                                     <td class="text-center">
 
-                                        <div class="d-flex gap-1 justify-content-center">
-
-                                            <!-- Editar - usa bi-pencil en lugar de fa-edit -->
-                                            <a href="{{ route('consultorios.edit', $consultorio) }}"
-                                                class="btn btn-sm btn-main" title="Editar">
-                                                <i class="bi bi-pencil"></i>
+                                        <div class="d-flex gap-1 justify-content-center flex-wrap">
+                                            <a href="{{ route('consultorios.show', $consultorio) }}"
+                                                class="btn btn-sm btn-info text-white" title="Ver detalle">
+                                                <i class="bi bi-eye"></i>
                                             </a>
 
+                                            {{-- EDITAR --}}
+                                            <a href="{{ route('consultorios.edit', $consultorio) }}"
+                                                class="btn btn-sm btn-main">
+
+                                                <i class="bi bi-pencil"></i>
+
+                                            </a>
+
+                                            {{-- ACTIVAR / DESACTIVAR --}}
                                             <form action="{{ route('consultorios.toggle', $consultorio) }}" method="POST">
+
                                                 @csrf
+
                                                 <button
-                                                    class="btn btn-sm {{ $consultorio->activo ? 'btn-warning' : 'btn-success' }}"
-                                                    title="Activar/Desactivar">
+                                                    class="btn btn-sm {{ $consultorio->activo ? 'btn-warning' : 'btn-success' }}">
+
                                                     <i class="bi bi-power"></i>
+
                                                 </button>
+
                                             </form>
 
-                                            <form action="{{ route('consultorios.destroy', $consultorio) }}" method="POST"
-                                                onsubmit="return confirm('¿Eliminar consultorio?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-danger" title="Eliminar">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
+                                            {{-- REGISTRAR PAGO --}}
+                                            <a href="{{ route('pagos.create') }}?consultorio={{ $consultorio->id }}"
+                                                class="btn btn-sm btn-success">
+
+                                                <i class="bi bi-cash"></i>
+
+                                            </a>
+
+                                            {{-- VER SUSCRIPCIÓN --}}
+                                            @if ($suscripcion)
+                                                <a href="{{ route('suscripciones.edit', $suscripcion) }}"
+                                                    class="btn btn-sm btn-primary">
+
+                                                    <i class="bi bi-credit-card"></i>
+
+                                                </a>
+                                            @endif
+
                                         </div>
 
                                     </td>

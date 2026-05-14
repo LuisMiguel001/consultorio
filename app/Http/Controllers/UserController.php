@@ -46,11 +46,27 @@ class UserController extends Controller
             'email' => 'required|string|unique:users',
             'password' => 'required|min:6',
             'doctor_id' => 'nullable|exists:users,id',
-            'consultorio_id' => 'required|exists:consultorios,id', // NUEVO
-            'especialidad_id' => 'nullable|exists:especialidades,id'
+            'consultorio_id' => 'required|exists:consultorios,id',
+            'especialidad_id' => 'nullable|exists:especialidades,id',
+            'roles' => 'required|array',
         ]);
 
-        $esDoctor = in_array('doctor', $request->roles ?? []);
+        $consultorio = Consultorio::findOrFail($request->consultorio_id);
+
+        if (!$consultorio->tieneSuscripcionActiva()) {
+            return back()->withErrors([
+                'consultorio_id' => 'El consultorio no tiene una suscripción activa.'
+            ]);
+        }
+
+        $esDoctor = in_array('doctor', $request->roles);
+
+        foreach ($request->roles as $rol) {
+            $validacion = $consultorio->puedeAgregarUsuario($rol);
+            if (!$validacion['puede']) {
+                return back()->withErrors(['roles' => $validacion['mensaje']]);
+            }
+        }
 
         if ($esDoctor && !$request->especialidad_id) {
             return back()->withErrors([
@@ -58,18 +74,12 @@ class UserController extends Controller
             ]);
         }
 
-        if ($esDoctor && !$request->consultorio_id) {
-            return back()->withErrors([
-                'consultorio_id' => 'El doctor debe tener un consultorio asignado.'
-            ]);
-        }
-
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'doctor_id' => $esDoctor ? null : $request->doctor_id,
-            'consultorio_id' => $request->consultorio_id,
+            'name'            => $request->name,
+            'email'           => $request->email,
+            'password'        => Hash::make($request->password),
+            'doctor_id'       => $esDoctor ? null : $request->doctor_id,
+            'consultorio_id'  => $request->consultorio_id,
             'especialidad_id' => $esDoctor ? $request->especialidad_id : null,
         ]);
 
@@ -85,7 +95,6 @@ class UserController extends Controller
             ->with('success', 'Usuario creado correctamente');
     }
 
-    // EDITAR
     public function edit(User $user)
     {
         $roles = Role::all();

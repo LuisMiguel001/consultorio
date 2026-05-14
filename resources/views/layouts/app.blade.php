@@ -323,7 +323,6 @@
 </head>
 
 <body>
-
     <div class="main-wrapper">
         <!-- Sidebar con estado inicial CERRADO -->
         <div class="sidebar" id="sidebar">
