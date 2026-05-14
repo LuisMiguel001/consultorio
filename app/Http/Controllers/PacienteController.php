@@ -14,9 +14,16 @@ class PacienteController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+        $consultorio = $user->consultorio;
 
         $doctorId = $user->doctor_principal;
         $consultorioId = $user->consultorio_id;
+
+        $validacion = $consultorio->puedeRealizarAccion('crear_paciente');
+
+        if (!$validacion['puede']) {
+            return back()->withErrors(['error' => $validacion['mensaje']]);
+        }
 
         $request->validate([
             'nombre'            => 'required|string|max:100',
@@ -38,20 +45,12 @@ class PacienteController extends Controller
 
         if ($request->accion == 'nuevo') {
 
-            return redirect()
-                ->route('pacientes.create')
-                ->with(
-                    'success',
-                    'Paciente creado correctamente'
-                );
+            return redirect()->route('pacientes.create')->with('success', 'Paciente creado correctamente');
         }
 
-        return redirect()
-            ->route('pacientes.lista')
-            ->with(
-                'success',
-                'Paciente creado correctamente'
-            );
+        $consultorio->incrementarUso('paciente');
+
+        return redirect()->route('pacientes.lista')->with('success', 'Paciente creado correctamente');
     }
 
     public function create()
@@ -76,7 +75,6 @@ class PacienteController extends Controller
             $query->where('doctor_id', $doctorId);
         }
 
-        // 🔎 BUSCADOR
         if ($request->filled('buscar')) {
 
             $buscar = strtolower($request->buscar);
@@ -451,7 +449,7 @@ class PacienteController extends Controller
         if (
             $user->roles->contains('name', 'doctor') &&
             $paciente->doctor_id !=
-                $user->doctor_principal
+            $user->doctor_principal
         ) {
             abort(404);
         }
@@ -474,7 +472,7 @@ class PacienteController extends Controller
                 'tipo' => 'Consulta',
                 'fecha' => $consulta->created_at,
                 'contenido' =>
-                    "Consulta {$consulta->tipo_consulta} - Dr. {$consulta->doctor->name}"
+                "Consulta {$consulta->tipo_consulta} - Dr. {$consulta->doctor->name}"
             ]);
 
             foreach ($consulta->diagnosticos as $diag) {
@@ -492,7 +490,7 @@ class PacienteController extends Controller
                     'tipo' => 'Medicamento',
                     'fecha' => $med->created_at,
                     'contenido' =>
-                        "{$med->medicamento} - {$med->dosis} ({$med->frecuencia})"
+                    "{$med->medicamento} - {$med->dosis} ({$med->frecuencia})"
                 ]);
             }
 

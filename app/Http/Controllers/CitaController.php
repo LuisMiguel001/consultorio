@@ -113,9 +113,15 @@ class CitaController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+        $consultorio = $user->consultorio;
 
+        $validacion = $consultorio->puedeRealizarAccion('crear_cita');
         $doctorId = $user->doctor_principal;
         $consultorioId = $user->consultorio_id;
+
+        if (!$validacion['puede']) {
+            return back()->withErrors(['error' => $validacion['mensaje']]);
+        }
 
         $request->validate([
             'paciente_id'         => 'required|exists:pacientes,id',
@@ -126,13 +132,11 @@ class CitaController extends Controller
             'prioridad'           => 'nullable|in:Normal,Preferente,Urgente',
         ]);
 
-        // Validar paciente del consultorio y doctor
         Paciente::where('id', $request->paciente_id)
             ->where('consultorio_id', $consultorioId)
             ->where('doctor_id', $doctorId)
             ->firstOrFail();
 
-        // Validar fecha pasada
         $fechaHoraCita = Carbon::parse(
             $request->fecha . ' ' . $request->hora
         );
@@ -198,7 +202,6 @@ class CitaController extends Controller
             'estudios_previos'    => $request->has('estudios_previos'),
         ]);
 
-        // RECORDATORIOS
         if ($request->has('enviar_recordatorio')) {
 
             $horasAntes = (int) ($request->horas_recordatorio ?? 24);
@@ -221,12 +224,9 @@ class CitaController extends Controller
             }
         }
 
-        return redirect()
-            ->route('citas.index')
-            ->with(
-                'success',
-                'Cita registrada correctamente.'
-            );
+        $consultorio->incrementarUso('cita');
+
+        return redirect()->route('citas.index')->with('success', 'Cita registrada correctamente.');
     }
 
     public function edit($id)

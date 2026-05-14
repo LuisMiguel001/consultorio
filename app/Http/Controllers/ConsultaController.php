@@ -15,14 +15,9 @@ class ConsultaController extends Controller
     {
         $user = Auth::user();
 
-        $query = Paciente::where(
-            'consultorio_id',
-            $user->consultorio_id
-        );
+        $query = Paciente::where('consultorio_id', $user->consultorio_id);
 
-        if (
-            $user->roles->contains('name', 'doctor')
-        ) {
+        if ($user->roles->contains('name', 'doctor')) {
             $query->where(
                 'doctor_id',
                 $user->doctor_principal
@@ -53,7 +48,7 @@ class ConsultaController extends Controller
         if (
             $user->roles->contains('name', 'doctor') &&
             $consulta->doctor_id !=
-                $user->doctor_principal
+            $user->doctor_principal
         ) {
             abort(404);
         }
@@ -80,8 +75,14 @@ class ConsultaController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+        $consultorio = $user->consultorio;
 
+        $validacion = $consultorio->puedeRealizarAccion('crear_consulta');
         $doctorId = $user->doctor_principal;
+
+        if (!$validacion['puede']) {
+            return back()->withErrors(['error' => $validacion['mensaje']]);
+        }
 
         $pacienteQuery = Paciente::where(
             'consultorio_id',
@@ -101,10 +102,6 @@ class ConsultaController extends Controller
             ->where('id', $request->paciente_id)
             ->firstOrFail();
 
-        // =========================
-        // CREAR CONSULTA
-        // =========================
-
         $consulta = Consulta::create([
             'paciente_id'       => $paciente->id,
             'doctor_id'         => $doctorId,
@@ -116,10 +113,7 @@ class ConsultaController extends Controller
             'observaciones'     => $request->observaciones,
         ]);
 
-        if (
-            $user->especialidad &&
-            $user->especialidad->slug === 'ginecologia'
-        ) {
+        if ($user->especialidad && $user->especialidad->slug === 'ginecologia') {
 
             ConsultaGinecologica::create([
                 'consulta_id'               => $consulta->id,
@@ -138,10 +132,7 @@ class ConsultaController extends Controller
             ]);
         }
 
-        $cita = Cita::where(
-            'consultorio_id',
-            $user->consultorio_id
-        )
+        $cita = Cita::where('consultorio_id', $user->consultorio_id)
             ->where(
                 'doctor_id',
                 $doctorId
@@ -165,14 +156,8 @@ class ConsultaController extends Controller
             ]);
         }
 
-        return redirect()
-            ->route(
-                'pacientes.show',
-                $paciente->id
-            )
-            ->with(
-                'success',
-                'Consulta registrada y cita marcada como realizada'
-            );
+        $consultorio->incrementarUso('consulta');
+
+        return redirect()->route('pacientes.show',$paciente->id)->with('success', 'Consulta registrada y cita marcada como realizada');
     }
 }

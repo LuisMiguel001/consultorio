@@ -33,7 +33,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ============================================================================
 // RUTAS PROTEGIDAS CON AUTENTICACIÓN Y VERIFICACIÓN DE SUSCRIPCIÓN
 // ============================================================================
-Route::middleware(['auth', 'nocache', 'suscripcion.activa'])->group(function () {
+Route::middleware(['auth', 'nocache', 'suscripcion.activa', 'modulo.plan'])->group(function () {
 
     // Perfil del usuario (sin restricción de permisos, todos pueden ver su perfil)
     Route::get('/perfil', [UserController::class, 'perfil'])->name('perfil');

@@ -36,15 +36,22 @@ class PlanController extends Controller
             'max_secretarias' => $request->max_secretarias,
             'max_enfermeras' => $request->max_enfermeras,
             'max_pacientes' => $request->max_pacientes,
+            'max_citas' => $request->max_citas,
+            'max_consultas' => $request->max_consultas,
+            'max_mensajes_whatsapp' => $request->max_mensajes_whatsapp,
+            'modulos_habilitados' => $request->modulos_habilitados ?? [],
+            'permite_archivar' => $request->has('permite_archivar'),
+            'permite_recordatorios' => $request->has('permite_recordatorios'),
+            'permite_whatsapp' => $request->has('permite_whatsapp'),
+            'permite_reportes_avanzados' => $request->has('permite_reportes_avanzados'),
+            'permite_multiple_consultorios' => $request->has('permite_multiple_consultorios'),
             'caracteristicas' => $request->caracteristicas
                 ? explode(',', $request->caracteristicas)
                 : [],
             'activo' => true,
         ]);
 
-        return redirect()
-            ->route('planes.index')
-            ->with('success', 'Plan creado correctamente');
+        return redirect()->route('planes.index')->with('success', 'Plan creado correctamente');
     }
 
     public function edit(Plan $plane)

@@ -166,4 +166,118 @@ class Consultorio extends Model
             'dias' => $dias
         ];
     }
+
+    public function usoRecursoActual()
+    {
+        $suscripcion = $this->suscripcionActiva;
+
+        if (!$suscripcion) {
+            return null;
+        }
+
+        return UsoRecurso::obtenerPeriodoActual($this->id, $suscripcion->id);
+    }
+
+    // Verificar si puede realizar una acción según límites
+    public function puedeRealizarAccion($accion)
+    {
+        $suscripcion = $this->suscripcionActiva;
+
+        if (!$suscripcion) {
+            return [
+                'puede' => false,
+                'mensaje' => 'No hay suscripción activa',
+                'limite' => 0,
+                'usado' => 0
+            ];
+        }
+
+        $plan = $suscripcion->plan;
+        $uso = $this->usoRecursoActual();
+
+        if (!$uso) {
+            return ['puede' => true, 'mensaje' => '', 'limite' => 'ilimitado', 'usado' => 0];
+        }
+
+        switch ($accion) {
+            case 'crear_paciente':
+                $limite = $plan->max_pacientes;
+                $usado = $uso->pacientes_registrados;
+                $tipo = 'pacientes';
+                break;
+
+            case 'crear_cita':
+                $limite = $plan->max_citas;
+                $usado = $uso->citas_creadas;
+                $tipo = 'citas';
+                break;
+
+            case 'crear_consulta':
+                $limite = $plan->max_consultas;
+                $usado = $uso->consultas_creadas;
+                $tipo = 'consultas';
+                break;
+
+            case 'enviar_whatsapp':
+                $limite = $plan->max_mensajes_whatsapp;
+                $usado = $uso->mensajes_whatsapp_enviados;
+                $tipo = 'mensajes WhatsApp';
+                break;
+
+            default:
+                return ['puede' => true, 'mensaje' => '', 'limite' => 'ilimitado', 'usado' => 0];
+        }
+
+        // null = ilimitado
+        if ($limite === null) {
+            return ['puede' => true, 'mensaje' => '', 'limite' => 'ilimitado', 'usado' => $usado];
+        }
+
+        if ($usado >= $limite) {
+            return [
+                'puede' => false,
+                'mensaje' => "Has alcanzado el límite de {$tipo} ({$usado}/{$limite}). Actualiza tu plan.",
+                'limite' => $limite,
+                'usado' => $usado
+            ];
+        }
+
+        return ['puede' => true, 'mensaje' => '', 'limite' => $limite, 'usado' => $usado];
+    }
+
+    // Verificar si tiene acceso a un módulo
+    public function tieneAccesoModulo($modulo)
+    {
+        $plan = $this->planActual();
+
+        if (!$plan) {
+            return false;
+        }
+
+        return $plan->tieneModulo($modulo);
+    }
+
+    public function incrementarUso($recurso)
+    {
+        $uso = $this->usoRecursoActual();
+
+        if (!$uso) {
+            return;
+        }
+
+        switch ($recurso) {
+            case 'paciente':
+                $uso->increment('pacientes_registrados');
+                break;
+            case 'cita':
+                $uso->increment('citas_creadas');
+                break;
+            case 'consulta':
+                $uso->increment('consultas_creadas');
+                break;
+            case 'whatsapp':
+                $uso->increment('mensajes_whatsapp_enviados');
+                break;
+        }
+    }
 }
