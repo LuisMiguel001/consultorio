@@ -78,7 +78,7 @@ class AuthController extends Controller
 
             // 6. Verificar último pago
             $ultimoPago = $suscripcion->pagos()
-                ->where('estado', 'completado')
+                ->where('estado', 'aprobado')
                 ->latest()
                 ->first();
 

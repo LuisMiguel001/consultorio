@@ -324,9 +324,7 @@
 
 <body>
     <div class="main-wrapper">
-        <!-- Sidebar con estado inicial CERRADO -->
         <div class="sidebar" id="sidebar">
-
             <div class="logo">
                 <div class="logo-content">
                     <!--img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png" height="30"
@@ -402,6 +400,13 @@
                     </a>
                 @endcan
 
+                @role('admin')
+                    <a href="{{ route('pagos.index') }}">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Pagos</span>
+                    </a>
+                @endrole
+
                 <div class="user-box">
                     @auth
                         <div class="fw-bold">
@@ -421,7 +426,6 @@
             </div>
         </div>
 
-        <!-- CONTENT -->
         <div class="content">
             @yield('content')
         </div>
@@ -446,7 +450,6 @@
 
     @yield('scripts')
 
-    <!-- Toast Container -->
     <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
 
     <script>
@@ -498,7 +501,6 @@
             }, 3500);
         }
 
-        // Disparar automáticamente los flash de Laravel
         document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 mostrarToast("{{ session('success') }}", 'success');

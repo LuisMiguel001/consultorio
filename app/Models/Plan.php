@@ -44,17 +44,10 @@ class Plan extends Model
         'permite_multiple_consultorios' => 'boolean',
     ];
 
-    // Módulos disponibles en el sistema
-    // Módulos disponibles en el sistema (mapeados desde permisos)
+    // Módulos disponibles en el sistema (SIN incluir administración)
     public static function modulosDisponibles()
     {
         return [
-            // Gestión de Usuarios
-            'ver_usuarios' => 'Ver Usuarios',
-            'crear_usuarios' => 'Crear Usuarios',
-            'editar_usuarios' => 'Editar Usuarios',
-            'eliminar_usuarios' => 'Eliminar Usuarios',
-
             // Gestión de Pacientes
             'ver_pacientes' => 'Ver Pacientes',
             'crear_pacientes' => 'Crear Pacientes',
@@ -104,17 +97,46 @@ class Plan extends Model
             'cerrar_caja' => 'Cerrar Caja',
             'ver_conciliacion_caja' => 'Ver Conciliación de Caja',
 
-            // Gestión de Consultorios
-            'ver_consultorios' => 'Ver Consultorios',
-            'crear_consultorios' => 'Crear Consultorios',
-            'editar_consultorios' => 'Editar Consultorios',
-            'eliminar_consultorios' => 'Eliminar Consultorios',
-
             // Características Premium
             'recordatorios' => 'Recordatorios Automáticos',
             'whatsapp' => 'Mensajería WhatsApp',
-            'reportes_avanzados' => 'Reportes Avanzados',
         ];
+    }
+
+    // Obtener descripción visual del plan
+    public function getDescripcionCompleta()
+    {
+        $limites = [];
+
+        // Personal
+        if ($this->max_doctores === null) {
+            $limites[] = '👨‍⚕️ Personal ilimitado';
+        } else {
+            $limites[] = "👨‍⚕️ {$this->max_doctores} doctores, {$this->max_secretarias} secretarias";
+        }
+
+        // Pacientes
+        if ($this->max_pacientes === null) {
+            $limites[] = '👥 Pacientes ilimitados';
+        } else {
+            $limites[] = "👥 Hasta {$this->max_pacientes} pacientes";
+        }
+
+        // Citas
+        if ($this->max_citas === null) {
+            $limites[] = '📅 Citas ilimitadas';
+        } else {
+            $limites[] = "📅 Hasta {$this->max_citas} citas/mes";
+        }
+
+        // WhatsApp
+        if ($this->max_mensajes_whatsapp > 0) {
+            $limites[] = "📱 {$this->max_mensajes_whatsapp} recordatorios WhatsApp/mes";
+        } else {
+            $limites[] = '📱 Sin recordatorios WhatsApp';
+        }
+
+        return implode(' • ', $limites);
     }
 
     // Verificar si el plan tiene acceso a un módulo

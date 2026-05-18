@@ -18,6 +18,7 @@ class Suscripcion extends Model
         'estado',
         'periodo',
         'proximo_pago',
+        'monto_pagado',
     ];
 
     protected $casts = [
@@ -100,5 +101,58 @@ class Suscripcion extends Model
     {
         return in_array($this->estado, ['activa', 'expirada']) &&
             $this->diasRestantes() <= 30;
+    }
+
+    public static function crearConPago(array $data, $comprobante = null)
+    {
+        $suscripcionActiva = self::where('consultorio_id', $data['consultorio_id'])
+            ->where('estado', 'activa')
+            ->where('fecha_fin', '>', now())
+            ->exists();
+
+        if ($suscripcionActiva) {
+            throw new \Exception('Este consultorio ya tiene una suscripción activa');
+        }
+
+        $plan = Plan::findOrFail($data['plan_id']);
+        $periodo = $data['periodo'] ?? 'mensual';
+
+        $fechaInicio = now();
+        $fechaFin = $periodo === 'mensual'
+            ? now()->addMonth()
+            : now()->addYear();
+
+        $monto = $periodo === 'mensual'
+            ? $plan->precio_mensual
+            : $plan->precio_anual;
+
+        $suscripcion = self::create([
+            'consultorio_id' => $data['consultorio_id'],
+            'plan_id' => $plan->id,
+            'fecha_inicio' => $fechaInicio,
+            'fecha_fin' => $fechaFin,
+            'proximo_pago' => $fechaFin,
+            'estado' => 'pendiente',
+            'periodo' => $periodo,
+            'monto_pagado' => $monto,
+        ]);
+
+        $pago = Pago::create([
+            'suscripcion_id' => $suscripcion->id,
+            'consultorio_id' => $data['consultorio_id'],
+            'plan_id' => $plan->id,
+            'monto' => $monto,
+            'estado' => 'pendiente',
+            'metodo_pago' => $data['metodo_pago'] ?? 'transferencia',
+            'referencia' => $data['referencia'] ?? null,
+            'notas' => $data['notas'] ?? null,
+            'comprobante' => $comprobante,
+            'fecha_pago' => now(),
+        ]);
+
+        return [
+            'suscripcion' => $suscripcion,
+            'pago' => $pago
+        ];
     }
 }

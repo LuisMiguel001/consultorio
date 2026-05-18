@@ -294,20 +294,16 @@
 
                                         @if($pago->estado == 'pendiente')
 
-                                            <form action="{{ route('pagos.aprobar',$pago) }}"
-                                                  method="POST">
-
+                                            <form action="{{ route('pagos.aprobar',$pago) }}" method="POST" title="Aprobar">
                                                 @csrf
 
                                                 <button class="btn btn-success btn-sm">
                                                     <i class="bi bi-check-circle"></i>
                                                 </button>
-
                                             </form>
 
                                             <form action="{{ route('pagos.rechazar',$pago) }}"
-                                                  method="POST">
-
+                                                  method="POST" title="Rechazar">
                                                 @csrf
 
                                                 <button class="btn btn-danger btn-sm">

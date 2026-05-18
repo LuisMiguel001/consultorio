@@ -77,7 +77,9 @@ class PlanController extends Controller
 
     public function planesPublicos()
     {
-        $planes = Plan::where('activo', true)->get();
+        $planes = Plan::whereIn('nombre', ['Estándar', 'Plus'])
+            ->where('activo', true)
+            ->get();
 
         return view('planes.publicos', compact('planes'));
     }

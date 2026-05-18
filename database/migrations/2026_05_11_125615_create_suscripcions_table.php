@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('fecha_fin');
             $table->enum('estado', ['activa', 'cancelada', 'expirada', 'pendiente'])->default('activa');
             $table->enum('periodo', ['mensual', 'anual'])->default('mensual');
-            $table->decimal('monto_pagado', 10, 2);
+            $table->decimal('monto_pagado', 10, 2)->nullable();
             $table->date('proximo_pago')->nullable();
             $table->timestamps();
         });

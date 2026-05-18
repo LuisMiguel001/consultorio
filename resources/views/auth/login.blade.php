@@ -173,7 +173,6 @@
         <!-- FORMULARIO -->
         <div class="form-side">
             <h3>Iniciar Sesión</h3>
-
             <form method="POST" action="{{ route('login.post') }}" id="loginForm">
                 @csrf
 
@@ -214,26 +213,6 @@
             </form>
         </div>
     </div>
-
-    <script>
-        // Sonido de latido (opcional, descomentar si quieres)
-        /*
-        const sound = document.getElementById("heartbeatSound");
-        let audioEnabled = false;
-
-        document.addEventListener("click", () => {
-            if (!audioEnabled) {
-                sound.play().then(() => {
-                    audioEnabled = true;
-                    setInterval(() => {
-                        sound.currentTime = 0;
-                        sound.play();
-                    }, 1000);
-                }).catch(() => {});
-            }
-        }, { once: true });
-        */
-    </script>
 </body>
 
 </html>
