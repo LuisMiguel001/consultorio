@@ -8,17 +8,26 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('plans', function (Blueprint $table) {
+        Schema::create('planes', function (Blueprint $table) {  // Cambiado de 'plans' a 'planes'
             $table->id();
-            $table->string('nombre');
+            $table->string('nombre')->unique(); // Agregar unique aquí también
             $table->text('descripcion')->nullable();
             $table->decimal('precio_mensual', 10, 2);
             $table->decimal('precio_anual', 10, 2)->nullable();
-            $table->integer('max_doctores')->default(1); // Cantidad de doctores permitidos
-            $table->integer('max_secretarias')->default(1); // Cantidad de secretarias
-            $table->integer('max_enfermeras')->default(0); // Cantidad de enfermeras
-            $table->integer('max_pacientes')->nullable(); // null = ilimitado
-            $table->json('caracteristicas')->nullable(); // Array de características
+            $table->integer('max_doctores')->nullable(); // Cambiar default a nullable
+            $table->integer('max_secretarias')->nullable();
+            $table->integer('max_enfermeras')->nullable();
+            $table->integer('max_pacientes')->nullable();
+            $table->integer('max_citas')->nullable();
+            $table->integer('max_consultas')->nullable();
+            $table->integer('max_mensajes_whatsapp')->default(0);
+            $table->json('modulos_habilitados')->nullable();
+            $table->boolean('permite_archivar')->default(false);
+            $table->boolean('permite_recordatorios')->default(false);
+            $table->boolean('permite_whatsapp')->default(false);
+            $table->boolean('permite_reportes_avanzados')->default(false);
+            $table->boolean('permite_multiple_consultorios')->default(false);
+            $table->json('caracteristicas')->nullable();
             $table->boolean('activo')->default(true);
             $table->timestamps();
         });
@@ -26,6 +35,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('plans');
+        Schema::dropIfExists('planes');
     }
 };

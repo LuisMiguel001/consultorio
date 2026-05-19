@@ -15,8 +15,8 @@ class PlanConModulosSeeder extends Seeder
         Plan::create([
             'nombre' => 'Estándar',
             'descripcion' => 'Plan completo con todas las funcionalidades. Perfecto para consultorios que no necesitan recordatorios automáticos.',
-            'precio_mensual' => 49.99,
-            'precio_anual' => 499.99,
+            'precio_mensual' => 34.99,
+            'precio_anual' => 349.99,
 
             // Límites de personal (ilimitado = null)
             'max_doctores' => null,
@@ -96,8 +96,8 @@ class PlanConModulosSeeder extends Seeder
         Plan::create([
             'nombre' => 'Plus',
             'descripcion' => 'Plan premium sin límites. Incluye 400 recordatorios automáticos de citas por WhatsApp mensualmente.',
-            'precio_mensual' => 79.99,
-            'precio_anual' => 799.99,
+            'precio_mensual' => 49.99,
+            'precio_anual' => 499.99,
 
             // Sin límites de personal
             'max_doctores' => null,

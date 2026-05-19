@@ -228,6 +228,7 @@ Route::middleware(['auth', 'nocache', 'role:admin'])->group(function () {
     // PLANES (Solo Admin)
     // ========================================================================
     Route::resource('planes', PlanController::class);
+Route::patch('/planes/{plane}/toggle-status', [PlanController::class, 'toggleStatus'])->name('planes.toggle-status');
 
     // ========================================================================
     // SUSCRIPCIONES (Solo Admin)

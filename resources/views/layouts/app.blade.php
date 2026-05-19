@@ -407,6 +407,21 @@
                     </a>
                 @endrole
 
+                @role('admin')
+                    <a href="{{ route('planes.index') }}">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Planes</span>
+                    </a>
+                @endrole
+
+
+                @role('admin')
+                    <a href="{{ route('planes.create') }}">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Crear Plan</span>
+                    </a>
+                @endrole
+
                 <div class="user-box">
                     @auth
                         <div class="fw-bold">

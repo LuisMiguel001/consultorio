@@ -9,6 +9,7 @@ use Carbon\Carbon;
 class Suscripcion extends Model
 {
     use HasFactory;
+    protected $table = 'suscripciones';
 
     protected $fillable = [
         'consultorio_id',
@@ -36,7 +37,8 @@ class Suscripcion extends Model
 
     public function plan()
     {
-        return $this->belongsTo(Plan::class);
+        // Especificar la tabla 'planes' y la clave foránea
+        return $this->belongsTo(Plan::class, 'plan_id', 'id');
     }
 
     // Métodos auxiliares
@@ -137,18 +139,23 @@ class Suscripcion extends Model
             'monto_pagado' => $monto,
         ]);
 
-        $pago = Pago::create([
-            'suscripcion_id' => $suscripcion->id,
-            'consultorio_id' => $data['consultorio_id'],
-            'plan_id' => $plan->id,
-            'monto' => $monto,
-            'estado' => 'pendiente',
-            'metodo_pago' => $data['metodo_pago'] ?? 'transferencia',
-            'referencia' => $data['referencia'] ?? null,
-            'notas' => $data['notas'] ?? null,
-            'comprobante' => $comprobante,
-            'fecha_pago' => now(),
-        ]);
+        // Asegurar que existe la clase Pago
+        if (class_exists(\App\Models\Pago::class)) {
+            $pago = \App\Models\Pago::create([
+                'suscripcion_id' => $suscripcion->id,
+                'consultorio_id' => $data['consultorio_id'],
+                'plan_id' => $plan->id,
+                'monto' => $monto,
+                'estado' => 'pendiente',
+                'metodo_pago' => $data['metodo_pago'] ?? 'transferencia',
+                'referencia' => $data['referencia'] ?? null,
+                'notas' => $data['notas'] ?? null,
+                'comprobante' => $comprobante,
+                'fecha_pago' => now(),
+            ]);
+        } else {
+            $pago = null;
+        }
 
         return [
             'suscripcion' => $suscripcion,

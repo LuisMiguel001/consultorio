@@ -139,7 +139,7 @@ class PagoController extends Controller
             else {
                 $request->validate([
                     'nuevo_consultorio_id' => 'required|exists:consultorios,id',
-                    'nuevo_plan_id' => 'required|exists:plans,id',
+                    'nuevo_plan_id' => 'required|exists:planes,id',
                     'periodo' => 'required|in:mensual,anual',
                 ]);
 

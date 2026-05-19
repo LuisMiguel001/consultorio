@@ -485,13 +485,17 @@
                     </div>
                 </div>
 
-                @forelse ($consulta->tratamientos as $tratamiento)
+                @forelse ($consulta->tratamientos->sortByDesc('created_at') as $tratamiento)
                     <div class="card mb-3">
                         <div class="card-header">
-                            {{ $tratamiento->medicamento }}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>{{ $tratamiento->medicamento }}</strong>
+                                <small class="text-muted">
+                                    {{ $tratamiento->created_at->format('d/m/Y H:i') }}
+                                </small>
+                            </div>
                         </div>
                         <div class="card-body">
-
                             <p><strong>Dosis:</strong> {{ $tratamiento->dosis }}</p>
                             <p><strong>Frecuencia:</strong> {{ $tratamiento->frecuencia }}</p>
                             <p><strong>Duración:</strong> {{ $tratamiento->duracion }}</p>
@@ -502,7 +506,6 @@
                                     {{ $tratamiento->indicaciones }}
                                 </p>
                             @endif
-
                         </div>
                     </div>
                 @empty

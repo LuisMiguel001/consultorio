@@ -12,29 +12,25 @@ class TratamientoController extends Controller
     {
         $user = Auth::user();
 
-        if (
-            $consulta->paciente->consultorio_id != $user->consultorio_id
-        ) {
+        if ($consulta->paciente->consultorio_id != $user->consultorio_id) {
             abort(403);
         }
 
-        if (
-            $consulta->doctor_id != $user->doctor_principal
-        ) {
+        if ($consulta->doctor_id != $user->doctor_principal) {
             abort(403);
         }
 
         $data = $request->validate([
             'medicamento' => 'required|string',
             'dosis' => 'required|string',
-            'via_administracion' => 'required|string'
+            'frecuencia' => 'required|string',
+            'duracion' => 'required|string',
+            'via_administracion' => 'required|string',
+            'indicaciones' => 'nullable|string'
         ]);
 
         $consulta->tratamientos()->create($data);
 
-        return back()->with(
-            'success',
-            'Tratamiento agregado correctamente'
-        );
+        return back()->with('success', 'Tratamiento agregado correctamente');
     }
 }
