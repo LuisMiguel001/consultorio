@@ -48,6 +48,11 @@ class Consultorio extends Model
         return $this->hasMany(Suscripcion::class);
     }
 
+    public function consumos()
+    {
+        return $this->hasMany(ConsumoPlan::class);
+    }
+
     public function suscripcionActiva()
     {
         return $this->hasOne(Suscripcion::class)
@@ -167,6 +172,14 @@ class Consultorio extends Model
         ];
     }
 
+    public function consumoActual()
+    {
+        return $this->consumos()
+            ->where('mes', now()->month)
+            ->where('anio', now()->year)
+            ->first();
+    }
+
     public function usoRecursoActual()
     {
         $suscripcion = $this->suscripcionActiva;
@@ -178,7 +191,6 @@ class Consultorio extends Model
         return UsoRecurso::obtenerPeriodoActual($this->id, $suscripcion->id);
     }
 
-    // Verificar si puede realizar una acción según límites
     public function puedeRealizarAccion($accion)
     {
         $suscripcion = $this->suscripcionActiva;
@@ -257,26 +269,29 @@ class Consultorio extends Model
         return $plan->tieneModulo($modulo);
     }
 
-    public function incrementarUso($recurso)
+    public function incrementarUso($tipo)
     {
-        $uso = $this->usoRecursoActual();
+        $consumo = $this->consumos()->firstOrCreate([
+            'mes' => now()->month,
+            'anio' => now()->year,
+        ]);
 
-        if (!$uso) {
-            return;
-        }
+        switch ($tipo) {
 
-        switch ($recurso) {
-            case 'paciente':
-                $uso->increment('pacientes_registrados');
-                break;
-            case 'cita':
-                $uso->increment('citas_creadas');
-                break;
             case 'consulta':
-                $uso->increment('consultas_creadas');
+                $consumo->increment('consultas');
                 break;
+
+            case 'cita':
+                $consumo->increment('citas');
+                break;
+
+            case 'paciente':
+                $consumo->increment('pacientes');
+                break;
+
             case 'whatsapp':
-                $uso->increment('mensajes_whatsapp_enviados');
+                $consumo->increment('mensajes_whatsapp');
                 break;
         }
     }

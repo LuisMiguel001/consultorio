@@ -3,100 +3,277 @@
 @section('content')
     <style>
         :root {
-            --primary-color: #0d47a1;
+            --primary: #0d47a1;
             --primary-dark: #002171;
-            --primary-light: #e8f1fb;
-            --primary-soft: #f4f8fd;
+            --soft: #f4f8fd;
+            --border: #edf2f7;
         }
 
         body {
-            background: var(--primary-soft);
+            background: var(--soft);
         }
 
-        .card {
+        .main-card {
             border: none;
-            border-radius: 16px;
+            border-radius: 22px;
             overflow: hidden;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, .08);
         }
 
-        .card-header {
-            background: linear-gradient(135deg,
-                    var(--primary-color),
-                    var(--primary-dark));
+        .main-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
+            padding: 20px 25px;
         }
 
-        .table thead {
-            background: var(--primary-light);
+        .stat-card {
+            border: none;
+            border-radius: 18px;
+            padding: 22px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
+            transition: .2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: #e8f1fb;
+            color: var(--primary);
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            border: none;
+            background: #f8fbff;
+            color: #4a5568;
+            font-size: .85rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            padding: 18px 14px;
+        }
+
+        .table tbody td {
+            padding: 18px 14px;
+            border-color: var(--border);
+            vertical-align: middle;
         }
 
         .table-hover tbody tr:hover {
-            background: var(--primary-light);
+            background: #f8fbff;
+        }
+
+        .consultorio-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
         }
 
         .btn-main {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
             color: white;
-            border-radius: 8px;
+            border-radius: 10px;
         }
 
         .btn-main:hover {
-            background: var(--primary-dark);
             color: white;
+            opacity: .95;
+        }
+
+        .btn-action {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .badge-soft {
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 22px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+        }
+
+        .consumo-box {
+            border-radius: 18px;
+            padding: 18px;
+            background: #f8fbff;
+            border: 1px solid #e3edf8;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 20px;
+        }
+
+        .usage-label {
+            font-size: .9rem;
+            color: #64748b;
         }
     </style>
 
-    <div class="container my-4">
+    <div class="container-fluid py-4">
 
-        <div class="card">
+        {{-- HEADER --}}
+        <div class="main-card">
 
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="main-header d-flex justify-content-between align-items-center">
 
-                <h5 class="mb-0">
-                    <i class="fas fa-hospital me-2"></i>
-                    Consultorios
-                </h5>
+                <div>
+                    <h3 class="fw-bold mb-1">
+                        <i class="fas fa-hospital me-2"></i>
+                        Gestión de Consultorios
+                    </h3>
 
-                <a href="{{ route('consultorios.create') }}" class="btn btn-light">
-                    <i class="fas fa-plus me-1"></i>
-                    Nuevo
+                    <div class="opacity-75">
+                        Administración general del sistema
+                    </div>
+                </div>
+
+                <a href="{{ route('consultorios.create') }}" class="btn btn-light rounded-pill px-4">
+                    <i class="fas fa-plus me-2"></i>
+                    Nuevo Consultorio
                 </a>
 
             </div>
 
-            <div class="card-body">
-                <div class="row mb-4">
+            <div class="p-4">
+
+                {{-- STATS --}}
+                <div class="row g-3 mb-4">
 
                     <div class="col-md-3">
-                        <div class="card p-3">
-                            <h6>Consultorios activos</h6>
-                            <h3>{{ $consultoriosActivos }}</h3>
+                        <div class="stat-card">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <div class="text-muted small">
+                                        Consultorios Activos
+                                    </div>
+
+                                    <h2 class="fw-bold mb-0 mt-2">
+                                        {{ $consultoriosActivos }}
+                                    </h2>
+                                </div>
+
+                                <div class="stat-icon">
+                                    <i class="fas fa-hospital"></i>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="card p-3">
-                            <h6>Suscripciones vencidas</h6>
-                            <h3>{{ $suscripcionesVencidas }}</h3>
+                        <div class="stat-card">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <div class="text-muted small">
+                                        Suscripciones Vencidas
+                                    </div>
+
+                                    <h2 class="fw-bold mb-0 mt-2">
+                                        {{ $suscripcionesVencidas }}
+                                    </h2>
+                                </div>
+
+                                <div class="stat-icon">
+                                    <i class="fas fa-calendar-times"></i>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="card p-3">
-                            <h6>Ingresos del mes</h6>
-                            <h3>RD$ {{ number_format($ingresosMes, 2) }}</h3>
+                        <div class="stat-card">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <div class="text-muted small">
+                                        Ingresos del Mes
+                                    </div>
+
+                                    <h2 class="fw-bold mb-0 mt-2">
+                                        RD$ {{ number_format($ingresosMes, 2) }}
+                                    </h2>
+                                </div>
+
+                                <div class="stat-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="card p-3">
-                            <h6>Próximos a vencer</h6>
-                            <h3>{{ $proximosVencer }}</h3>
+                        <div class="stat-card">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <div class="text-muted small">
+                                        Próximos a Vencer
+                                    </div>
+
+                                    <h2 class="fw-bold mb-0 mt-2">
+                                        {{ $proximosVencer }}
+                                    </h2>
+                                </div>
+
+                                <div class="stat-icon">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
 
                 </div>
+
+                {{-- TABLA --}}
                 <div class="table-responsive">
 
                     <table class="table table-hover align-middle">
@@ -105,13 +282,11 @@
                             <tr>
                                 <th>Consultorio</th>
                                 <th>Plan</th>
-                                <th>Estado Suscripción</th>
-                                <th>Vence</th>
-                                <th>Días</th>
+                                <th>Vencimiento</th>
                                 <th>Usuarios</th>
                                 <th>Último Pago</th>
                                 <th>Estado</th>
-                                <th class="text-center">Acciones</th>
+                                <th width="240">Acciones</th>
                             </tr>
                         </thead>
 
@@ -119,6 +294,7 @@
 
                             @foreach ($consultorios as $consultorio)
                                 @php
+
                                     $suscripcion = $consultorio->suscripcionActiva;
 
                                     $estado = $consultorio->estadoSuscripcion();
@@ -126,64 +302,74 @@
                                     $plan = optional($suscripcion)->plan;
 
                                     $ultimoPago = optional($suscripcion)->pagos()?->latest()?->first();
+
+                                    $consumo = $consultorio->consumoActual();
+
+                                    $consultas = $consumo->consultas ?? 0;
+
+                                    $citas = App\Models\Cita::where('consultorio_id', $consultorio->id)->count();
+
+                                    $pacientes = App\Models\Paciente::where(
+                                        'consultorio_id',
+                                        $consultorio->id,
+                                    )->count();
+
+                                    $whatsapp = $consumo->mensajes_whatsapp ?? 0;
                                 @endphp
 
                                 <tr>
 
                                     {{-- CONSULTORIO --}}
                                     <td>
-                                        <div class="fw-bold">
-                                            {{ $consultorio->nombre }}
+
+                                        <div class="d-flex align-items-center gap-3">
+
+                                            <div class="consultorio-avatar">
+                                                {{ strtoupper(substr($consultorio->nombre, 0, 1)) }}
+                                            </div>
+
+                                            <div>
+
+                                                <div class="fw-bold">
+                                                    {{ $consultorio->nombre }}
+                                                </div>
+
+                                                <small class="text-muted">
+                                                    {{ $consultorio->email }}
+                                                </small>
+
+                                            </div>
+
                                         </div>
 
-                                        <small class="text-muted">
-                                            {{ $consultorio->email }}
-                                        </small>
                                     </td>
 
                                     {{-- PLAN --}}
                                     <td>
 
                                         @if ($plan)
-                                            <span class="badge bg-primary">
+                                            <span class="badge bg-primary badge-soft">
                                                 {{ $plan->nombre }}
                                             </span>
                                         @else
-                                            <span class="badge bg-danger">
+                                            <span class="badge bg-danger badge-soft">
                                                 Sin plan
                                             </span>
                                         @endif
 
                                     </td>
 
-                                    {{-- ESTADO SUSCRIPCIÓN --}}
-                                    <td>
-
-                                        <span class="badge bg-{{ $estado['clase'] }}">
-                                            {{ $estado['icono'] }}
-                                            {{ $estado['mensaje'] }}
-                                        </span>
-
-                                    </td>
-
-                                    {{-- FECHA VENCIMIENTO --}}
+                                    {{-- VENCIMIENTO --}}
                                     <td>
 
                                         @if ($suscripcion)
-                                            {{ $suscripcion->fecha_fin->format('d/m/Y') }}
-                                        @else
-                                            —
-                                        @endif
+                                            <div class="fw-semibold">
+                                                {{ $suscripcion->fecha_fin->format('d/m/Y') }}
+                                            </div>
 
-                                    </td>
-
-                                    {{-- DÍAS RESTANTES --}}
-                                    <td>
-
-                                        @if ($suscripcion)
-                                            <strong>
-                                                {{ $suscripcion->diasRestantes() }}
-                                            </strong> días
+                                            <small class="text-muted">
+                                                {{ $suscripcion->diasRestantes() }} días restantes
+                                            </small>
                                         @else
                                             —
                                         @endif
@@ -196,56 +382,49 @@
                                         <div class="small">
 
                                             <div>
-                                                👨‍⚕️
-                                                {{ $consultorio->doctores()->count() }}
-                                                /
-                                                {{ optional($plan)->max_doctores ?? '∞' }}
+                                                👨‍⚕️ {{ $consultorio->doctores()->count() }}
                                             </div>
 
                                             <div>
-                                                👩‍💼
-                                                {{ $consultorio->secretarias()->count() }}
-                                                /
-                                                {{ optional($plan)->max_secretarias ?? '∞' }}
+                                                👩‍💼 {{ $consultorio->secretarias()->count() }}
                                             </div>
 
                                             <div>
-                                                👩‍⚕️
-                                                {{ $consultorio->enfermeras()->count() }}
-                                                /
-                                                {{ optional($plan)->max_enfermeras ?? '∞' }}
+                                                👩‍⚕️ {{ $consultorio->enfermeras()->count() }}
                                             </div>
 
                                         </div>
 
                                     </td>
 
+                                    {{-- PAGO --}}
                                     <td>
+
                                         @if ($ultimoPago)
-                                            <div>
-                                                RD$
-                                                {{ number_format($ultimoPago->monto, 2) }}
+                                            <div class="fw-bold">
+                                                RD$ {{ number_format($ultimoPago->monto, 2) }}
                                             </div>
 
                                             <small class="text-muted">
                                                 {{ $ultimoPago->fecha_pago?->format('d/m/Y') }}
                                             </small>
                                         @else
-                                            <span class="text-danger">
+                                            <span class="badge bg-danger">
                                                 Sin pagos
                                             </span>
                                         @endif
+
                                     </td>
 
-                                    {{-- ESTADO CONSULTORIO --}}
+                                    {{-- ESTADO --}}
                                     <td>
 
                                         @if ($consultorio->activo)
-                                            <span class="badge bg-success">
+                                            <span class="badge bg-success badge-soft">
                                                 Activo
                                             </span>
                                         @else
-                                            <span class="badge bg-danger">
+                                            <span class="badge bg-danger badge-soft">
                                                 Inactivo
                                             </span>
                                         @endif
@@ -253,29 +432,37 @@
                                     </td>
 
                                     {{-- ACCIONES --}}
-                                    <td class="text-center">
+                                    <td>
 
-                                        <div class="d-flex gap-1 justify-content-center flex-wrap">
+                                        <div class="d-flex gap-2 flex-wrap">
+
                                             <a href="{{ route('consultorios.show', $consultorio) }}"
-                                                class="btn btn-sm btn-info text-white" title="Ver detalle">
+                                                class="btn btn-info text-white btn-action">
                                                 <i class="bi bi-eye"></i>
                                             </a>
 
-                                            {{-- EDITAR --}}
                                             <a href="{{ route('consultorios.edit', $consultorio) }}"
-                                                class="btn btn-sm btn-main">
-
+                                                class="btn btn-main btn-action">
                                                 <i class="bi bi-pencil"></i>
-
                                             </a>
 
-                                            {{-- ACTIVAR / DESACTIVAR --}}
+                                            <button class="btn btn-dark btn-action" data-bs-toggle="modal"
+                                                data-bs-target="#consumoModal{{ $consultorio->id }}">
+
+                                                <i class="bi bi-bar-chart"></i>
+
+                                            </button>
+
+                                            <a href="{{ route('pagos.create') }}?consultorio={{ $consultorio->id }}"
+                                                class="btn btn-success btn-action">
+                                                <i class="bi bi-cash"></i>
+                                            </a>
+
                                             <form action="{{ route('consultorios.toggle', $consultorio) }}" method="POST">
 
                                                 @csrf
 
-                                                <button
-                                                    class="btn btn-sm {{ $consultorio->activo ? 'btn-warning' : 'btn-success' }}">
+                                                <button class="btn btn-warning btn-action">
 
                                                     <i class="bi bi-power"></i>
 
@@ -283,29 +470,184 @@
 
                                             </form>
 
-                                            {{-- REGISTRAR PAGO --}}
-                                            <a href="{{ route('pagos.create') }}?consultorio={{ $consultorio->id }}"
-                                                class="btn btn-sm btn-success">
-
-                                                <i class="bi bi-cash"></i>
-
-                                            </a>
-
-                                            {{-- VER SUSCRIPCIÓN --}}
-                                            @if ($suscripcion)
-                                                <a href="{{ route('suscripciones.edit', $suscripcion) }}"
-                                                    class="btn btn-sm btn-primary">
-
-                                                    <i class="bi bi-credit-card"></i>
-
-                                                </a>
-                                            @endif
-
                                         </div>
 
                                     </td>
 
                                 </tr>
+
+                                {{-- MODAL CONSUMO --}}
+                                <div class="modal fade" id="consumoModal{{ $consultorio->id }}" tabindex="-1">
+
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+
+                                                <h5 class="modal-title">
+                                                    📊 Consumo del Plan
+                                                </h5>
+
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="modal">
+                                                </button>
+
+                                            </div>
+
+                                            <div class="modal-body p-4">
+
+                                                <div class="mb-4">
+
+                                                    <h4 class="fw-bold mb-1">
+                                                        {{ $consultorio->nombre }}
+                                                    </h4>
+
+                                                    <div class="text-muted">
+                                                        {{ $plan->nombre ?? 'Sin plan' }}
+                                                    </div>
+
+                                                </div>
+
+                                                {{-- CONSULTAS --}}
+                                                <div class="consumo-box mb-3">
+
+                                                    <div class="d-flex justify-content-between mb-2">
+
+                                                        <span class="fw-semibold">
+                                                            🩺 Consultas
+                                                        </span>
+
+                                                        <span>
+                                                            {{ $consultas }}
+                                                            /
+                                                            {{ $plan->max_consultas ?? '∞' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    @php
+                                                        $porcentajeConsultas =
+                                                            $plan && $plan->max_consultas
+                                                                ? min(($consultas / $plan->max_consultas) * 100, 100)
+                                                                : 0;
+                                                    @endphp
+
+                                                    <div class="progress">
+                                                        <div class="progress-bar"
+                                                            style="width: {{ $porcentajeConsultas }}%">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                {{-- PACIENTES --}}
+                                                <div class="consumo-box mb-3">
+
+                                                    <div class="d-flex justify-content-between mb-2">
+
+                                                        <span class="fw-semibold">
+                                                            👥 Pacientes
+                                                        </span>
+
+                                                        <span>
+                                                            {{ $pacientes }}
+                                                            /
+                                                            {{ $plan->max_pacientes ?? '∞' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    @php
+                                                        $porcentajePacientes =
+                                                            $plan && $plan->max_pacientes
+                                                                ? min(($pacientes / $plan->max_pacientes) * 100, 100)
+                                                                : 0;
+                                                    @endphp
+
+                                                    <div class="progress">
+
+                                                        <div class="progress-bar bg-info"
+                                                            style="width: {{ $porcentajePacientes }}%">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                {{-- CITAS --}}
+                                                <div class="consumo-box mb-3">
+
+                                                    <div class="d-flex justify-content-between mb-2">
+
+                                                        <span class="fw-semibold">
+                                                            📅 Citas
+                                                        </span>
+
+                                                        <span>
+                                                            {{ $citas }}
+                                                            /
+                                                            {{ $plan->max_citas ?? '∞' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    @php
+                                                        $porcentajeCitas =
+                                                            $plan && $plan->max_citas
+                                                                ? min(($citas / $plan->max_citas) * 100, 100)
+                                                                : 0;
+                                                    @endphp
+
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-success"
+                                                            style="width: {{ $porcentajeCitas }}%">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                {{-- WHATSAPP --}}
+                                                <div class="consumo-box">
+
+                                                    <div class="d-flex justify-content-between mb-2">
+
+                                                        <span class="fw-semibold">
+                                                            📱 WhatsApp
+                                                        </span>
+
+                                                        <span>
+                                                            {{ $whatsapp }}
+                                                            /
+                                                            {{ $plan->max_mensajes_whatsapp ?? '∞' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    @php
+                                                        $porcentajeWhatsapp =
+                                                            $plan && $plan->max_mensajes_whatsapp
+                                                                ? min(
+                                                                    ($whatsapp / $plan->max_mensajes_whatsapp) * 100,
+                                                                    100,
+                                                                )
+                                                                : 0;
+                                                    @endphp
+
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-warning"
+                                                            style="width: {{ $porcentajeWhatsapp }}%">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
                             @endforeach
 
                         </tbody>
@@ -314,10 +656,8 @@
 
                 </div>
 
-                <div class="mt-3">
-
+                <div class="mt-4">
                     {{ $consultorios->links() }}
-
                 </div>
 
             </div>
