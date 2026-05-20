@@ -1,1876 +1,995 @@
-<!doctype html>
+<!-- resources/views/landing.blade.php -->
+<!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HRMT4GM4M4"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoctorClick - Sistema de Gestión Médica</title>
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        gtag('config', 'G-HRMT4GM4M4');
-    </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- SEO Principal -->
-    <title>Dr. Lorenzo García | Cirujano Cardiovascular - San Francisco de Macorís - Santo Domingo</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/healthicons@2.0.0/font/healthicons.css" rel="stylesheet">
-
-    <meta name="description"
-        content="Especialista en cirugía cardiovascular, bypass coronario, várices con láser, aneurisma de aorta y paciente renal. Más de 10,000 pacientes atendidos. San Francisco de Macorís y Santo Domingo.">
-    <meta name="keywords"
-        content="cirujano cardiovascular San Francisco de Macorís, cirugía corazón República Dominicana, bypass coronario, tratamiento várices láser, aneurisma aorta abdominal, endarterectomía carotídea, fístula arteriovenosa hemodiálisis, cirujano vascular nordeste dominicano, Dr Lorenzo García cardiólogo">
-    <meta name="author" content="Dr. Lorenzo García">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://drlorenzogarcia.com/">
-
-    <!-- Open Graph (WhatsApp, Facebook) -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Dr. Lorenzo García | Cirujano Cardiovascular">
-    <meta property="og:description"
-        content="Pionero en cirugía cardiovascular del nordeste dominicano. Bypass coronario, várices, aneurisma de aorta y más.">
-    <meta property="og:image" content="https://i.postimg.cc/VNsTbCzP/Whats-App-Image-2026-03-07-at-9-49-59-AM-(1).jpg">
-    <meta property="og:url" content="https://drlorenzogarcia.com/">
-    <meta property="og:locale" content="es_DO">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Dr. Lorenzo García | Cirujano Cardiovascular">
-    <meta name="twitter:description"
-        content="Especialista en cirugía cardiovascular. San Francisco de Macorís y Santo Domingo.">
-    <meta name="twitter:image" content="https://i.postimg.cc/VNsTbCzP/Whats-App-Image-2026-03-07-at-9-49-59-AM-(1).jpg">
-
-    <!-- Geo -->
-    <meta name="geo.region" content="DO">
-    <meta name="geo.placename" content="San Francisco de Macorís, República Dominicana">
-
-    <!--Iconos de la página-->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-    <!-- Google reCAPTCHA v2 -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
     <style>
-        /* Variables de colores y fuentes */
-        :root {
-            --primary-color: #2a7fba;
-            --primary-dark: #1a5f8a;
-            --secondary-color: #f8f9fa;
-            --accent-color: #34c759;
-            --text-dark: #333;
-            --text-light: #666;
-            --text-on-dark: #fff;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --border-radius: 8px;
-            --transition: all 0.3s ease;
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
         }
 
-        /* Reset y estilos generales */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root{
+            --primary:#0d47a1;
+            --primary-dark:#002171;
+            --primary-light:#edf4ff;
+            --text:#1e293b;
+            --text-light:#64748b;
+            --border:#e2e8f0;
+            --white:#ffffff;
+            --bg:#f8fbff;
+            --success:#2563eb;
+            --shadow:0 10px 30px rgba(13,71,161,.10);
+            --radius:20px;
         }
 
-        body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
+        html{
+            scroll-behavior:smooth;
         }
 
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 1rem;
+        body{
+            font-family:'Inter',sans-serif;
+            background:var(--white);
+            color:var(--text);
+            overflow-x:hidden;
         }
 
-        h1 {
-            font-size: 2.5rem;
+        a{
+            text-decoration:none;
         }
 
-        h2 {
-            font-size: 2rem;
-            color: var(--primary-color);
+        .container{
+            width:100%;
+            max-width:1200px;
+            margin:auto;
+            padding:0 20px;
         }
 
-        h3 {
-            font-size: 1.5rem;
+        /* =========================
+           HEADER
+        ==========================*/
+        header{
+            width:100%;
+            background:rgba(255,255,255,.95);
+            position:sticky;
+            top:0;
+            z-index:1000;
+            backdrop-filter:blur(10px);
+            border-bottom:1px solid rgba(226,232,240,.7);
         }
 
-        p {
-            margin-bottom: 1rem;
+        .navbar{
+            height:78px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
+        .logo{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            font-size:1.35rem;
+            font-weight:800;
+            color:var(--primary);
         }
 
-        img {
-            max-width: 100%;
-            height: auto;
+        .logo-icon{
+            width:42px;
+            height:42px;
+            background:var(--primary);
+            border-radius:12px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:white;
+            font-size:1rem;
+            box-shadow:0 8px 20px rgba(13,71,161,.25);
         }
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .nav-links{
+            display:flex;
+            align-items:center;
+            gap:35px;
         }
 
-        .section {
-            padding: 80px 0;
+        .nav-links a{
+            color:#475569;
+            font-size:.95rem;
+            font-weight:500;
+            transition:.25s;
         }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-            position: relative;
+        .nav-links a:hover{
+            color:var(--primary);
         }
 
-        .section-title::after {
-            content: "";
-            position: absolute;
-            width: 60px;
-            height: 4px;
-            background-color: var(--accent-color);
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
+        .btn{
+            border:none;
+            outline:none;
+            cursor:pointer;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            transition:.3s ease;
+            font-weight:600;
+            border-radius:14px;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 28px;
-            background-color: var(--primary-color);
-            color: var(--text-on-dark);
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
+        .btn-primary{
+            background:var(--primary);
+            color:white;
+            padding:14px 28px;
+            box-shadow:0 10px 25px rgba(13,71,161,.25);
         }
 
-        .btn:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
+        .btn-primary:hover{
+            transform:translateY(-2px);
+            background:var(--primary-dark);
         }
 
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .btn-outline{
+            background:white;
+            color:var(--primary);
+            border:2px solid #bfd5ff;
+            padding:14px 28px;
         }
 
-        .btn-secondary {
-            background-color: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
+        .btn-outline:hover{
+            background:var(--primary-light);
         }
 
-        .btn-secondary:hover {
-            background-color: var(--primary-color);
-            color: var(--text-on-dark);
+        /* =========================
+           HERO
+        ==========================*/
+        .hero{
+            background:linear-gradient(to bottom,#f5f9ff,#eef5ff);
+            padding:120px 0 110px;
+            position:relative;
+            overflow:hidden;
         }
 
-        /* CAPTCHA Styles */
-        .captcha-container {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: var(--border-radius);
-            border: 1px solid #e0e0e0;
+        .hero::before{
+            content:'';
+            position:absolute;
+            width:600px;
+            height:600px;
+            background:rgba(13,71,161,.05);
+            border-radius:50%;
+            top:-250px;
+            right:-150px;
         }
 
-        .captcha-error {
-            color: #dc3545;
-            font-size: 0.85rem;
-            margin-top: 8px;
-            display: none;
+        .hero::after{
+            content:'';
+            position:absolute;
+            width:400px;
+            height:400px;
+            background:rgba(13,71,161,.04);
+            border-radius:50%;
+            bottom:-220px;
+            left:-120px;
         }
 
-        .captcha-error.show {
-            display: block;
+        .hero-content{
+            position:relative;
+            z-index:2;
+            text-align:center;
+            max-width:900px;
+            margin:auto;
         }
 
-        /* Mensajes de éxito/error */
-        .form-message {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            display: none;
+        .hero h1{
+            font-size:4rem;
+            line-height:1.08;
+            color:var(--primary-dark);
+            font-weight:800;
+            margin-bottom:28px;
         }
 
-        .form-message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .hero p{
+            font-size:1.2rem;
+            color:var(--text-light);
+            max-width:720px;
+            margin:0 auto 45px;
+            line-height:1.8;
         }
 
-        .form-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .hero-buttons{
+            display:flex;
+            justify-content:center;
+            gap:18px;
+            flex-wrap:wrap;
         }
 
-        .form-message.show {
-            display: block;
+        /* =========================
+           SECTIONS
+        ==========================*/
+        section{
+            padding:100px 0;
         }
 
-        /* Header y navegación */
-        header {
-            background-color: var(--text-on-dark);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
+        .section-header{
+            text-align:center;
+            margin-bottom:65px;
         }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            flex-wrap: wrap;
-            position: relative;
+        .section-header h2{
+            font-size:3rem;
+            color:var(--primary-dark);
+            margin-bottom:18px;
+            font-weight:800;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1001;
+        .section-header p{
+            color:var(--text-light);
+            font-size:1.1rem;
+            max-width:700px;
+            margin:auto;
+            line-height:1.8;
         }
 
-        .logo-icon {
-            color: var(--primary-color);
-            font-size: 2rem;
+        /* =========================
+           FEATURES
+        ==========================*/
+        .features-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:30px;
         }
 
-        .logo-text {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            white-space: nowrap;
+        .feature-card{
+            background:white;
+            border-radius:24px;
+            padding:35px 30px;
+            border:1px solid #edf2f7;
+            transition:.35s ease;
+            box-shadow:0 5px 15px rgba(15,23,42,.03);
         }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 0;
-            margin: 0;
-            padding: 0;
+        .feature-card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 20px 40px rgba(15,23,42,.08);
         }
 
-        .nav-links li {
-            margin-left: 30px;
+        .feature-icon{
+            width:64px;
+            height:64px;
+            border-radius:18px;
+            background:#eff6ff;
+            color:var(--primary);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:1.4rem;
+            margin-bottom:25px;
         }
 
-        .nav-links a {
-            font-weight: 500;
-            transition: var(--transition);
-            font-size: 0.95rem;
+        .feature-card h3{
+            font-size:1.35rem;
+            margin-bottom:15px;
+            color:var(--primary-dark);
         }
 
-        .nav-links a:hover {
-            color: var(--primary-color);
+        .feature-card p{
+            color:var(--text-light);
+            line-height:1.8;
+            font-size:1rem;
         }
 
-        .mobile-menu-btn {
-            display: none;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--primary-color);
-            z-index: 1001;
-            padding: 5px;
+        /* =========================
+           PRICING
+        ==========================*/
+        .pricing{
+            background:#f5f9ff;
         }
 
-        /* ===== RESPONSIVE NAVBAR ===== */
-        @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
+        .pricing-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+            gap:30px;
+            align-items:center;
+        }
+
+        .price-card{
+            background:white;
+            border-radius:28px;
+            padding:45px 35px;
+            position:relative;
+            transition:.35s ease;
+            border:1px solid #e2e8f0;
+        }
+
+        .price-card:hover{
+            transform:translateY(-8px);
+        }
+
+        .price-card.popular{
+            background:linear-gradient(180deg,#0d47a1,#114fb1);
+            color:white;
+            transform:scale(1.04);
+            box-shadow:0 30px 50px rgba(13,71,161,.25);
+        }
+
+        .badge{
+            position:absolute;
+            top:20px;
+            left:20px;
+            background:white;
+            color:var(--primary);
+            font-size:.75rem;
+            font-weight:700;
+            padding:8px 14px;
+            border-radius:999px;
+        }
+
+        .plan-name{
+            font-size:2rem;
+            font-weight:700;
+            margin-bottom:15px;
+        }
+
+        .price{
+            font-size:4rem;
+            font-weight:800;
+            margin-bottom:25px;
+        }
+
+        .price span{
+            font-size:1rem;
+            font-weight:500;
+        }
+
+        .features-list{
+            list-style:none;
+            margin-bottom:35px;
+        }
+
+        .features-list li{
+            margin-bottom:18px;
+            display:flex;
+            align-items:center;
+            gap:12px;
+            color:inherit;
+        }
+
+        .features-list i{
+            font-size:.95rem;
+        }
+
+        .price-card .btn{
+            width:100%;
+        }
+
+        .popular .btn{
+            background:white;
+            color:var(--primary);
+        }
+
+        /* =========================
+           CTA
+        ==========================*/
+        .cta{
+            background:linear-gradient(135deg,#0d47a1,#002171);
+            color:white;
+            text-align:center;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .cta::before{
+            content:'';
+            position:absolute;
+            width:500px;
+            height:500px;
+            background:rgba(255,255,255,.05);
+            border-radius:50%;
+            top:-200px;
+            right:-100px;
+        }
+
+        .cta-content{
+            position:relative;
+            z-index:2;
+        }
+
+        .cta h2{
+            font-size:3rem;
+            margin-bottom:20px;
+            font-weight:800;
+        }
+
+        .cta p{
+            font-size:1.15rem;
+            opacity:.9;
+            max-width:700px;
+            margin:auto auto 40px;
+            line-height:1.8;
+        }
+
+        .cta-buttons{
+            display:flex;
+            justify-content:center;
+            gap:18px;
+            flex-wrap:wrap;
+        }
+
+        .btn-light{
+            background:white;
+            color:var(--primary);
+            padding:14px 28px;
+        }
+
+        .btn-dark{
+            background:#00154d;
+            color:white;
+            padding:14px 28px;
+        }
+
+        .btn-dark:hover{
+            background:#02103a;
+        }
+
+        /* =========================
+           FOOTER
+        ==========================*/
+        footer{
+            background:#001b63;
+            color:white;
+            padding:80px 0 30px;
+        }
+
+        .footer-grid{
+            display:grid;
+            grid-template-columns:2fr 1fr 1fr 1fr;
+            gap:40px;
+            margin-bottom:50px;
+        }
+
+        .footer-brand p{
+            margin-top:18px;
+            color:#cbd5e1;
+            line-height:1.8;
+            max-width:320px;
+        }
+
+        .footer-column h4{
+            margin-bottom:22px;
+            font-size:1.1rem;
+        }
+
+        .footer-links{
+            display:flex;
+            flex-direction:column;
+            gap:15px;
+        }
+
+        .footer-links a{
+            color:#cbd5e1;
+            transition:.25s;
+        }
+
+        .footer-links a:hover{
+            color:white;
+            transform:translateX(3px);
+        }
+
+        .footer-bottom{
+            border-top:1px solid rgba(255,255,255,.08);
+            padding-top:25px;
+            text-align:center;
+            color:#cbd5e1;
+        }
+
+        /* =========================
+           MOBILE
+        ==========================*/
+        .menu-btn{
+            display:none;
+            background:none;
+            border:none;
+            font-size:1.5rem;
+            color:var(--primary);
+            cursor:pointer;
+        }
+
+        @media(max-width:992px){
+
+            .hero h1{
+                font-size:3rem;
             }
 
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                background-color: var(--text-on-dark);
-                padding: 10px 0 20px;
-                border-top: 1px solid #eee;
-                margin-top: 10px;
+            .section-header h2,
+            .cta h2{
+                font-size:2.4rem;
             }
 
-            .nav-links.active {
-                display: flex;
-            }
-
-            .nav-links li {
-                margin: 0;
-                width: 100%;
-            }
-
-            .nav-links a {
-                display: block;
-                padding: 12px 20px;
-                font-size: 1rem;
-                border-bottom: 1px solid #f0f0f0;
-                transition: background 0.2s ease;
-            }
-
-            .nav-links a:hover {
-                background-color: #f5f9ff;
-                color: var(--primary-color);
-                padding-left: 28px;
-            }
-
-            .logo-text {
-                font-size: 1.1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-text {
-                font-size: 1rem;
-            }
-
-            .navbar {
-                padding: 12px 0;
-            }
-        }
-
-        /* HERO MODERNO (FIGMA STYLE) */
-        .hero-modern {
-            background-color: #f5f9ff;
-            padding: 160px 0 100px;
-            color: var(--text-dark);
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            align-items: center;
-            gap: 60px;
-        }
-
-        .hero-content h1 {
-            font-size: 3rem;
-            color: #1e3a5f;
-        }
-
-        .hero-content p {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 520px;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #e6f0ff;
-            color: var(--primary-color);
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-
-        .hero-info-left {
-            justify-content: flex-start;
-        }
-
-        .hero-info {
-            display: flex;
-            gap: 30px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .info-icon {
-            font-size: 1.4rem;
-            color: var(--primary-color);
-            margin-top: 4px;
-        }
-
-        .hero-image {
-            position: relative;
-        }
-
-        .hero-image img {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .hero-card {
-            position: absolute;
-            bottom: 30px;
-            left: -40px;
-            background: #fff;
-            padding: 20px 24px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .hero-card i {
-            font-size: 1.8rem;
-            color: var(--accent-color);
-        }
-
-        .hero-card strong {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-
-        .hero-card span {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        @media (max-width: 576px) {
-            .hero-info {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        /* Responsive Hero */
-        @media (max-width: 992px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-image {
-                margin-top: 40px;
-            }
-
-            .hero-card {
-                left: 20px;
-            }
-        }
-
-        /* Sección Servicios */
-        .services {
-            background-color: var(--secondary-color);
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .service-card {
-            background-color: var(--text-on-dark);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .service-icon {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-
-        /* Sección Doctor */
-        .doctor {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-        }
-
-        .doctor-image {
-            flex: 0 0 auto;
-            width: clamp(320px, 50vw, 480px);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .doctor-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
-            aspect-ratio: 3 / 4;
-        }
-
-        .doctor-info {
-            flex: 1;
-        }
-
-        .doctor-qualifications {
-            margin-top: 30px;
-        }
-
-        .qualification-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .qualification-icon {
-            color: var(--accent-color);
-            margin-right: 15px;
-            font-size: 1.2rem;
-        }
-
-        /* Responsive para pantallas pequeñas */
-        @media (max-width: 768px) {
-            .doctor {
-                flex-direction: column;
-                gap: 30px;
-            }
-
-            .doctor-image {
-                width: clamp(180px, 60vw, 280px);
-                margin: 0 auto;
-            }
-        }
-
-        /* Sección Testimonios */
-        .testimonials {
-            background-color: var(--secondary-color);
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        /* Estilos para el carrusel automático de testimonios */
-        .testimonials-carousel-container {
-            position: relative;
-            overflow: hidden;
-            padding: 20px 0;
-            margin-top: 30px;
-        }
-
-        .testimonials-row {
-            display: flex;
-            width: 100%;
-            margin-bottom: 30px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .testimonials-track {
-            display: flex;
-            gap: 25px;
-            padding: 10px 0;
-            will-change: transform;
-        }
-
-        .service-icon-img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-
-        /* Estilos para las tarjetas del carrusel */
-        .testimonials-row .testimonial-card {
-            flex: 0 0 350px;
-            min-width: 350px;
-            background-color: var(--text-on-dark);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
-        }
-
-        .testimonials-row .testimonial-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Animaciones para las filas */
-        .testimonials-row-top .testimonials-track {
-            animation: scroll-left 40s linear infinite;
-        }
-
-        .testimonials-row-bottom .testimonials-track {
-            animation: scroll-right 35s linear infinite;
-        }
-
-        /* Pausar animación al hacer hover */
-        .testimonials-row:hover .testimonials-track {
-            animation-play-state: paused;
-        }
-
-        /* Overlay para gradiente en los bordes */
-        .carousel-overlay {
-            position: absolute;
-            top: 0;
-            width: 100px;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        .carousel-overlay.left {
-            left: 0;
-            background: linear-gradient(to right,
-                    var(--secondary-color) 0%,
-                    rgba(248, 249, 250, 0.8) 50%,
-                    transparent 100%);
-        }
-
-        .carousel-overlay.right {
-            right: 0;
-            background: linear-gradient(to left,
-                    var(--secondary-color) 0%,
-                    rgba(248, 249, 250, 0.8) 50%,
-                    transparent 100%);
-        }
-
-        /* Animaciones clave */
-        @keyframes scroll-left {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
+            .footer-grid{
+                grid-template-columns:1fr 1fr;
             }
         }
 
-        @keyframes scroll-right {
-            0% {
-                transform: translateX(-50%);
+        @media(max-width:768px){
+
+            .menu-btn{
+                display:block;
             }
 
-            100% {
-                transform: translateX(0);
-            }
-        }
-
-        /* Responsive para el carrusel */
-        @media (max-width: 992px) {
-            .testimonials-row .testimonial-card {
-                flex: 0 0 300px;
-                min-width: 300px;
-            }
-
-            .carousel-overlay {
-                width: 60px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .testimonials-row .testimonial-card {
-                flex: 0 0 280px;
-                min-width: 280px;
+            .nav-links{
+                position:absolute;
+                top:78px;
+                left:0;
+                width:100%;
+                background:white;
+                flex-direction:column;
+                align-items:flex-start;
+                padding:30px;
+                gap:20px;
+                border-bottom:1px solid var(--border);
+                display:none;
             }
 
-            .testimonials-row {
-                margin-bottom: 20px;
+            .nav-links.active{
+                display:flex;
             }
 
-            .testimonials-track {
-                gap: 20px;
+            .hero{
+                padding:90px 0;
             }
 
-            .carousel-overlay {
-                width: 40px;
+            .hero h1{
+                font-size:2.5rem;
             }
 
-            .testimonials-row-top .testimonials-track {
-                animation: scroll-left 30s linear infinite;
+            .hero p{
+                font-size:1rem;
             }
 
-            .testimonials-row-bottom .testimonials-track {
-                animation: scroll-right 25s linear infinite;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .testimonials-row .testimonial-card {
-                flex: 0 0 260px;
-                min-width: 260px;
-                padding: 20px;
+            .section-header h2,
+            .cta h2{
+                font-size:2rem;
             }
 
-            .carousel-overlay {
-                width: 30px;
+            .price-card.popular{
+                transform:none;
+            }
+
+            .footer-grid{
+                grid-template-columns:1fr;
             }
         }
 
-        .testimonial-card {
-            background-color: var(--text-on-dark);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-        }
+        @media(max-width:500px){
 
-        .testimonial-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .stars {
-            color: #ffc107;
-        }
-
-        .patient-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .patient-since {
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        /* Sección Contacto */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 50px;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-        }
-
-        .contact-icon {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            margin-top: 5px;
-        }
-
-        .contact-form {
-            background-color: var(--text-on-dark);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-family: inherit;
-            font-size: 1rem;
-        }
-
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .map-container {
-            width: 100%;
-            height: 100px;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            background: #eee;
-        }
-
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /*Redes sociales*/
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-            margin-top: 20px;
-            align-items: center;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            transition: var(--transition);
-            font-size: 1.4rem;
-            color: white;
-            text-decoration: none;
-        }
-
-        .social-link:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Redes sociales en sección de contacto - Horizontal */
-        .contact-social {
-            display: flex;
-            gap: 20px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .contact-social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 42px;
-            height: 42px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            transition: var(--transition);
-            font-size: 1.2rem;
-            text-decoration: none;
-        }
-
-        .contact-social-link:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Colores específicos para hover (opcional) */
-        .social-link:hover .fa-facebook-f,
-        .contact-social-link:hover .fa-facebook-f {
-            color: white;
-        }
-
-        /* Responsive para móviles */
-        @media (max-width: 768px) {
-            .social-links {
-                justify-content: center;
-                gap: 20px;
+            .hero h1{
+                font-size:2rem;
             }
 
-            .contact-social {
-                justify-content: flex-start;
-                gap: 18px;
+            .btn,
+            .btn-primary,
+            .btn-outline{
+                width:100%;
             }
 
-            .social-link {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
+            .hero-buttons,
+            .cta-buttons{
+                flex-direction:column;
             }
 
-            .contact-social-link {
-                width: 38px;
-                height: 38px;
-                font-size: 1.1rem;
-            }
-        }
-
-        /* Para pantallas muy pequeñas */
-        @media (max-width: 480px) {
-            .social-links {
-                gap: 15px;
+            .section-header h2{
+                font-size:1.8rem;
             }
 
-            .contact-social {
-                gap: 15px;
+            .price{
+                font-size:3rem;
             }
-        }
-
-        /* Sección Consultorio */
-        .clinic-images {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
-        }
-
-        .clinic-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .clinic-image:hover {
-            transform: scale(1.03);
-        }
-
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 2000;
-        }
-
-        .lightbox.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .lightbox img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            font-size: 2.5rem;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            margin-top: 50px;
-            text-align: center;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            line-height: 1;
-        }
-
-        /* ===== FOOTER PROFESIONAL REDISEÑADO ===== */
-        footer {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, #0a3b5e 100%);
-            color: var(--text-on-dark);
-            padding: 60px 0 30px;
-            position: relative;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-
-        /* Columnas del footer */
-        .footer-section h3 {
-            color: white;
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-section h3::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 40px;
-            height: 3px;
-            background-color: var(--accent-color);
-        }
-
-        .footer-description {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        /* Enlaces del footer */
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: var(--transition);
-            font-size: 0.95rem;
-            display: inline-block;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-color);
-            transform: translateX(5px);
-        }
-
-        /* Información de contacto */
-        .contact-info li {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-        }
-
-        .contact-icon-footer {
-            color: var(--accent-color);
-            font-size: 1rem;
-            min-width: 20px;
-            margin-top: 3px;
-        }
-
-        /* Sección de Redes Sociales */
-        .social-section {
-            margin-top: 25px;
-        }
-
-        .social-title {
-            color: white;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-
-        .social-links-footer {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .social-link-footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1.2rem;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        /* Instagram DESTACADO - más grande y con estilo especial */
-        .social-link-footer.instagram:hover {
-            background: radial-gradient(circle at 30% 30%, #fdf497, #fd5949, #d6249f, #285AEB);
-            transform: translateY(-5px);
-        }
-
-        .social-link-footer.tiktok:hover {
-            background-color: #010101;
-            transform: translateY(-5px);
-        }
-
-        .social-link-footer.linkedin:hover {
-            background-color: #0A66C2;
-            transform: translateY(-5px);
-        }
-
-        .social-link-footer.youtube:hover {
-            background-color: #ff0000;
-            transform: translateY(-5px);
-        }
-
-        .social-link-footer:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Copyright */
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 40px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            footer {
-                padding: 40px 0 20px;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .footer-section h3::after {
-                left: 0;
-                transform: none;
-            }
-
-            .social-links-footer {
-                justify-content: flex-start;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .social-links-footer {
-                gap: 12px;
-            }
-
-            .social-link-footer {
-                width: 38px;
-                height: 38px;
-                font-size: 1.1rem;
-            }
-
-            .social-link-footer.instagram {
-                width: 46px;
-                height: 46px;
-                font-size: 1.4rem;
-            }
-        }
-
-        /* ===== CORAZÓN LATIENTE ===== */
-        @keyframes latido {
-            0% {
-                transform: scale(1);
-            }
-
-            25% {
-                transform: scale(1.1);
-            }
-
-            35% {
-                transform: scale(1);
-            }
-
-            45% {
-                transform: scale(1.15);
-            }
-
-            55% {
-                transform: scale(1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .heart-beat {
-            animation: latido 1.5s ease-in-out infinite;
-            display: inline-block;
-        }
-
-        /* Para el corazón del hero-badge */
-        .hero-badge i.fa-heart {
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        /* Para el corazón del footer */
-        .footer-section .logo i.fa-heartbeat {
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        /* Para el corazón de la tarjeta del hero */
-        .hero-card i.fa-heartbeat {
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        /* Para el icono de cirugía de corazón en servicios */
-        .service-card i.fa-heart-pulse,
-        .service-card i.fa-heart {
-            animation: latido 2s ease-in-out infinite;
-            transition: all 0.3s ease;
-        }
-
-        .service-card i.fa-heart-pulse:hover,
-        .service-card i.fa-heart:hover {
-            animation: latido 0.8s ease-in-out infinite;
-            color: var(--accent-color);
-        }
-
-        /* Clase helper para cualquier corazón que quieras que lata */
-        .latido {
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        /* Versión más rápida para hover */
-        .latido-rapido {
-            animation: latido 0.8s ease-in-out infinite;
-        }
-
-        .logo-image-wrapper {
-            display: inline-block;
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        .logo-image-wrapper img {
-            display: block;
         }
     </style>
 </head>
-
 <body>
-    <!-- Header y Navegación -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-image-wrapper heart-beat">
-                        <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
-                            class="logo-icon" height="30" width="30"
-                            alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" />
-                    </div>
-                    <span class="logo-text">Dr. Lorenzo García</span>
+
+<!-- =========================
+     HEADER
+========================= -->
+<header>
+    <div class="container">
+        <nav class="navbar">
+
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-calendar-check"></i>
                 </div>
+                <span>DoctorClick</span>
+            </a>
 
-                <button class="mobile-menu-btn" id="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
+            <div class="nav-links" id="navLinks">
+                <a href="#caracteristicas">Características</a>
+                <a href="#precios">Precios</a>
+                <a href="#demo">Demo</a>
 
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#servicios">Procedimientos</a></li>
-                    <li><a href="#doctor">Sobre Mí</a></li>
-                    <li><a href="#consultorio">Más de Nosotros</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Sección Hero / Inicio -->
-    <section class="hero hero-modern" id="inicio">
-        <div class="container hero-grid">
-            <div class="hero-content">
-                <span class="hero-badge">
-                    <i class="fas fa-heart"></i> Cirugía Cardiovascular Especializada
-                </span>
-
-                <h1>Pionero en Cirugía Cardiovascular del Nordeste</h1>
-
-                <p>
-                    Experiencia avanzada en procedimientos de corazón, cirugía
-                    venosa con láser y tratamientos vasculares de última tecnología.
-                    Top Ranking Cirujano Cardiovascular del Nordeste.
-                    Más de 10,000 pacientes atendidos.
-                </p>
-
-                <div class="hero-buttons">
-                    <a href="#contacto" class="btn">
-                        <i class="far fa-calendar-alt"></i> Agendar Consulta
-                    </a>
-                    <a href="#servicios" class="btn btn-secondary">
-                        Ver Procedimientos
-                    </a>
-                </div>
-
-                <div class="hero-info hero-info-left">
-                    <div class="info-item">
-                        <i class="fas fa-award info-icon"></i>
-                        <div>
-                            <strong>Experiencia</strong>
-                            <p>Más de 10,000 pacientes</p>
-                        </div>
-                    </div>
-
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt info-icon"></i>
-                        <div>
-                            <strong>Ubicación</strong>
-                            <p>San Francisco de Macorís</p>
-                        </div>
-                    </div>
-                </div>
+                <a href="{{ route('login') }}" class="btn btn-primary" style="color:white;">
+                    Comenzar
+                </a>
             </div>
 
-            <div class="hero-image">
-                <img src="https://i.postimg.cc/VNsTbCzP/Whats-App-Image-2026-03-07-at-9-49-59-AM-(1).jpg"
-                    alt="Cirujano Cardiovascular" />
-                <div class="hero-card">
-                    <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
-                        alt="Logo Dr. García" style="width: 44px; height: 44px; object-fit: contain;" />
-                    <div>
-                        <strong>Alta Especialización</strong>
-                        <span>Cirugía Cardiovascular</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+            <button class="menu-btn" id="menuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
 
-    <!--Procedimientos-->
-    <section class="section services" id="servicios">
-        <div class="container">
-            <h2 class="section-title">Procedimientos Especializados</h2>
-            <div class="services-grid">
+        </nav>
+    </div>
+</header>
 
-                <!-- Cirugía de Corazón -->
-                <div class="service-card">
-                    <i class="fas fa-heart-pulse service-icon"></i>
-                    <h3>Cirugía de Corazón</h3>
-                    <p>
-                        Cirugía de las Válvulas Cardiacas.<br />
-                        Cirugía Bypass Coronario.
-                    </p>
-                </div>
+<!-- =========================
+     HERO
+========================= -->
+<section class="hero">
 
-                <!-- Endarterectomía Carotídea -->
-                <div class="service-card">
-                    <i class="fas fa-brain service-icon"></i>
-                    <h3>Endarterectomía Carotídea</h3>
-                    <p>Cirugía para eliminar la placa de las arterias carótidas y reducir el riesgo de accidente
-                        cerebrovascular.</p>
-                </div>
+    <div class="container">
+        <div class="hero-content">
 
-                <!-- Paciente Renal -->
-                <div class="service-card">
-                    <i class="fas fa-droplet service-icon"></i>
-                    <h3>Paciente Renal</h3>
-                    <p>
-                        Creación de fístula arteriovenosa, colocación de catéter
-                        permanente y manejo de acceso para hemodiálisis.
-                    </p>
-                </div>
+            <h1>
+                El Sistema de Gestión Médica
+                que Transforma tu Práctica
+            </h1>
 
-                <!-- Tratamiento de Várices -->
-                <div class="service-card">
-                    <i class="bi bi-virus service-icon"></i>
-                    <h3>Tratamiento de Várices</h3>
-                    <p>
-                        Procedimientos modernos y efectivos para la corrección de várices.
-                    </p>
-                </div>
-
-                <!-- Cirugía Venosa con Láser -->
-                <div class="service-card">
-                    <i class="fas fa-bolt service-icon"></i>
-                    <h3>Cirugía Venosa con Láser</h3>
-                    <p>
-                        Manejo avanzado de patología venosa mediante técnicas mínimamente invasivas.
-                    </p>
-                </div>
-
-                <!-- Aneurisma de Aorta Abdominal -->
-                <div class="service-card">
-                    <svg class="service-icon" viewBox="0 0 100 100" width="50" height="50">
-
-                        <!-- Tronco principal -->
-                        <path d="M50 15
-                 C46 30, 46 45, 50 55
-                 C54 45, 54 30, 50 15" stroke="#3b82c4" stroke-width="14" fill="none" stroke-linecap="round" />
-
-                        <!-- Arteria lateral izquierda -->
-                        <path d="M50 40 L30 40" stroke="#3b82c4" stroke-width="10" fill="none"
-                            stroke-linecap="round" />
-
-                        <!-- Arteria lateral derecha -->
-                        <path d="M50 40 L70 40" stroke="#3b82c4" stroke-width="10" fill="none"
-                            stroke-linecap="round" />
-
-                        <!-- Panza (aneurisma) -->
-                        <ellipse cx="50" cy="60" rx="12" ry="10" stroke="#3b82c4"
-                            stroke-width="14" fill="none" />
-
-                        <!-- Bifurcación principal -->
-                        <path d="M50 70 L35 90" stroke="#3b82c4" stroke-width="14" fill="none"
-                            stroke-linecap="round" />
-
-                        <path d="M50 70 L65 90" stroke="#3b82c4" stroke-width="14" fill="none"
-                            stroke-linecap="round" />
-
-                        <!-- Ramitas secundarias -->
-                        <path d="M38 78 L30 85" stroke="#3b82c4" stroke-width="6" fill="none"
-                            stroke-linecap="round" />
-
-                        <path d="M62 78 L70 85" stroke="#3b82c4" stroke-width="6" fill="none"
-                            stroke-linecap="round" />
-
-                    </svg>
-
-                    <h3>Aneurisma de Aorta Abdominal</h3>
-                    <p>
-                        Tratamiento quirúrgico y endovascular para la corrección de aneurismas de la aorta abdominal.
-                    </p>
-                </div>
-
-                <!-- Angioplastia de Miembros Inferiores -->
-                <div class="service-card">
-                    <i class="fas fa-walking service-icon"></i>
-                    <h3>Angioplastia de Miembros Inferiores</h3>
-                    <p>Procedimiento mínimamente invasivo para restablecer el flujo sanguíneo en arterias obstruidas de
-                        las piernas.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="doctor">
-        <div class="container">
-            <div class="doctor">
-                <div class="doctor-image">
-                    <img src="https://i.postimg.cc/Fsk5p3t4/Whats-App-Image-2026-03-07-at-9-44-53-PM-(1).jpg"
-                        alt="Dr. Lorenzo" />
-                </div>
-
-                <div class="doctor-info">
-                    <h2>Dr. Lorenzo García</h2>
-
-                    <p>
-                        Pionero en la cirugía cardiovascular del nordeste. Primer
-                        especialista en realizar procedimientos de corazón abierto en la
-                        región.
-                    </p>
-
-                    <p>
-                        Manejo avanzado de patología venosa con láser y procedimientos de
-                        última tecnología. Especialista en acceso vasculares en pacientes renales,
-                        creación de fístula arteriovenosa, colocación de catéter
-                        permanente.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Consultorio -->
-    <section class="section" id="consultorio">
-        <div class="container">
-            <h2 class="section-title">Encargado de su Cuidado</h2>
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <img src="https://i.postimg.cc/k4tMbZy4/Whats-App-Image-2026-03-07-at-9-44-53-PM.jpg"
-                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" class="clinic-image"
-                    style="max-width: calc(33.33% - 14px);" />
-            </div>
-
-            <div class="clinic-images">
-                <img src="https://i.postimg.cc/ZKLbp667/Whats-App-Image-2026-03-07-at-9-49-59-AM.jpg"
-                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" class="clinic-image" />
-                <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
-                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís"class="clinic-image" />
-                <img src="https://i.postimg.cc/nrJxQLzy/DSC-6927.jpg" alt="Consultorio 3" class="clinic-image" />
-            </div>
-
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <img src="https://i.postimg.cc/QxZ1YkVF/Opera.jpg"
-                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" class="clinic-image"
-                    style="max-width: calc(33.33% - 14px);" />
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Contacto con CAPTCHA -->
-    <section class="section" id="contacto">
-        <div class="container">
-            <h2 class="section-title">Contáctanos</h2>
-            <p style="text-align: center; max-width: 800px; margin: 0 auto 50px">
-                Estamos aquí para atenderte. Ponte en contacto con nosotros para que agendes
-                tu cita de forma rápida y sencilla.
+            <p>
+                Simplifica la administración de tu consultorio con DoctorClick.
+                Agenda, expedientes digitales, recetas electrónicas y mucho más,
+                todo en un solo lugar.
             </p>
 
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <h3>Información de Contacto</h3>
+            <div class="hero-buttons">
 
-                    <div class="contact-item">
-                        <i class="fas fa-phone contact-icon"></i>
-                        <div>
-                            <h4>Teléfono</h4>
-                            <p>+1 (809) 588-5601 - San Francisco de Macorís</p>
-                            <p>+1 (829) 378-1976 ext 224 240 - Santo Domingo</p>
-                        </div>
-                    </div>
+                <a href="#demo" class="btn btn-outline">
+                    <i class="fa-regular fa-circle-play"></i>
+                    Probar Demo Gratis
+                </a>
 
-                    <div class="contact-item">
-                        <i class="far fa-clock contact-icon"></i>
-                        <div>
-                            <h4>Horario</h4>
-                            <p>
-                                Lunes a Viernes: Previa cita a partir de las 9AM<br />
-                            </p>
-                        </div>
-                    </div>
+                <a href="{{ route('login') }}" class="btn btn-primary">
+                    Comenzar Ahora
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
 
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt contact-icon"></i>
-                        <div>
-                            <h4>Dirección</h4>
-                            <p>C/. Duarte, Edificio Profesional Dr. Reynaldo Almanzar, 2Do Nive.l<br />San Francisco de
-                                Macorís</p>
-                        </div>
-                    </div>
-                    <div class="map-container">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d941.3922733279405!2d-70.25859704849792!3d19.301096363614818!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eae2deeb606e03d%3A0xd3b901431e39fb92!2sEdificio%20Medico%20Dr.Almanzar%20(Siglo%2021)!5e0!3m2!1ses-419!2sdo!4v1773155131750!5m2!1ses-419!2sdo"
-                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt contact-icon"></i>
-                        <div>
-                            <h4>Dirección</h4>
-                            <p>Grupo Médico Mac Center</p>
-                        </div>
-                    </div>
-                    <div class="map-container">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d946.1523292626038!2d-69.95754218065501!3d18.456039431621484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ea561db57f454cd%3A0xbdd9cb94abe987ed!2sGrupo%20M%C3%A9dico%20Mac%20Center!5e0!3m2!1ses-419!2sdo!4v1774011906508!5m2!1ses-419!2sdo"
-                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                </div>
-
-                <div class="contact-form">
-                    <h3>Envíanos un Mensaje</h3>
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Nombre Completo</label>
-                            <input type="text" id="name" placeholder="Tu nombre" required
-                                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo se permiten letras" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message">Motivo de la consulta</label>
-                            <textarea id="message" placeholder="Ej: Consulta general, dolor, chequeo..." required></textarea>
-                        </div>
-
-                        <!-- CAPTCHA de Google (selección de imágenes) -->
-                        <div class="captcha-container">
-                            <div class="g-recaptcha" data-sitekey="6LdFEJUsAAAAAIcOJNgguO-U8szFl_0OAmVP-PEi"></div>
-                            <div class="captcha-error" id="captchaError">
-                                <i class="fas fa-exclamation-circle"></i> Por favor, completa el CAPTCHA para continuar.
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn" id="submitBtn" style="width: 100%">
-                            <i class="fab fa-whatsapp" style="color: #25d366"></i> Agendar
-                            por WhatsApp
-                        </button>
-
-                        <div class="form-message" id="formMessage"></div>
-                    </form>
-                </div>
             </div>
+
         </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <!-- Columna 1: Logo y descripción -->
-                <div class="footer-section about-section">
-                    <div class="logo" style="margin-bottom: 20px">
-                        <i class="fas fa-heartbeat logo-icon"></i>
-                        <span class="logo-text">Dr. Lorenzo García</span>
-                    </div>
-                    <p class="footer-description">
-                        Especialista en Cirugía Cardiovascular. Innovación, precisión y
-                        experiencia al servicio de tu salud.
-                    </p>
-                </div>
-
-                <!-- Columna 2: Enlaces Rápidos -->
-                <div class="footer-section">
-                    <h3>Enlaces Rápidos</h3>
-                    <ul class="footer-links">
-                        <li><a href="#inicio">Inicio</a></li>
-                        <li><a href="#servicios">Procedimientos</a></li>
-                        <li><a href="#doctor">Sobre Mí</a></li>
-                        <li><a href="#consultorio">Más de Nosotros</a></li>
-                        <li><a href="#contacto">Contacto</a></li>
-                    </ul>
-                </div>
-
-                <!-- Columna 3: Procedimientos (más compacta) -->
-                <div class="footer-section">
-                    <h3>Procedimientos</h3>
-                    <ul class="footer-links">
-                        <li><a href="#servicios">Cirugía de Corazón</a></li>
-                        <li><a href="#servicios">Endarterectomía Carotídea</a></li>
-                        <li><a href="#servicios">Paciente Renal</a></li>
-                        <li><a href="#servicios">Cirugía Venosa con Láser</a></li>
-                        <li><a href="#servicios">Aneurisma de Aorta</a></li>
-                        <li><a href="#servicios">Tratamiento de Várices</a></li>
-                    </ul>
-                </div>
-
-                <!-- Columna 4: Contacto + Redes Sociales (Instagram destacado) -->
-                <div class="footer-section contact-section">
-                    <h3>Contacto</h3>
-                    <ul class="footer-links contact-info">
-                        <li>
-                            <i class="fas fa-phone contact-icon-footer"></i>
-                            <span>+1 (809) 588-5601 - San Francisco de Macorís</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-phone contact-icon-footer"></i>
-                            <span>+1 (829) 378-1976 ext 224 240 - Santo Domingo</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-map-marker-alt contact-icon-footer"></i>
-                            <span>C/. Duarte, Edif. Dr. Reynaldo Almanzar, 2do Nivel<br>San Francisco de Macorís</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-map-marker-alt contact-icon-footer"></i>
-                            <span>Grupo Médico Mac Center<br>Santo Domingo</span>
-                        </li>
-                        <li>
-                            <i class="far fa-clock contact-icon-footer"></i>
-                            <span>Lun-Vie: Previa cita desde 9AM</span>
-                        </li>
-                    </ul>
-
-                    <!-- Redes Sociales con Instagram Destacado -->
-                    <div class="social-section">
-                        <h4 class="social-title">Síguenos en:</h4>
-                        <div class="social-links-footer">
-                            <!-- Instagram DESTACADO (más grande y primero) -->
-                            <a href="https://www.instagram.com/cardiovascular_lorenzogarcia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-                                target="_blank" class="social-link-footer instagram" aria-label="Instagram">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Copyright -->
-            <div class="copyright">
-                <p>&copy; <span id="year"></span> Dr. Lorenzo García.</p>
-            </div>
-        </div>
-    </footer>
-    <div class="lightbox" id="lightbox">
-        <span class="lightbox-close">&times;</span>
-        <img id="lightbox-img" src="" alt="Imagen ampliada" />
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Menú móvil
-            const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-            const navLinks = document.getElementById("nav-links");
+</section>
 
-            if (mobileMenuBtn && navLinks) {
-                mobileMenuBtn.addEventListener("click", () => {
-                    navLinks.classList.toggle("active");
-                    mobileMenuBtn.innerHTML = navLinks.classList.contains("active") ?
-                        '<i class="fas fa-times"></i>' :
-                        '<i class="fas fa-bars"></i>';
-                });
-            }
+<!-- =========================
+     FEATURES
+========================= -->
+<section id="caracteristicas">
 
-            // Cerrar menú al hacer clic en un enlace
-            document.querySelectorAll(".nav-links a").forEach((link) => {
-                link.addEventListener("click", () => {
-                    navLinks.classList.remove("active");
-                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-                });
-            });
+    <div class="container">
 
-            // Formulario con CAPTCHA
-            const contactForm = document.getElementById("contactForm");
-            const submitBtn = document.getElementById("submitBtn");
-            const captchaError = document.getElementById("captchaError");
-            const formMessage = document.getElementById("formMessage");
+        <div class="section-header">
+            <h2>
+                Todo lo que necesitas para gestionar tu consultorio
+            </h2>
 
-            if (contactForm) {
-                contactForm.addEventListener("submit", async (e) => {
-                    e.preventDefault();
+            <p>
+                Herramientas profesionales diseñadas específicamente
+                para médicos y clínicas
+            </p>
+        </div>
 
-                    // Ocultar mensajes previos
-                    captchaError.classList.remove("show");
-                    formMessage.classList.remove("show", "success", "error");
+        <div class="features-grid">
 
-                    // Verificar CAPTCHA
-                    const recaptchaResponse = grecaptcha.getResponse();
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-regular fa-calendar"></i>
+                </div>
 
-                    if (!recaptchaResponse) {
-                        captchaError.classList.add("show");
-                        return;
-                    }
+                <h3>Gestión de Citas</h3>
 
-                    // Deshabilitar botón mientras se procesa
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = "Verificando...";
+                <p>
+                    Agenda y administra citas médicas de manera eficiente
+                    con recordatorios automáticos.
+                </p>
+            </div>
 
-                    try {
-                        // Verificar CAPTCHA con Google (opcional - para producción)
-                        // En entorno de pruebas, la clave demo siempre es válida
-                        // Para producción, debes reemplazar la site key y verificar en backend
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
 
-                        const name = document.getElementById("name").value.trim();
-                        const message = document.getElementById("message").value.trim();
-                        const whatsappNumber = "18095885601";
+                <h3>Expedientes Digitales</h3>
 
-                        const text = `
-                            *SOLICITUD DE CITA MÉDICA*
+                <p>
+                    Almacena y accede a historiales clínicos completos
+                    de forma segura y organizada.
+                </p>
+            </div>
 
-                            *Nombre:* ${name}
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-regular fa-file-lines"></i>
+                </div>
 
+                <h3>Recetas Electrónicas</h3>
 
-                            *Motivo de la consulta:*
-                            ${message}
+                <p>
+                    Genera y envía recetas médicas digitales con firma
+                    electrónica válida.
+                </p>
+            </div>
 
-                            Quedo atento(a) a su confirmación.
-                            Muchas gracias.
-                        `.trim();
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-chart-column"></i>
+                </div>
 
-                        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
+                <h3>Reportes y Estadísticas</h3>
 
-                        // Resetear CAPTCHA después de verificación exitosa
-                        grecaptcha.reset();
+                <p>
+                    Visualiza métricas clave de tu consultorio con dashboards
+                    intuitivos y análisis avanzados.
+                </p>
+            </div>
 
-                        // Mostrar mensaje de éxito
-                        formMessage.textContent = "✓ Verificación exitosa. Redirigiendo a WhatsApp...";
-                        formMessage.classList.add("show", "success");
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-regular fa-clock"></i>
+                </div>
 
-                        // Redirigir después de un breve momento
-                        setTimeout(() => {
-                            window.open(url, "_blank");
-                            contactForm.reset();
-                        }, 1000);
+                <h3>Gestión de Tiempo</h3>
 
-                    } catch (error) {
-                        console.error("Error:", error);
-                        formMessage.textContent = "✗ Ocurrió un error. Por favor, intenta nuevamente.";
-                        formMessage.classList.add("show", "error");
-                        grecaptcha.reset();
-                    } finally {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="fab fa-whatsapp" style="color: #25d366"></i> Agendar por WhatsApp';
-                    }
-                });
-            }
+                <p>
+                    Optimiza tu agenda y reduce tiempos de espera
+                    mediante automatización inteligente.
+                </p>
+            </div>
 
-            // Smooth scroll
-            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-                anchor.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute("href"));
-                    if (target) {
-                        window.scrollTo({
-                            top: target.offsetTop - 80,
-                            behavior: "smooth",
-                        });
-                    }
-                });
-            });
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-shield-heart"></i>
+                </div>
 
-            /* ================= LIGHTBOX ================= */
-            const images = document.querySelectorAll(".clinic-image");
-            const lightbox = document.getElementById("lightbox");
-            const lightboxImg = document.getElementById("lightbox-img");
-            const closeBtn = document.querySelector(".lightbox-close");
+                <h3>Seguridad HIPAA</h3>
 
-            if (images.length && lightbox && lightboxImg && closeBtn) {
-                images.forEach((img) => {
-                    img.addEventListener("click", () => {
-                        lightboxImg.src = img.src;
-                        lightbox.classList.add("active");
-                        document.body.style.overflow = "hidden";
-                    });
-                });
+                <p>
+                    Protección de datos médicos con cifrado
+                    de nivel empresarial.
+                </p>
+            </div>
 
-                closeBtn.addEventListener("click", () => {
-                    lightbox.classList.remove("active");
-                    document.body.style.overflow = "";
-                });
+        </div>
 
-                lightbox.addEventListener("click", (e) => {
-                    if (e.target === lightbox) {
-                        lightbox.classList.remove("active");
-                        document.body.style.overflow = "";
-                    }
-                });
-            }
-        });
+    </div>
 
-        /*Validación de campos del formulario */
-        const phoneInput = document.getElementById("phone");
-        if (phoneInput) {
-            phoneInput.addEventListener("input", () => {
-                phoneInput.value = phoneInput.value.replace(/\D/g, "");
-            });
-        }
+</section>
 
-        document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+<!-- =========================
+     PRICING
+========================= -->
+<section class="pricing" id="precios">
+
+    <div class="container">
+
+        <div class="section-header">
+            <h2>
+                Planes que se adaptan a tu práctica
+            </h2>
+
+            <p>
+                Elige el plan perfecto para ti. Cancela cuando quieras.
+            </p>
+        </div>
+
+        <div class="pricing-grid">
+
+            <!-- BASIC -->
+            <div class="price-card">
+
+                <div class="plan-name">Básico</div>
+
+                <div class="price">
+                    $49
+                    <span>/mes</span>
+                </div>
+
+                <ul class="features-list">
+                    <li><i class="fa-regular fa-circle-check"></i> Hasta 100 pacientes</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Agenda digital</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Expedientes básicos</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Soporte por email</li>
+                </ul>
+
+                <a href="{{ route('login') }}" class="btn btn-primary">
+                    Seleccionar Plan
+                </a>
+
+            </div>
+
+            <!-- PRO -->
+            <div class="price-card popular">
+
+                <div class="badge">
+                    MÁS POPULAR
+                </div>
+
+                <div class="plan-name">Profesional</div>
+
+                <div class="price">
+                    $99
+                    <span>/mes</span>
+                </div>
+
+                <ul class="features-list">
+                    <li><i class="fa-regular fa-circle-check"></i> Pacientes ilimitados</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Recetas electrónicas</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Reportes avanzados</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Soporte prioritario</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Integraciones API</li>
+                </ul>
+
+                <a href="{{ route('login') }}" class="btn">
+                    Seleccionar Plan
+                </a>
+
+            </div>
+
+            <!-- CLINIC -->
+            <div class="price-card">
+
+                <div class="plan-name">Clínica</div>
+
+                <div class="price">
+                    $199
+                    <span>/mes</span>
+                </div>
+
+                <ul class="features-list">
+                    <li><i class="fa-regular fa-circle-check"></i> Múltiples médicos</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Todo lo de Profesional</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Dashboard administrativo</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Soporte 24/7</li>
+                    <li><i class="fa-regular fa-circle-check"></i> Personalización completa</li>
+                </ul>
+
+                <a href="{{ route('login') }}" class="btn btn-primary">
+                    Seleccionar Plan
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================
+     CTA
+========================= -->
+<section class="cta" id="demo">
+
+    <div class="container">
+
+        <div class="cta-content">
+
+            <h2>
+                ¿Listo para modernizar tu consultorio?
+            </h2>
+
+            <p>
+                Únete a cientos de profesionales de la salud
+                que ya confían en DoctorClick.
+            </p>
+
+            <div class="cta-buttons">
+
+                <a href="#" class="btn btn-light">
+                    Probar Demo Gratis
+                </a>
+
+                <a href="{{ route('login') }}" class="btn btn-dark">
+                    Comenzar Ahora
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================
+     FOOTER
+========================= -->
+<footer>
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+            <div class="footer-brand">
+
+                <a href="/" class="logo" style="color:white;">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+
+                    <span>DoctorClick</span>
+                </a>
+
+                <p>
+                    La solución completa para la gestión
+                    de tus consultas.
+                </p>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h4>Producto</h4>
+
+                <div class="footer-links">
+                    <a href="#caracteristicas">Características</a>
+                    <a href="#precios">Precios</a>
+                    <a href="#demo">Demo</a>
+                </div>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h4>Empresa</h4>
+
+                <div class="footer-links">
+                    <a href="#">Sobre Nosotros</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contacto</a>
+                </div>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h4>Legal</h4>
+
+                <div class="footer-links">
+                    <a href="#">Privacidad</a>
+                    <a href="#">Términos</a>
+                    <a href="#">Seguridad</a>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            © {{ date('Y') }} DoctorClick. Todos los derechos reservados.
+        </div>
+
+    </div>
+
+</footer>
+
+<script>
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    menuBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+</script>
+
 </body>
-
 </html>

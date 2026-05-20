@@ -294,7 +294,6 @@
 
                             @foreach ($consultorios as $consultorio)
                                 @php
-
                                     $suscripcion = $consultorio->suscripcionActiva;
 
                                     $estado = $consultorio->estadoSuscripcion();
@@ -309,19 +308,14 @@
 
                                     $citas = App\Models\Cita::where('consultorio_id', $consultorio->id)->count();
 
-                                    $pacientes = App\Models\Paciente::where(
-                                        'consultorio_id',
-                                        $consultorio->id,
-                                    )->count();
+                                    $pacientes = App\Models\Paciente::where('consultorio_id',$consultorio->id,)->count();
 
                                     $whatsapp = $consumo->mensajes_whatsapp ?? 0;
                                 @endphp
 
                                 <tr>
-
                                     {{-- CONSULTORIO --}}
                                     <td>
-
                                         <div class="d-flex align-items-center gap-3">
 
                                             <div class="consultorio-avatar">
@@ -337,16 +331,12 @@
                                                 <small class="text-muted">
                                                     {{ $consultorio->email }}
                                                 </small>
-
                                             </div>
-
                                         </div>
-
                                     </td>
 
                                     {{-- PLAN --}}
                                     <td>
-
                                         @if ($plan)
                                             <span class="badge bg-primary badge-soft">
                                                 {{ $plan->nombre }}
@@ -433,28 +423,26 @@
 
                                     {{-- ACCIONES --}}
                                     <td>
-
                                         <div class="d-flex gap-2 flex-wrap">
-
                                             <a href="{{ route('consultorios.show', $consultorio) }}"
-                                                class="btn btn-info text-white btn-action">
+                                                class="btn btn-info text-white btn-action" title="Ver Detalles">
                                                 <i class="bi bi-eye"></i>
                                             </a>
 
                                             <a href="{{ route('consultorios.edit', $consultorio) }}"
-                                                class="btn btn-main btn-action">
+                                                class="btn btn-main btn-action" title="Editar">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
 
                                             <button class="btn btn-dark btn-action" data-bs-toggle="modal"
-                                                data-bs-target="#consumoModal{{ $consultorio->id }}">
+                                                data-bs-target="#consumoModal{{ $consultorio->id }}" title="Ver Consumo">
 
                                                 <i class="bi bi-bar-chart"></i>
 
                                             </button>
 
                                             <a href="{{ route('pagos.create') }}?consultorio={{ $consultorio->id }}"
-                                                class="btn btn-success btn-action">
+                                                class="btn btn-success btn-action" title="Registrar Pago">
                                                 <i class="bi bi-cash"></i>
                                             </a>
 
@@ -462,10 +450,8 @@
 
                                                 @csrf
 
-                                                <button class="btn btn-warning btn-action">
-
+                                                <button class="btn btn-warning btn-action" title="Activar/Desactivar">
                                                     <i class="bi bi-power"></i>
-
                                                 </button>
 
                                             </form>
@@ -566,11 +552,9 @@
                                                     @endphp
 
                                                     <div class="progress">
-
                                                         <div class="progress-bar bg-info"
                                                             style="width: {{ $porcentajePacientes }}%">
                                                         </div>
-
                                                     </div>
                                                 </div>
 
