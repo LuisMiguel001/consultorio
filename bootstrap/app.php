@@ -33,6 +33,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'modulo.plan' => VerificarModuloPlan::class,
         ]);
     })
+    ->withMiddleware(function ($middleware) {
+
+        $middleware->alias([
+            'demo.activo' =>
+            \App\Http\Middleware\DemoExpiradoMiddleware::class,
+        ]);
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

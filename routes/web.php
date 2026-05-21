@@ -25,6 +25,9 @@ Route::get('/', function () {
     return view('landing');
 });
 
+Route::post('/demo/crear', [AuthController::class, 'crearDemo'])
+    ->name('demo.crear');
+
 //Login
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
@@ -33,7 +36,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ============================================================================
 // RUTAS PROTEGIDAS CON AUTENTICACIÓN Y VERIFICACIÓN DE SUSCRIPCIÓN
 // ============================================================================
-Route::middleware(['auth', 'nocache', 'suscripcion.activa', 'modulo.plan'])->group(function () {
+Route::middleware(['auth', 'demo.activo', 'nocache', 'suscripcion.activa', 'modulo.plan'])->group(function () {
 
     // Perfil del usuario (sin restricción de permisos, todos pueden ver su perfil)
     Route::get('/perfil', [UserController::class, 'perfil'])->name('perfil');

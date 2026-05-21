@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use App\Models\Consultorio;
+use App\Models\Plan;
+use App\Models\Suscripcion;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -77,16 +82,21 @@ class AuthController extends Controller
             }
 
             // 6. Verificar último pago
-            $ultimoPago = $suscripcion->pagos()
-                ->where('estado', 'aprobado')
-                ->latest()
-                ->first();
+            if (!$user->es_demo) {
 
-            if (!$ultimoPago) {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'No se encontró registro de pago para la suscripción actual. Contacta al administrador.'
-                ]);
+                $ultimoPago = $suscripcion->pagos()
+                    ->where('estado', 'aprobado')
+                    ->latest()
+                    ->first();
+
+                if (!$ultimoPago) {
+
+                    Auth::logout();
+
+                    return back()->withErrors([
+                        'email' => 'No se encontró registro de pago para la suscripción actual. Contacta al administrador.'
+                    ]);
+                }
             }
 
             // 7. Verificar especialidad para doctores
@@ -153,5 +163,104 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+
+    public function crearDemo()
+    {
+        DB::beginTransaction();
+
+        try {
+
+            // =========================
+            // CONSULTORIO TEMPORAL
+            // =========================
+
+            $consultorio = Consultorio::create([
+
+                'nombre' => 'Demo ' . rand(1000, 9999),
+
+                'email' => 'demo' . time() . '@doctorclick.com',
+
+                'telefono' => '8090000000',
+
+                'activo' => true,
+
+            ]);
+
+            // =========================
+            // USUARIO DEMO
+            // =========================
+
+            $password = 'demo123';
+
+            $user = User::create([
+
+                'name' => 'Usuario Demo',
+
+                'email' => 'demo' . time() . '@demo.com',
+
+                'password' => bcrypt($password),
+
+                'consultorio_id' => $consultorio->id,
+
+                'es_demo' => true,
+
+                'demo_expira_en' => now()->addDay(),
+
+            ]);
+
+            // =========================
+            // ROL
+            // =========================
+
+            $user->assignRole('doctor');
+
+            // =========================
+            // PLAN DEMO
+            // =========================
+
+            $plan = Plan::first();
+
+            Suscripcion::create([
+
+                'consultorio_id' => $consultorio->id,
+
+                'plan_id' => $plan->id,
+
+                'fecha_inicio' => now(),
+
+                'fecha_fin' => now()->addDay(),
+
+                'estado' => 'activa',
+
+                'tipo_pago' => 'mensual',
+
+                'monto_pagado' => 0,
+
+                'observaciones' => 'Cuenta demo gratuita',
+
+            ]);
+
+            DB::commit();
+
+            // =========================
+            // LOGIN AUTOMÁTICO
+            // =========================
+
+            Auth::login($user);
+
+            return redirect()
+                ->route('pacientes.inicio')
+                ->with(
+                    'success',
+                    'Bienvenido al demo gratuito. '
+                        . 'Tienes 1 hora de acceso.'
+                );
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

@@ -564,3 +564,40 @@
 </body>
 
 </html>
+
+<script>
+    const expira =
+        "{{ auth()->user()?->demo_expira_en }}";
+
+    if (expira) {
+
+        const end = new Date(expira).getTime();
+
+        const interval = setInterval(() => {
+
+            const now = new Date().getTime();
+
+            const diff = end - now;
+
+            if (diff <= 0) {
+
+                clearInterval(interval);
+
+                location.reload();
+
+                return;
+            }
+
+            const mins =
+                Math.floor(diff / 1000 / 60);
+
+            const secs =
+                Math.floor((diff / 1000) % 60);
+
+            document.getElementById("demoTimer")
+                .innerHTML =
+                mins + "m " + secs + "s";
+
+        }, 1000);
+    }
+</script>
