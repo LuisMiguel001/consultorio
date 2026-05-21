@@ -21,9 +21,7 @@ use App\Http\Controllers\SuscripcionController;
 use App\Http\Controllers\PagoController;
 
 //Landing page
-Route::get('/', function () {
-    return view('landing');
-});
+Route::get('/', [AuthController::class, 'landing']);
 
 Route::post('/demo/crear', [AuthController::class, 'crearDemo'])
     ->name('demo.crear');

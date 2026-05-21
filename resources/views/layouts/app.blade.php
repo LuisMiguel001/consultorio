@@ -319,6 +319,70 @@
                 margin-left: 260px;
             }
         }
+
+        /* ===== DEMO TIMER ===== */
+        .demo-timer-box {
+            margin: 15px 12px 10px;
+            padding: 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            color: white;
+            box-shadow: 0 10px 25px rgba(13, 71, 161, 0.18);
+            animation: pulseDemo 2s infinite;
+        }
+
+        .demo-timer-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            opacity: .95;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .demo-timer {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        @keyframes pulseDemo {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Sidebar colapsado */
+        .sidebar:not(.expanded) .demo-timer-label span,
+        .sidebar:not(.expanded) .demo-timer {
+            display: none;
+        }
+
+        .sidebar:not(.expanded) .demo-timer-box {
+            padding: 12px 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sidebar:not(.expanded) .demo-timer-label {
+            margin: 0;
+        }
+
+        .sidebar:not(.expanded) .demo-timer-label i {
+            margin: 0;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 
@@ -337,6 +401,20 @@
             </div>
 
             <div class="menu">
+                @auth
+                    @if (auth()->user()->es_demo)
+                        <div class="demo-timer-box" id="demoTimerBox">
+                            <div class="demo-timer-label">
+                                <i class="bi bi-clock-history" style="color: white"></i>
+                                <span>Demo expira en:</span>
+                            </div>
+
+                            <div class="demo-timer" id="demoTimer">
+                                5m 00s
+                            </div>
+                        </div>
+                    @endif
+                @endauth
                 @auth
                     <a href="{{ route('pacientes.inicio') }}">
                         <i class="bi bi-speedometer2"></i>
@@ -566,10 +644,9 @@
 </html>
 
 <script>
-    const expira =
-        "{{ auth()->user()?->demo_expira_en }}";
+    const expira = "{{ auth()->user()?->created_at?->copy()->addMinutes(5)->toISOString() }}";
 
-    if (expira) {
+    if (expira && document.getElementById("demoTimer")) {
 
         const end = new Date(expira).getTime();
 
@@ -583,20 +660,21 @@
 
                 clearInterval(interval);
 
-                location.reload();
+                document.getElementById("demoTimer").innerHTML = "Expirado";
+
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
 
                 return;
             }
 
-            const mins =
-                Math.floor(diff / 1000 / 60);
+            const mins = Math.floor(diff / 1000 / 60);
 
-            const secs =
-                Math.floor((diff / 1000) % 60);
+            const secs = Math.floor((diff / 1000) % 60);
 
-            document.getElementById("demoTimer")
-                .innerHTML =
-                mins + "m " + secs + "s";
+            document.getElementById("demoTimer").innerHTML =
+                `${mins}m ${secs.toString().padStart(2, '0')}s`;
 
         }, 1000);
     }

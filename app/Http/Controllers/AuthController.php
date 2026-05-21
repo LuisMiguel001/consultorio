@@ -11,6 +11,7 @@ use App\Models\Plan;
 use App\Models\Suscripcion;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Models\Especialidad;
 
 class AuthController extends Controller
 {
@@ -223,11 +224,34 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    public function crearDemo()
+    public function crearDemo(Request $request)
     {
+        $key = 'demo:' . $request->ip();
+
+        if (RateLimiter::tooManyAttempts($key, 2)) {
+
+            $seconds = RateLimiter::availableIn($key);
+
+            $hours = floor($seconds / 3600);
+
+            $minutes = floor(($seconds % 3600) / 60);
+
+            return back()->with(
+                'error',
+                "Solo puedes generar 2 demos cada 24 horas. "
+                    . "Intenta nuevamente en {$hours}h {$minutes}m."
+            );
+        }
+
+        RateLimiter::hit($key, 60 * 60 * 24);
+
         DB::beginTransaction();
 
         try {
+
+            $request->validate([
+                'especialidad_id' => 'required|exists:especialidades,id'
+            ]);
 
             // =========================
             // CONSULTORIO TEMPORAL
@@ -261,6 +285,8 @@ class AuthController extends Controller
 
                 'consultorio_id' => $consultorio->id,
 
+                'especialidad_id' => $request->especialidad_id,
+
                 'es_demo' => true,
             ]);
 
@@ -271,7 +297,6 @@ class AuthController extends Controller
             $user->assignRole('doctor');
 
             $user->givePermissionTo([
-
                 'ver pacientes',
                 'crear pacientes',
                 'editar pacientes',
@@ -307,12 +332,6 @@ class AuthController extends Controller
                 'registrar egresos',
                 'cerrar caja',
                 'ver conciliacion caja',
-
-                'ver consultorios',
-                'crear consultorios',
-                'editar consultorios',
-                'eliminar consultorios',
-
             ]);
 
             // =========================
@@ -342,10 +361,6 @@ class AuthController extends Controller
             ]);
 
             DB::commit();
-
-            // =========================
-            // LOGIN AUTOMÁTICO
-            // =========================
 
             Auth::loginUsingId($user->id);
 
@@ -410,5 +425,12 @@ class AuthController extends Controller
 
             logger()->error($e->getMessage());
         }
+    }
+
+    public function landing()
+    {
+        $especialidades = Especialidad::orderBy('nombre')->get();
+
+        return view('landing', compact('especialidades'));
     }
 }
