@@ -35,6 +35,25 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
+            if (
+                $user->es_demo &&
+                now()->greaterThan(
+                    $user->created_at->copy()->addMinutes(5)
+                )
+            ) {
+
+                // eliminar datos demo
+                $this->eliminarDemo($user);
+
+                Auth::logout();
+
+                return redirect()
+                    ->route('login')
+                    ->withErrors([
+                        'email' => 'La sesión demo ha expirado.'
+                    ]);
+            }
+
             // 1. Verificar si el usuario está activo
             if (!$user->activo) {
                 Auth::logout();
@@ -64,24 +83,63 @@ class AuthController extends Controller
                 ]);
             }
 
-            // 5. Verificar suscripción activa
-            $suscripcion = $consultorio->suscripcionActiva;
+            if (!$user->es_demo) {
 
-            if (!$suscripcion) {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'El consultorio no tiene una suscripción activa. Contacta al administrador para renovar el plan.'
-                ]);
+                // Verificar suscripción
+                $suscripcion = $consultorio->suscripcionActiva;
+
+                if (!$suscripcion) {
+
+                    Auth::logout();
+
+                    return back()->withErrors([
+                        'email' => 'El consultorio no tiene una suscripción activa.'
+                    ]);
+                }
+
+                if (!$suscripcion->estaActiva()) {
+
+                    Auth::logout();
+
+                    return back()->withErrors([
+                        'email' => "La suscripción expiró el {$suscripcion->fecha_fin->format('d/m/Y')}."
+                    ]);
+                }
+
+                // pago
+                $ultimoPago = $suscripcion->pagos()
+                    ->where('estado', 'aprobado')
+                    ->latest()
+                    ->first();
+
+                if (!$ultimoPago) {
+
+                    Auth::logout();
+
+                    return back()->withErrors([
+                        'email' => 'No se encontró registro de pago.'
+                    ]);
+                }
+
+                // límites
+                $validacion = $this->verificarLimitesPlan($consultorio, $suscripcion->plan);
+
+                if (!$validacion['valido']) {
+                    session()->flash('warning', $validacion['mensaje']);
+                }
+
+                // alerta vencimiento
+                $diasRestantes = $suscripcion->diasRestantes();
+
+                if ($diasRestantes <= 7) {
+                    session()->flash(
+                        'warning',
+                        "⚠️ La suscripción vence en {$diasRestantes} días."
+                    );
+                }
             }
 
-            if (!$suscripcion->estaActiva()) {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => "La suscripción expiró el {$suscripcion->fecha_fin->format('d/m/Y')}. Contacta al administrador para renovar."
-                ]);
-            }
-
-            // 6. Verificar último pago
+            /* 6. Verificar último pago
             if (!$user->es_demo) {
 
                 $ultimoPago = $suscripcion->pagos()
@@ -97,7 +155,7 @@ class AuthController extends Controller
                         'email' => 'No se encontró registro de pago para la suscripción actual. Contacta al administrador.'
                     ]);
                 }
-            }
+            }*/
 
             // 7. Verificar especialidad para doctores
             if ($user->roles->contains('name', 'doctor') && !$user->especialidad_id) {
@@ -107,7 +165,7 @@ class AuthController extends Controller
                 ]);
             }
 
-            // 8. Verificar límites del plan
+            /* 8. Verificar límites del plan
             $validacion = $this->verificarLimitesPlan($consultorio, $suscripcion->plan);
             if (!$validacion['valido']) {
                 session()->flash('warning', $validacion['mensaje']);
@@ -117,7 +175,7 @@ class AuthController extends Controller
             $diasRestantes = $suscripcion->diasRestantes();
             if ($diasRestantes <= 7) {
                 session()->flash('warning', "⚠️ La suscripción vence en {$diasRestantes} días.");
-            }
+            }*/
 
             return redirect()->route('pacientes.inicio');
         }
@@ -204,9 +262,6 @@ class AuthController extends Controller
                 'consultorio_id' => $consultorio->id,
 
                 'es_demo' => true,
-
-                'demo_expira_en' => now()->addDay(),
-
             ]);
 
             // =========================
@@ -214,6 +269,51 @@ class AuthController extends Controller
             // =========================
 
             $user->assignRole('doctor');
+
+            $user->givePermissionTo([
+
+                'ver pacientes',
+                'crear pacientes',
+                'editar pacientes',
+                'eliminar pacientes',
+
+                'ver citas',
+                'crear citas',
+                'editar citas',
+                'eliminar citas',
+
+                'ver consultas',
+                'crear consultas',
+
+                'ver antecedentes',
+                'crear antecedentes',
+
+                'ver estudios',
+                'crear estudios',
+                'descargar estudios',
+
+                'crear diagnosticos',
+                'crear tratamientos',
+                'crear procedimientos',
+                'crear signos vitales',
+                'crear examen fisico',
+                'crear evoluciones',
+
+                'generar recetas',
+
+                'ver caja',
+                'abrir caja',
+                'registrar pagos',
+                'registrar egresos',
+                'cerrar caja',
+                'ver conciliacion caja',
+
+                'ver consultorios',
+                'crear consultorios',
+                'editar consultorios',
+                'eliminar consultorios',
+
+            ]);
 
             // =========================
             // PLAN DEMO
@@ -229,7 +329,7 @@ class AuthController extends Controller
 
                 'fecha_inicio' => now(),
 
-                'fecha_fin' => now()->addDay(),
+                'fecha_fin' => now()->addMinutes(5),
 
                 'estado' => 'activa',
 
@@ -247,20 +347,68 @@ class AuthController extends Controller
             // LOGIN AUTOMÁTICO
             // =========================
 
-            Auth::login($user);
+            Auth::loginUsingId($user->id);
 
-            return redirect()
-                ->route('pacientes.inicio')
-                ->with(
-                    'success',
-                    'Bienvenido al demo gratuito. '
-                        . 'Tienes 1 hora de acceso.'
-                );
+            return redirect()->route('pacientes.inicio');
         } catch (\Exception $e) {
 
             DB::rollBack();
 
             return back()->with('error', $e->getMessage());
+        }
+    }
+
+    private function eliminarDemo($user)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $consultorioId = $user->consultorio_id;
+
+            // =========================
+            // ELIMINAR DATOS RELACIONADOS
+            // =========================
+
+            DB::table('consultas')
+                ->where('doctor_id', $user->id)
+                ->delete();
+
+            DB::table('citas')
+                ->where('doctor_id', $user->id)
+                ->delete();
+
+            DB::table('pacientes')
+                ->where('consultorio_id', $consultorioId)
+                ->delete();
+
+            DB::table('suscripciones')
+                ->where('consultorio_id', $consultorioId)
+                ->delete();
+
+            // roles spatie
+            DB::table('model_has_roles')
+                ->where('model_id', $user->id)
+                ->delete();
+
+            // =========================
+            // ELIMINAR USER
+            // =========================
+
+            User::where('id', $user->id)->delete();
+
+            // =========================
+            // ELIMINAR CONSULTORIO
+            // =========================
+
+            Consultorio::where('id', $consultorioId)->delete();
+
+            DB::commit();
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            logger()->error($e->getMessage());
         }
     }
 }

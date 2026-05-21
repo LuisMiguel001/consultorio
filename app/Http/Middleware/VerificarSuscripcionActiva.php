@@ -14,6 +14,10 @@ class VerificarSuscripcionActiva
     {
         $user = Auth::user();
 
+        if ($user && $user->es_demo) {
+            return $next($request);
+        }
+
         // Admin siempre puede acceder
         if ($user->roles->contains('name', 'admin')) {
             return $next($request);

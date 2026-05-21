@@ -29,7 +29,6 @@ class Suscripcion extends Model
         'monto_pagado' => 'decimal:2',
     ];
 
-    // Relaciones
     public function consultorio()
     {
         return $this->belongsTo(Consultorio::class);
@@ -37,14 +36,13 @@ class Suscripcion extends Model
 
     public function plan()
     {
-        // Especificar la tabla 'planes' y la clave foránea
         return $this->belongsTo(Plan::class, 'plan_id', 'id');
     }
 
-    // Métodos auxiliares
     public function estaActiva()
     {
-        return $this->estado === 'activa' && $this->fecha_fin >= now();
+        return $this->estado === 'activa'
+            && now()->lessThanOrEqualTo($this->fecha_fin);
     }
 
     public function diasRestantes()
