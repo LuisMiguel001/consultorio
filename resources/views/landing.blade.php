@@ -295,9 +295,9 @@
 
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
-            align-items: center;
+            align-items: stretch;
         }
 
         .price-card {
@@ -307,6 +307,8 @@
             position: relative;
             transition: .35s ease;
             border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
         }
 
         .price-card:hover {
@@ -339,9 +341,9 @@
         }
 
         .price {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 800;
-            margin-bottom: 25px;
+            margin-bottom: 10px;
         }
 
         .price span {
@@ -349,9 +351,16 @@
             font-weight: 500;
         }
 
+        .price-note {
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+
         .features-list {
             list-style: none;
             margin-bottom: 35px;
+            flex-grow: 1;
         }
 
         .features-list li {
@@ -364,6 +373,7 @@
 
         .features-list i {
             font-size: .95rem;
+            width: 20px;
         }
 
         .price-card .btn {
@@ -770,6 +780,16 @@
             margin-top: 12px;
             padding-top: 12px;
             border-top: 2px solid rgba(13, 71, 161, 0.3);
+            flex-wrap: wrap;
+        }
+
+        .price-comparison > div {
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            text-align: center;
+            flex: 1;
+            min-width: 70px;
         }
 
         /* Formulario */
@@ -1173,7 +1193,7 @@
         <div class="container">
             <div class="section-header">
                 <h2>Todo lo que necesitas para gestionar tu consultorio</h2>
-                <p>Herramientas profesionales diseñadas específicamente para médicos y clínicas</p>
+                <p>Herramientas profesionales diseñadas específicamente para médicos</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
@@ -1214,53 +1234,55 @@
     <section class="pricing" id="precios">
         <div class="container">
             <div class="section-header">
-                <h2>Planes que se adaptan a tu práctica</h2>
+                <h2>Planes que se adaptan a tus consultas</h2>
                 <p>Elige el plan perfecto para ti. Cancela cuando quieras.</p>
             </div>
             <div class="pricing-grid">
-                <!-- BASIC -->
+                <!-- BÁSICO -->
                 <div class="price-card">
                     <div class="plan-name">Básico</div>
-                    <div class="price">$49 <span>/mes</span></div>
-                    <div style="font-size: 0.9rem; margin-top: -15px; margin-bottom: 20px; color: inherit; opacity: 0.8;">RD$ 2,940 /mes</div>
+                    <div class="price">$25 <span>/mes</span></div>
+                    <div class="price-note">RD$ 1,500 /mes</div>
                     <ul class="features-list">
-                        <li><i class="fa-regular fa-circle-check"></i> Hasta 100 pacientes</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Agenda digital</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Expedientes básicos</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Soporte por email</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 3,000 pacientes registrados</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 200 citas mensuales</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 1 doctor</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 1 secretaria</li>
                     </ul>
-                    <button onclick="abrirModalContacto('Básico', '49', '2,940')" class="btn btn-primary">Seleccionar Plan</button>
+                    <button onclick="abrirModalContacto('Básico', '25', '1,500')" class="btn btn-primary">Seleccionar Plan</button>
                 </div>
 
-                <!-- PRO -->
+                <!-- ESTÁNDAR -->
                 <div class="price-card popular">
                     <div class="badge">MÁS POPULAR</div>
-                    <div class="plan-name">Profesional</div>
-                    <div class="price">$99 <span>/mes</span></div>
-                    <div style="font-size: 0.9rem; margin-top: -15px; margin-bottom: 20px; color: inherit; opacity: 0.8;">RD$ 5,940 /mes</div>
+                    <div class="plan-name">Estándar</div>
+                    <div class="price">$40 <span>/mes</span></div>
+                    <div class="price-note">RD$ 2,400 /mes</div>
                     <ul class="features-list">
                         <li><i class="fa-regular fa-circle-check"></i> Pacientes ilimitados</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Recetas electrónicas</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Reportes avanzados</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Soporte prioritario</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Integraciones API</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 500 citas mensuales</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 2 doctores</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 2 secretarias</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 2 enfermeras</li>
+                        <li><i class="fa-regular fa-circle-check"></i> Recordatorios WhatsApp (500 créditos)</li>
                     </ul>
-                    <button onclick="abrirModalContacto('Profesional', '99', '5,940')" class="btn">Seleccionar Plan</button>
+                    <button onclick="abrirModalContacto('Estándar', '40', '2,400')" class="btn">Seleccionar Plan</button>
                 </div>
 
-                <!-- CLINIC -->
+                <!-- PLUS -->
                 <div class="price-card">
-                    <div class="plan-name">Clínica</div>
-                    <div class="price">$199 <span>/mes</span></div>
-                    <div style="font-size: 0.9rem; margin-top: -15px; margin-bottom: 20px; color: inherit; opacity: 0.8;">RD$ 11,940 /mes</div>
+                    <div class="plan-name">Plus</div>
+                    <div class="price">$130 <span>/mes</span></div>
+                    <div class="price-note">RD$ 7,800 /mes</div>
                     <ul class="features-list">
-                        <li><i class="fa-regular fa-circle-check"></i> Múltiples médicos</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Todo lo de Profesional</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Dashboard administrativo</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Soporte 24/7</li>
-                        <li><i class="fa-regular fa-circle-check"></i> Personalización completa</li>
+                        <li><i class="fa-regular fa-circle-check"></i> Pacientes ilimitados</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 1,500 citas mensuales</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 4 doctores</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 4 secretarias</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 4 enfermeras / auxiliares</li>
+                        <li><i class="fa-regular fa-circle-check"></i> Recordatorios WhatsApp (1,500 créditos)</li>
                     </ul>
-                    <button onclick="abrirModalContacto('Clínica', '199', '11,940')" class="btn btn-primary">Seleccionar Plan</button>
+                    <button onclick="abrirModalContacto('Plus', '130', '7,800')" class="btn btn-primary">Seleccionar Plan</button>
                 </div>
             </div>
 
@@ -1494,10 +1516,6 @@
                         <input type="text" id="nombre" placeholder="Ej: Juan Pérez Rodríguez" required>
                     </div>
                     <div class="form-group">
-                        <label><i class="fa-brands fa-whatsapp"></i> Teléfono / WhatsApp</label>
-                        <input type="tel" id="telefono" placeholder="Ej: 809-555-1234" required>
-                    </div>
-                    <div class="form-group">
                         <label><i class="fa-regular fa-envelope"></i> Correo Electrónico</label>
                         <input type="email" id="email" placeholder="Ej: juan@consultorio.com" required>
                     </div>
@@ -1566,10 +1584,10 @@
                     <span class="plan-detail-value">$${precioUSD} USD (RD$${precioRD})</span>
                 </div>
                 <div class="price-comparison">
-                    <div style="flex:1"><small>💳 Pago mensual</small><br><strong>RD$${precioRD}</strong></div>
-                    <div style="flex:1"><small>🎯 3 meses (-3%)</small><br><strong>RD$${mensualidades[0].total.toLocaleString()}</strong></div>
-                    <div style="flex:1"><small>🏆 6 meses (-5%)</small><br><strong>RD$${mensualidades[1].total.toLocaleString()}</strong></div>
-                    <div style="flex:1"><small>⭐ 12 meses (-10%)</small><br><strong>RD$${mensualidades[2].total.toLocaleString()}</strong></div>
+                    <div><small>💳 Pago mensual</small><br><strong>RD$${precioRD}</strong></div>
+                    <div><small>🎯 3 meses (-3%)</small><br><strong>RD$${mensualidades[0].total.toLocaleString()}</strong></div>
+                    <div><small>🏆 6 meses (-5%)</small><br><strong>RD$${mensualidades[1].total.toLocaleString()}</strong></div>
+                    <div><small>⭐ 12 meses (-10%)</small><br><strong>RD$${mensualidades[2].total.toLocaleString()}</strong></div>
                 </div>
                 <div class="plan-detail-row" style="margin-top:12px; border-top:1px dashed rgba(13,71,161,0.2); padding-top:12px;">
                     <span class="plan-detail-label">Método de pago:</span>
@@ -1615,7 +1633,6 @@
             const mensaje = `🏥 *NUEVA SOLICITUD - DoctorClick* 🏥%0A%0A` +
                 `👤 *DATOS DEL CLIENTE*%0A` +
                 `• Nombre: ${nombre}%0A` +
-                `• Teléfono: ${telefono}%0A` +
                 `• Correo: ${email}%0A%0A` +
                 `📋 *PLAN SELECCIONADO*%0A` +
                 `• Plan: ${planSeleccionado.nombre}%0A` +

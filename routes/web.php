@@ -19,6 +19,9 @@ use App\Http\Controllers\ConsultorioController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SuscripcionController;
 use App\Http\Controllers\PagoController;
+use App\Http\Controllers\CajaController;
+use App\Http\Controllers\ServicioController;
+use App\Http\Controllers\CuentaPacienteController;
 
 //Landing page
 Route::get('/', [AuthController::class, 'landing']);
@@ -205,6 +208,56 @@ Route::middleware(['auth', 'demo.activo',  'nocache', 'suscripcion.activa', 'mod
     Route::middleware('permission:generar recetas')->group(function () {
         Route::get('/consultas/{consulta}/receta/pdf', [RecetaController::class, 'generar'])->name('receta.pdf');
     });
+
+    // SERVICIOS
+    Route::get('/servicios', [ServicioController::class, 'index'])->name('servicios.index');
+
+    Route::get('/servicios/crear', [ServicioController::class, 'create'])->name('servicios.create');
+
+    Route::post(
+        '/servicios',
+        [ServicioController::class, 'store']
+    )->name('servicios.store');
+
+    Route::get('/servicios/{servicio}/editar', [ServicioController::class, 'edit'])->name('servicios.edit');
+
+    Route::put(
+        '/servicios/{servicio}',
+        [ServicioController::class, 'update']
+    )->name('servicios.update');
+
+    Route::delete(
+        '/servicios/{servicio}',
+        [ServicioController::class, 'destroy']
+    )->name('servicios.destroy');
+
+    Route::middleware(['auth'])->group(function () {
+
+        Route::get(
+            '/cuentas',
+            [CuentaPacienteController::class, 'index']
+        )->name('cuentas.index');
+
+        Route::get(
+            '/cuentas/{id}',
+            [CuentaPacienteController::class, 'show']
+        )->name('cuentas.show');
+
+        Route::post(
+            '/cuentas/cobrar',
+            [CuentaPacienteController::class, 'cobrar']
+        )->name('cuentas.cobrar');
+    });
+
+    Route::get(
+        '/caja/cuentas',
+        [CajaController::class, 'cuentasPendientes']
+    )->name('caja.cuentas');
+
+    Route::post(
+        '/caja/cobrar-cuenta',
+        [CajaController::class, 'cobrarCuenta']
+    )->name('caja.cobrarCuenta');
 });
 
 // ============================================================================
@@ -229,7 +282,7 @@ Route::middleware(['auth', 'nocache', 'role:admin'])->group(function () {
     // PLANES (Solo Admin)
     // ========================================================================
     Route::resource('planes', PlanController::class);
-Route::patch('/planes/{plane}/toggle-status', [PlanController::class, 'toggleStatus'])->name('planes.toggle-status');
+    Route::patch('/planes/{plane}/toggle-status', [PlanController::class, 'toggleStatus'])->name('planes.toggle-status');
 
     // ========================================================================
     // SUSCRIPCIONES (Solo Admin)

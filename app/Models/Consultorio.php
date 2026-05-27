@@ -53,6 +53,16 @@ class Consultorio extends Model
         return $this->hasMany(ConsumoPlan::class);
     }
 
+    public function cuentasPacientes()
+    {
+        return $this->hasMany(CuentaPaciente::class);
+    }
+
+    public function servicios()
+    {
+        return $this->hasMany(Servicio::class);
+    }
+
     public function suscripcionActiva()
     {
         return $this->hasOne(Suscripcion::class)

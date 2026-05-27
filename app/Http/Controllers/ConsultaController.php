@@ -8,16 +8,29 @@ use App\Models\Paciente;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cita;
 use App\Models\ConsultaGinecologica;
+use App\Models\CuentaPaciente;
+use App\Models\DetalleCuenta;
+use App\Models\Servicio;
 
 class ConsultaController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | CREAR CONSULTA
+    |--------------------------------------------------------------------------
+    */
+
     public function create(Request $request, $id)
     {
         $user = Auth::user();
 
-        $query = Paciente::where('consultorio_id', $user->consultorio_id);
+        $query = Paciente::where(
+            'consultorio_id',
+            $user->consultorio_id
+        );
 
         if ($user->roles->contains('name', 'doctor')) {
+
             $query->where(
                 'doctor_id',
                 $user->doctor_principal
@@ -28,11 +41,35 @@ class ConsultaController extends Controller
 
         $cita_id = $request->cita;
 
+        /*
+        |--------------------------------------------------------------------------
+        | SERVICIOS
+        |--------------------------------------------------------------------------
+        */
+
+        $servicios = Servicio::where(
+            'consultorio_id',
+            $user->consultorio_id
+        )
+            ->where('activo', 1)
+            ->orderBy('nombre')
+            ->get();
+
         return view(
             'consultas.create',
-            compact('paciente', 'cita_id')
+            compact(
+                'paciente',
+                'cita_id',
+                'servicios'
+            )
         );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | VER CONSULTA
+    |--------------------------------------------------------------------------
+    */
 
     public function show(Consulta $consulta)
     {
@@ -63,7 +100,8 @@ class ConsultaController extends Controller
             'signoVital',
             'examenFisico',
             'evoluciones',
-            'ginecologia'
+            'ginecologia',
+            'cuenta.detalles.servicio'
         ]);
 
         return view(
@@ -72,17 +110,41 @@ class ConsultaController extends Controller
         );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | GUARDAR CONSULTA
+    |--------------------------------------------------------------------------
+    */
+
     public function store(Request $request)
     {
         $user = Auth::user();
+
         $consultorio = $user->consultorio;
 
-        $validacion = $consultorio->puedeRealizarAccion('crear_consulta');
+        $validacion = $consultorio
+            ->puedeRealizarAccion('crear_consulta');
+
         $doctorId = $user->doctor_principal;
 
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDACIÓN PLAN
+        |--------------------------------------------------------------------------
+        */
+
         if (!$validacion['puede']) {
-            return back()->withErrors(['error' => $validacion['mensaje']]);
+
+            return back()->withErrors([
+                'error' => $validacion['mensaje']
+            ]);
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | PACIENTE
+        |--------------------------------------------------------------------------
+        */
 
         $pacienteQuery = Paciente::where(
             'consultorio_id',
@@ -92,6 +154,7 @@ class ConsultaController extends Controller
         if (
             $user->roles->contains('name', 'doctor')
         ) {
+
             $pacienteQuery->where(
                 'doctor_id',
                 $doctorId
@@ -101,6 +164,12 @@ class ConsultaController extends Controller
         $paciente = $pacienteQuery
             ->where('id', $request->paciente_id)
             ->firstOrFail();
+
+        /*
+        |--------------------------------------------------------------------------
+        | CREAR CONSULTA
+        |--------------------------------------------------------------------------
+        */
 
         $consulta = Consulta::create([
             'paciente_id'       => $paciente->id,
@@ -113,10 +182,19 @@ class ConsultaController extends Controller
             'observaciones'     => $request->observaciones,
         ]);
 
-        if ($user->especialidad && $user->especialidad->slug === 'ginecologia') {
+        /*
+        |--------------------------------------------------------------------------
+        | GINECOLOGÍA
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            $user->especialidad &&
+            $user->especialidad->slug === 'ginecologia'
+        ) {
 
             ConsultaGinecologica::create([
-                'consulta_id'               => $consulta->id,
+                'consulta_id'                => $consulta->id,
                 'fecha_ultima_menstruacion' => $request->fum,
                 'ciclo_menstrual'           => $request->ciclo,
                 'gestas'                    => $request->gestas,
@@ -132,7 +210,77 @@ class ConsultaController extends Controller
             ]);
         }
 
-        $cita = Cita::where('consultorio_id', $user->consultorio_id)
+        /*
+        |--------------------------------------------------------------------------
+        | CREAR CUENTA DEL PACIENTE
+        |--------------------------------------------------------------------------
+        */
+
+        $total = 0;
+
+        $cuenta = CuentaPaciente::create([
+            'consultorio_id' => $consultorio->id,
+            'paciente_id'    => $paciente->id,
+            'consulta_id'    => $consulta->id,
+            'total'          => 0,
+            'estado'         => 'pendiente'
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | SERVICIOS
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->has('servicios')) {
+
+            foreach ($request->servicios as $servicioId) {
+
+                $servicio = Servicio::where(
+                    'consultorio_id',
+                    $consultorio->id
+                )
+                    ->where('activo', 1)
+                    ->find($servicioId);
+
+                if (!$servicio) {
+                    continue;
+                }
+
+                $subtotal = $servicio->precio;
+
+                DetalleCuenta::create([
+                    'cuenta_paciente_id' => $cuenta->id,
+                    'servicio_id'        => $servicio->id,
+                    'precio'             => $servicio->precio,
+                    'cantidad'           => 1,
+                    'subtotal'           => $subtotal
+                ]);
+
+                $total += $subtotal;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTUALIZAR TOTAL
+        |--------------------------------------------------------------------------
+        */
+
+        $cuenta->update([
+            'total' => $total
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTUALIZAR CITA
+        |--------------------------------------------------------------------------
+        */
+
+        $cita = Cita::where(
+            'consultorio_id',
+            $user->consultorio_id
+        )
             ->where(
                 'doctor_id',
                 $doctorId
@@ -156,8 +304,25 @@ class ConsultaController extends Controller
             ]);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | USO PLAN
+        |--------------------------------------------------------------------------
+        */
+
         $consultorio->incrementarUso('consulta');
 
-        return redirect()->route('pacientes.show',$paciente->id)->with('success', 'Consulta registrada y cita marcada como realizada');
+        /*
+        |--------------------------------------------------------------------------
+        | RESPUESTA
+        |--------------------------------------------------------------------------
+        */
+
+        return redirect()
+            ->route('pacientes.show', $paciente->id)
+            ->with(
+                'success',
+                'Consulta registrada correctamente.'
+            );
     }
 }

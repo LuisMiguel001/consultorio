@@ -457,6 +457,31 @@
                     </a>
                 @endcan
 
+                {{-- =========================
+| FACTURACIÓN / CAJA
+|========================= --}}
+
+                @can('ver pacientes')
+                    <a href="{{ route('cuentas.index') }}">
+                        <i class="bi bi-receipt-cutoff"></i>
+                        <span>Facturas</span>
+                    </a>
+                @endcan
+
+                @can('ver pacientes')
+                    <a href="{{ route('caja.cuentas') }}">
+                        <i class="bi bi-cash-coin"></i>
+                        <span>Caja / Cobros</span>
+                    </a>
+                @endcan
+
+                @can('ver pacientes')
+                    <a href="{{ route('servicios.index') }}">
+                        <i class="bi bi-heart-pulse"></i>
+                        <span>Servicios</span>
+                    </a>
+                @endcan
+
                 @auth
                     <a href="{{ route('perfil') }}">
                         <i class="bi bi-person-circle"></i>

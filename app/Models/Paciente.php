@@ -45,4 +45,9 @@ class Paciente extends Model
     {
         return $this->belongsTo(Consultorio::class);
     }
+
+    public function cuentas()
+    {
+        return $this->hasMany(CuentaPaciente::class);
+    }
 }
