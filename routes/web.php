@@ -15,28 +15,38 @@ use App\Http\Controllers\ExamenFisicoController;
 use App\Http\Controllers\EvolucionController;
 use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\UserController;
-
-
+use App\Http\Controllers\ConsultorioController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\SuscripcionController;
+use App\Http\Controllers\PagoController;
+use App\Http\Controllers\CajaController;
+use App\Http\Controllers\ServicioController;
+use App\Http\Controllers\CuentaPacienteController;
 
 //Landing page
-Route::get('/', function () {
-    return view('landing');
-});
+Route::get('/', [AuthController::class, 'landing']);
+
+Route::post('/demo/crear', [AuthController::class, 'crearDemo'])
+    ->name('demo.crear');
 
 //Login
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth', 'nocache'])->group(function () {
+// ============================================================================
+// RUTAS PROTEGIDAS CON AUTENTICACIÓN Y VERIFICACIÓN DE SUSCRIPCIÓN
+// ============================================================================
+Route::middleware(['auth', 'demo.activo',  'nocache', 'suscripcion.activa', 'modulo.plan'])->group(function () {
 
-    // Perfil del usuario
+    // Perfil del usuario (sin restricción de permisos, todos pueden ver su perfil)
     Route::get('/perfil', [UserController::class, 'perfil'])->name('perfil');
     Route::put('/perfil/update', [UserController::class, 'updatePerfil'])->name('perfil.update');
     Route::put('/perfil/password', [UserController::class, 'updatePassword'])->name('perfil.password');
 
-    /*Usuarios*/
+    // ========================================================================
+    // USUARIOS
+    // ========================================================================
     Route::middleware('permission:ver usuarios')->group(function () {
         Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
     });
@@ -57,13 +67,16 @@ Route::middleware(['auth', 'nocache'])->group(function () {
         Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->name('usuarios.destroy');
     });
 
-
-    /*Inicio*/
+    // ========================================================================
+    // INICIO / DASHBOARD
+    // ========================================================================
     Route::middleware('permission:ver pacientes')->group(function () {
         Route::get('/consultorio/inicio', [PacienteController::class, 'inicio'])->name('pacientes.inicio');
     });
 
-    /*Pacientes*/
+    // ========================================================================
+    // PACIENTES
+    // ========================================================================
     Route::middleware('permission:crear pacientes')->group(function () {
         Route::get('/pacientes', [PacienteController::class, 'create'])->name('pacientes.create');
         Route::post('/pacientes', [PacienteController::class, 'store'])->name('pacientes.store');
@@ -85,7 +98,9 @@ Route::middleware(['auth', 'nocache'])->group(function () {
         Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy'])->name('pacientes.destroy');
     });
 
-    /*Citas*/
+    // ========================================================================
+    // CITAS
+    // ========================================================================
     Route::middleware('permission:ver citas')->group(function () {
         Route::get('/citas', [CitaController::class, 'index'])->name('citas.index');
     });
@@ -105,11 +120,11 @@ Route::middleware(['auth', 'nocache'])->group(function () {
     });
 
     Route::post('/citas/{id}/realizar', [CitaController::class, 'realizar'])->name('citas.realizar');
-
     Route::get('/buscar-pacientes', [CitaController::class, 'buscarPacientes']);
 
-    /*Consulta*/
-
+    // ========================================================================
+    // CONSULTAS
+    // ========================================================================
     Route::middleware('permission:crear consultas')->group(function () {
         Route::get('/pacientes/{id}/consulta', [ConsultaController::class, 'create'])->name('consultas.create');
         Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
@@ -119,9 +134,9 @@ Route::middleware(['auth', 'nocache'])->group(function () {
         Route::get('/consultas/{consulta}', [ConsultaController::class, 'show'])->name('consultas.show');
     });
 
-
-    /*ANTECEDENTES*/
-
+    // ========================================================================
+    // ANTECEDENTES
+    // ========================================================================
     Route::middleware('permission:crear antecedentes')->group(function () {
         Route::post('/pacientes/{id}/antecedentes', [AntecedenteController::class, 'store'])->name('antecedentes.store');
     });
@@ -130,92 +145,166 @@ Route::middleware(['auth', 'nocache'])->group(function () {
         Route::get('/pacientes/{id}/antecedentes', [AntecedenteController::class, 'index']);
     });
 
-
-    /*Estudios*/
-
+    // ========================================================================
+    // ESTUDIOS
+    // ========================================================================
     Route::middleware('permission:ver estudios')->group(function () {
-        Route::get(
-            '/consultas/{consulta}/estudios',
-            [EstudioController::class, 'index']
-        )->name('estudios.index');
+        Route::get('/consultas/{consulta}/estudios', [EstudioController::class, 'index'])->name('estudios.index');
     });
 
     Route::middleware('permission:crear estudios')->group(function () {
-        Route::post(
-            '/consultas/{consulta}/estudios',
-            [EstudioController::class, 'store']
-        )->name('estudios.store');
+        Route::post('/consultas/{consulta}/estudios', [EstudioController::class, 'store'])->name('estudios.store');
     });
 
     Route::middleware('permission:descargar estudios')->group(function () {
-        Route::get(
-            '/estudios/{estudio}/descargar',
-            [EstudioController::class, 'descargarArchivo']
-        )->name('estudios.descargar');
+        Route::get('/estudios/{estudio}/descargar', [EstudioController::class, 'descargarArchivo'])->name('estudios.descargar');
     });
 
-    /*Diagnosticos*/
-
+    // ========================================================================
+    // DIAGNÓSTICOS
+    // ========================================================================
     Route::middleware('permission:crear diagnosticos')->group(function () {
-        Route::post(
-            '/consultas/{consulta}/diagnosticos',
-            [DiagnosticoController::class, 'store']
-        )->name('diagnosticos.store');
+        Route::post('/consultas/{consulta}/diagnosticos', [DiagnosticoController::class, 'store'])->name('diagnosticos.store');
     });
 
-
-    /*tratamientos*/
-
+    // ========================================================================
+    // TRATAMIENTOS
+    // ========================================================================
     Route::middleware('permission:crear tratamientos')->group(function () {
-        Route::post(
-            '/consultas/{consulta}/tratamientos',
-            [TratamientoController::class, 'store']
-        )->name('tratamientos.store');
+        Route::post('/consultas/{consulta}/tratamientos', [TratamientoController::class, 'store'])->name('tratamientos.store');
     });
 
-
-    /*Procedimientos*/
-
+    // ========================================================================
+    // PROCEDIMIENTOS
+    // ========================================================================
     Route::middleware('permission:crear procedimientos')->group(function () {
-        Route::post(
-            '/consultas/{consulta}/procedimientos',
-            [ProcedimientoController::class, 'store']
-        )->name('procedimientos.store');
+        Route::post('/consultas/{consulta}/procedimientos', [ProcedimientoController::class, 'store'])->name('procedimientos.store');
     });
 
-    /*Signos Vitales*/
-
+    // ========================================================================
+    // SIGNOS VITALES
+    // ========================================================================
     Route::middleware('permission:crear signos vitales')->group(function () {
-        Route::post(
-            '/consultas/{consulta}/signos-vitales',
-            [SignoVitalController::class, 'store']
-        )->name('signos-vitales.store');
+        Route::post('/consultas/{consulta}/signos-vitales', [SignoVitalController::class, 'store'])->name('signos-vitales.store');
     });
 
-    /*Examen Fisico*/
-
+    // ========================================================================
+    // EXAMEN FÍSICO
+    // ========================================================================
     Route::middleware('permission:crear examen fisico')->group(function () {
-        Route::post(
-            '/consultas/{consulta}/examen-fisico',
-            [ExamenFisicoController::class, 'store']
-        )->name('examen-fisico.store');
+        Route::post('/consultas/{consulta}/examen-fisico', [ExamenFisicoController::class, 'store'])->name('examen-fisico.store');
     });
 
-
-    /*Evoluciones*/
+    // ========================================================================
+    // EVOLUCIONES
+    // ========================================================================
     Route::middleware('permission:crear evoluciones')->group(function () {
-        Route::post(
-            '/consultas/{consulta}/evoluciones',
-            [EvolucionController::class, 'store']
-        )->name('evoluciones.store');
+        Route::post('/consultas/{consulta}/evoluciones', [EvolucionController::class, 'store'])->name('evoluciones.store');
     });
 
-
-    /*Recetas*/
+    // ========================================================================
+    // RECETAS
+    // ========================================================================
     Route::middleware('permission:generar recetas')->group(function () {
-        Route::get(
-            '/consultas/{consulta}/receta/pdf',
-            [RecetaController::class, 'generar']
-        )->name('receta.pdf');
+        Route::get('/consultas/{consulta}/receta/pdf', [RecetaController::class, 'generar'])->name('receta.pdf');
     });
+
+    // SERVICIOS
+    Route::get('/servicios', [ServicioController::class, 'index'])->name('servicios.index');
+
+    Route::get('/servicios/crear', [ServicioController::class, 'create'])->name('servicios.create');
+
+    Route::post(
+        '/servicios',
+        [ServicioController::class, 'store']
+    )->name('servicios.store');
+
+    Route::get('/servicios/{servicio}/editar', [ServicioController::class, 'edit'])->name('servicios.edit');
+
+    Route::put(
+        '/servicios/{servicio}',
+        [ServicioController::class, 'update']
+    )->name('servicios.update');
+
+    Route::delete(
+        '/servicios/{servicio}',
+        [ServicioController::class, 'destroy']
+    )->name('servicios.destroy');
+
+    Route::middleware(['auth'])->group(function () {
+
+        Route::get(
+            '/cuentas',
+            [CuentaPacienteController::class, 'index']
+        )->name('cuentas.index');
+
+        Route::get(
+            '/cuentas/{id}',
+            [CuentaPacienteController::class, 'show']
+        )->name('cuentas.show');
+
+        Route::post(
+            '/cuentas/cobrar',
+            [CuentaPacienteController::class, 'cobrar']
+        )->name('cuentas.cobrar');
+    });
+
+    Route::get(
+        '/caja/cuentas',
+        [CajaController::class, 'cuentasPendientes']
+    )->name('caja.cuentas');
+
+    Route::post(
+        '/caja/cobrar-cuenta',
+        [CajaController::class, 'cobrarCuenta']
+    )->name('caja.cobrarCuenta');
 });
+
+// ============================================================================
+// RUTAS DE ADMINISTRACIÓN (SOLO ADMIN - SIN VERIFICACIÓN DE SUSCRIPCIÓN)
+// Admin puede gestionar consultorios, planes, suscripciones y pagos
+// sin restricciones de suscripción activa
+// ============================================================================
+Route::middleware(['auth', 'nocache', 'role:admin'])->group(function () {
+
+    // ========================================================================
+    // CONSULTORIOS (Solo Admin)
+    // ========================================================================
+    Route::get('/consultorios', [ConsultorioController::class, 'index'])->name('consultorios.index');
+    Route::get('/consultorios/create', [ConsultorioController::class, 'create'])->name('consultorios.create');
+    Route::post('/consultorios', [ConsultorioController::class, 'store'])->name('consultorios.store');
+    Route::get('/consultorios/{consultorio}/edit', [ConsultorioController::class, 'edit'])->name('consultorios.edit');
+    Route::put('/consultorios/{consultorio}', [ConsultorioController::class, 'update'])->name('consultorios.update');
+    Route::post('/consultorios/{consultorio}/toggle', [ConsultorioController::class, 'toggleActivo'])->name('consultorios.toggle');
+    Route::delete('/consultorios/{consultorio}', [ConsultorioController::class, 'destroy'])->name('consultorios.destroy');
+
+    // ========================================================================
+    // PLANES (Solo Admin)
+    // ========================================================================
+    Route::resource('planes', PlanController::class);
+    Route::patch('/planes/{plane}/toggle-status', [PlanController::class, 'toggleStatus'])->name('planes.toggle-status');
+
+    // ========================================================================
+    // SUSCRIPCIONES (Solo Admin)
+    // ========================================================================
+    Route::resource('suscripciones', SuscripcionController::class);
+    Route::post('/suscripciones/{suscripcion}/renovar', [SuscripcionController::class, 'renovar'])->name('suscripciones.renovar');
+    Route::post('/suscripciones/{suscripcion}/cancelar', [SuscripcionController::class, 'cancelar'])->name('suscripciones.cancelar');
+    Route::post('/suscripciones/{suscripcion}/cambiar-plan', [SuscripcionController::class, 'cambiarPlan'])->name('suscripciones.cambiar-plan');
+
+    // ========================================================================
+    // PAGOS (Solo Admin)
+    // ========================================================================
+    Route::resource('pagos', PagoController::class);
+    Route::get('/pagos/reporte/mensual', [PagoController::class, 'reporteMensual'])->name('pagos.reporte.mensual');
+    Route::post('/pagos/{pago}/aprobar', [PagoController::class, 'aprobar'])->name('pagos.aprobar');
+    Route::post('/pagos/{pago}/rechazar', [PagoController::class, 'rechazar'])->name('pagos.rechazar');
+
+    Route::get('/consultorios/{consultorio}', [ConsultorioController::class, 'show'])->name('consultorios.show');
+});
+
+// ============================================================================
+// RUTAS OPCIONALES - Vistas públicas de planes (sin autenticación)
+// Por si quieres mostrar los planes disponibles antes del login
+// ============================================================================
+Route::get('/planes-disponibles', [PlanController::class, 'planesPublicos'])->name('planes.publicos');

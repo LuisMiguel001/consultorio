@@ -24,8 +24,12 @@ class User extends Authenticatable
         'email',
         'password',
         'doctor_id',
+        'consultorio_id',
+        'especialidad_id',
         'telefono',
         'activo',
+        'es_demo',
+        'demo_expira_en',
     ];
 
     /**
@@ -49,6 +53,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'activo' => 'boolean',
+            'es_demo' => 'boolean',
+            'demo_expira_en' => 'datetime',
         ];
     }
 
@@ -75,5 +81,15 @@ class User extends Authenticatable
     public function getDoctorPrincipalAttribute()
     {
         return $this->doctor_id ?? $this->id;
+    }
+
+    public function especialidad()
+    {
+        return $this->belongsTo(Especialidad::class);
+    }
+
+    public function consultorio()
+    {
+        return $this->belongsTo(Consultorio::class);
     }
 }

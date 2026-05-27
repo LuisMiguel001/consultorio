@@ -2,6 +2,9 @@
 
 @section('content')
     <div class="container">
+        @php
+            $especialidad = auth()->user()->especialidad->slug ?? null;
+        @endphp
         <style>
             .consulta-card {
                 border-radius: 16px;
@@ -482,13 +485,17 @@
                     </div>
                 </div>
 
-                @forelse ($consulta->tratamientos as $tratamiento)
+                @forelse ($consulta->tratamientos->sortByDesc('created_at') as $tratamiento)
                     <div class="card mb-3">
                         <div class="card-header">
-                            {{ $tratamiento->medicamento }}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>{{ $tratamiento->medicamento }}</strong>
+                                <small class="text-muted">
+                                    {{ $tratamiento->created_at->format('d/m/Y H:i') }}
+                                </small>
+                            </div>
                         </div>
                         <div class="card-body">
-
                             <p><strong>Dosis:</strong> {{ $tratamiento->dosis }}</p>
                             <p><strong>Frecuencia:</strong> {{ $tratamiento->frecuencia }}</p>
                             <p><strong>Duración:</strong> {{ $tratamiento->duracion }}</p>
@@ -499,7 +506,6 @@
                                     {{ $tratamiento->indicaciones }}
                                 </p>
                             @endif
-
                         </div>
                     </div>
                 @empty
@@ -609,100 +615,147 @@
 
             <!-- EXAMEN FÍSICO -->
             <div class="tab-pane fade" id="examen">
+                <button class="btn btn-light btn-sm mb-3" data-bs-toggle="collapse" data-bs-target="#formExamen">
+                    ➕ Registrar Examen Físico
+                </button>
 
-                <div class="card card-body">
+                <!-- FORMULARIO COLAPSABLE -->
+                <div class="collapse mb-4" id="formExamen">
+                    <div class="card card-body">
 
-                    <form method="POST" action="{{ route('examen-fisico.store', $consulta) }}">
-                        @csrf
+                        <form method="POST" action="{{ route('examen-fisico.store', $consulta) }}">
+                            @csrf
 
-                        <div class="mb-3">
-                            <label>Estado General</label>
-                            <textarea name="estado_general" class="form-control"></textarea>
-                        </div>
+                            @if ($especialidad === 'ginecologia')
+                                <hr>
+                                <h6 class="fw-bold text-danger">🌸 Examen Físico Ginecológico</h6>
 
-                        <div class="mb-3">
-                            <label>Cabeza y Cuello</label>
-                            <textarea name="cabeza_cuello" class="form-control"></textarea>
-                        </div>
+                                <div class="mb-3">
+                                    <label>Genitales externos</label>
+                                    <textarea name="genitales_externos" class="form-control"></textarea>
+                                </div>
 
-                        <div class="mb-3">
-                            <label>Sistema Cardiovascular</label>
-                            <textarea name="cardiovascular" class="form-control"></textarea>
-                        </div>
+                                <div class="mb-3">
+                                    <label>Especuloscopía</label>
+                                    <textarea name="especuloscopia" class="form-control"></textarea>
+                                </div>
 
-                        <div class="mb-3">
-                            <label>Sistema Respiratorio</label>
-                            <textarea name="respiratorio" class="form-control"></textarea>
-                        </div>
+                                <div class="mb-3">
+                                    <label>Tacto vaginal (bimanual)</label>
+                                    <textarea name="tacto_vaginal" class="form-control"></textarea>
+                                </div>
 
-                        <div class="mb-3">
-                            <label>Abdomen</label>
-                            <textarea name="abdomen" class="form-control"></textarea>
-                        </div>
+                                <div class="mb-3">
+                                    <label>Flujo vaginal</label>
+                                    <input type="text" name="flujo_vaginal" class="form-control">
+                                </div>
 
-                        <div class="mb-3">
-                            <label>Extremidades</label>
-                            <textarea name="extremidades" class="form-control"></textarea>
-                        </div>
+                                <div class="mb-3">
+                                    <label>Dolor pélvico</label>
+                                    <select name="dolor_pelvico" class="form-control">
+                                        <option value="">--Seleccione--</option>
+                                        <option value="no">No</option>
+                                        <option value="leve">Leve</option>
+                                        <option value="moderado">Moderado</option>
+                                        <option value="severo">Severo</option>
+                                    </select>
+                                </div>
 
-                        <div class="mb-3">
-                            <label>Neurológico</label>
-                            <textarea name="neurologico" class="form-control"></textarea>
-                        </div>
+                                <div class="mb-3">
+                                    <label>Hallazgos ginecológicos</label>
+                                    <textarea name="hallazgos_gineco" class="form-control"></textarea>
+                                </div>
+                            @endif
 
-                        <div class="mb-3">
-                            <label>Otros Hallazgos</label>
-                            <textarea name="otros" class="form-control"></textarea>
-                        </div>
+                            <hr>
 
-                        <button class="btn btn-success w-100">
-                            Guardar Examen Físico
-                        </button>
-
-                    </form>
-                    @if ($consulta->examenFisico)
-                        <div class="card mt-4">
-                            <div class="card-header bg-light">
-                                🩺 Examen Físico Registrado
+                            <div class="mb-3">
+                                <label>Estado General</label>
+                                <textarea name="estado_general" class="form-control"></textarea>
                             </div>
-                            <div class="card-body">
 
-                                <p><strong>Estado General:</strong><br>
-                                    {{ $consulta->examenFisico->estado_general }}
-                                </p>
-
-                                <p><strong>Cabeza y Cuello:</strong><br>
-                                    {{ $consulta->examenFisico->cabeza_cuello }}
-                                </p>
-
-                                <p><strong>Cardiovascular:</strong><br>
-                                    {{ $consulta->examenFisico->cardiovascular }}
-                                </p>
-
-                                <p><strong>Respiratorio:</strong><br>
-                                    {{ $consulta->examenFisico->respiratorio }}
-                                </p>
-
-                                <p><strong>Abdomen:</strong><br>
-                                    {{ $consulta->examenFisico->abdomen }}
-                                </p>
-
-                                <p><strong>Extremidades:</strong><br>
-                                    {{ $consulta->examenFisico->extremidades }}
-                                </p>
-
-                                <p><strong>Neurológico:</strong><br>
-                                    {{ $consulta->examenFisico->neurologico }}
-                                </p>
-
-                                <p><strong>Otros:</strong><br>
-                                    {{ $consulta->examenFisico->otros }}
-                                </p>
-
+                            <div class="mb-3">
+                                <label>Cabeza y Cuello</label>
+                                <textarea name="cabeza_cuello" class="form-control"></textarea>
                             </div>
-                        </div>
-                    @endif
+
+                            <div class="mb-3">
+                                <label>Sistema Cardiovascular</label>
+                                <textarea name="cardiovascular" class="form-control"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Sistema Respiratorio</label>
+                                <textarea name="respiratorio" class="form-control"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Abdomen</label>
+                                <textarea name="abdomen" class="form-control"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Extremidades</label>
+                                <textarea name="extremidades" class="form-control"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Neurológico</label>
+                                <textarea name="neurologico" class="form-control"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Otros Hallazgos</label>
+                                <textarea name="otros" class="form-control"></textarea>
+                            </div>
+
+                            <button class="btn btn-success w-100">
+                                Guardar
+                            </button>
+
+                        </form>
+
+                    </div>
                 </div>
+
+                <!-- LISTADO -->
+                @if ($consulta->examenFisico)
+                    <div class="card mt-3">
+                        <div class="card-header bg-light">
+                            🩺 Examen Físico Registrado
+                        </div>
+
+                        <div class="card-body">
+
+                            @if ($especialidad === 'ginecologia')
+                                <h6 class="fw-bold text-danger">🌸 Ginecológico</h6>
+
+                                <p><strong>Genitales externos:</strong>
+                                    {{ $consulta->examenFisico->genitales_externos ?? '-' }}</p>
+                                <p><strong>Especuloscopía:</strong> {{ $consulta->examenFisico->especuloscopia ?? '-' }}
+                                </p>
+                                <p><strong>Tacto vaginal:</strong> {{ $consulta->examenFisico->tacto_vaginal ?? '-' }}</p>
+                                <p><strong>Flujo vaginal:</strong> {{ $consulta->examenFisico->flujo_vaginal ?? '-' }}</p>
+                                <p><strong>Dolor pélvico:</strong>
+                                    {{ ucfirst($consulta->examenFisico->dolor_pelvico ?? '-') }}</p>
+                                <p><strong>Hallazgos:</strong> {{ $consulta->examenFisico->hallazgos_gineco ?? '-' }}</p>
+
+                                <hr>
+                            @endif
+
+                            <p><strong>Estado General:</strong> {{ $consulta->examenFisico->estado_general }}</p>
+                            <p><strong>Cabeza y Cuello:</strong> {{ $consulta->examenFisico->cabeza_cuello }}</p>
+                            <p><strong>Cardiovascular:</strong> {{ $consulta->examenFisico->cardiovascular }}</p>
+                            <p><strong>Respiratorio:</strong> {{ $consulta->examenFisico->respiratorio }}</p>
+                            <p><strong>Abdomen:</strong> {{ $consulta->examenFisico->abdomen }}</p>
+                            <p><strong>Extremidades:</strong> {{ $consulta->examenFisico->extremidades }}</p>
+                            <p><strong>Neurológico:</strong> {{ $consulta->examenFisico->neurologico }}</p>
+                            <p><strong>Otros:</strong> {{ $consulta->examenFisico->otros }}</p>
+
+                        </div>
+                    </div>
+                @endif
+
             </div>
 
             <div class="tab-pane fade" id="evolucion">

@@ -319,20 +319,81 @@
                 margin-left: 260px;
             }
         }
+
+        /* ===== DEMO TIMER ===== */
+        .demo-timer-box {
+            margin: 15px 12px 10px;
+            padding: 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            color: white;
+            box-shadow: 0 10px 25px rgba(13, 71, 161, 0.18);
+            animation: pulseDemo 2s infinite;
+        }
+
+        .demo-timer-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            opacity: .95;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .demo-timer {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        @keyframes pulseDemo {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Sidebar colapsado */
+        .sidebar:not(.expanded) .demo-timer-label span,
+        .sidebar:not(.expanded) .demo-timer {
+            display: none;
+        }
+
+        .sidebar:not(.expanded) .demo-timer-box {
+            padding: 12px 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sidebar:not(.expanded) .demo-timer-label {
+            margin: 0;
+        }
+
+        .sidebar:not(.expanded) .demo-timer-label i {
+            margin: 0;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 
 <body>
-
     <div class="main-wrapper">
-        <!-- Sidebar con estado inicial CERRADO -->
         <div class="sidebar" id="sidebar">
-
             <div class="logo">
                 <div class="logo-content">
-                    <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png" height="30"
-                        width="30" alt="logo" />
-                    <span>Dr. Lorenzo</span>
+                    <!--img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png" height="30"
+                        width="30" alt="logo" /-->
+                    <span>Consultorio</span>
                 </div>
                 <button class="toggle-btn" onclick="toggleSidebar()">
                     <i class="bi bi-list"></i>
@@ -340,6 +401,20 @@
             </div>
 
             <div class="menu">
+                @auth
+                    @if (auth()->user()->es_demo)
+                        <div class="demo-timer-box" id="demoTimerBox">
+                            <div class="demo-timer-label">
+                                <i class="bi bi-clock-history" style="color: white"></i>
+                                <span>Demo expira en:</span>
+                            </div>
+
+                            <div class="demo-timer" id="demoTimer">
+                                5m 00s
+                            </div>
+                        </div>
+                    @endif
+                @endauth
                 @auth
                     <a href="{{ route('pacientes.inicio') }}">
                         <i class="bi bi-speedometer2"></i>
@@ -382,6 +457,31 @@
                     </a>
                 @endcan
 
+                {{-- =========================
+| FACTURACIÓN / CAJA
+|========================= --}}
+
+                @can('ver pacientes')
+                    <a href="{{ route('cuentas.index') }}">
+                        <i class="bi bi-receipt-cutoff"></i>
+                        <span>Facturas</span>
+                    </a>
+                @endcan
+
+                @can('ver pacientes')
+                    <a href="{{ route('caja.cuentas') }}">
+                        <i class="bi bi-cash-coin"></i>
+                        <span>Caja / Cobros</span>
+                    </a>
+                @endcan
+
+                @can('ver pacientes')
+                    <a href="{{ route('servicios.index') }}">
+                        <i class="bi bi-heart-pulse"></i>
+                        <span>Servicios</span>
+                    </a>
+                @endcan
+
                 @auth
                     <a href="{{ route('perfil') }}">
                         <i class="bi bi-person-circle"></i>
@@ -396,8 +496,35 @@
                     </a>
                 @endrole
 
+                @can('ver consultorios')
+                    <a href="{{ route('consultorios.index') }}">
+                        <i class="bi bi-hospital"></i>
+                        <span>Consultorios</span>
+                    </a>
+                @endcan
 
-                <!-- USER BOX -->
+                @role('admin')
+                    <a href="{{ route('pagos.index') }}">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Pagos</span>
+                    </a>
+                @endrole
+
+                @role('admin')
+                    <a href="{{ route('planes.index') }}">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Planes</span>
+                    </a>
+                @endrole
+
+
+                @role('admin')
+                    <a href="{{ route('planes.create') }}">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Crear Plan</span>
+                    </a>
+                @endrole
+
                 <div class="user-box">
                     @auth
                         <div class="fw-bold">
@@ -417,7 +544,6 @@
             </div>
         </div>
 
-        <!-- CONTENT -->
         <div class="content">
             @yield('content')
         </div>
@@ -442,7 +568,6 @@
 
     @yield('scripts')
 
-    <!-- Toast Container -->
     <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
 
     <script>
@@ -494,7 +619,6 @@
             }, 3500);
         }
 
-        // Disparar automáticamente los flash de Laravel
         document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 mostrarToast("{{ session('success') }}", 'success');
@@ -543,3 +667,40 @@
 </body>
 
 </html>
+
+<script>
+    const expira = "{{ auth()->user()?->created_at?->copy()->addMinutes(5)->toISOString() }}";
+
+    if (expira && document.getElementById("demoTimer")) {
+
+        const end = new Date(expira).getTime();
+
+        const interval = setInterval(() => {
+
+            const now = new Date().getTime();
+
+            const diff = end - now;
+
+            if (diff <= 0) {
+
+                clearInterval(interval);
+
+                document.getElementById("demoTimer").innerHTML = "Expirado";
+
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+
+                return;
+            }
+
+            const mins = Math.floor(diff / 1000 / 60);
+
+            const secs = Math.floor((diff / 1000) % 60);
+
+            document.getElementById("demoTimer").innerHTML =
+                `${mins}m ${secs.toString().padStart(2, '0')}s`;
+
+        }, 1000);
+    }
+</script>

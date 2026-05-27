@@ -15,7 +15,15 @@ class ExamenFisico extends Model
         'abdomen',
         'extremidades',
         'neurologico',
-        'otros'
+        'otros',
+
+        //Ginecología
+        'genitales_externos',
+        'especuloscopia',
+        'tacto_vaginal',
+        'flujo_vaginal',
+        'dolor_pelvico',
+        'hallazgos_gineco'
     ];
 
     public function consulta()

@@ -28,7 +28,7 @@
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Cédula</label>
+        <label class="form-label">Cédula - ID</label>
         <input type="text" id="cedula" name="cedula" minlength="13" maxlength="13"
             class="form-control @error('cedula') is-invalid @enderror"
             value="{{ old('cedula', $paciente->cedula ?? '') }}" style="border-color: var(--primary-border);">

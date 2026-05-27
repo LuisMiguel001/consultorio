@@ -1,799 +1,798 @@
-<!doctype html>
+<!-- resources/views/landing.blade.php -->
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HRMT4GM4M4"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>DoctorClick - Sistema de Gestión Médica</title>
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        gtag('config', 'G-HRMT4GM4M4');
-    </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- SEO Principal -->
-    <title>Dr. Lorenzo García | Cirujano Cardiovascular - San Francisco de Macorís - Santo Domingo</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/healthicons@2.0.0/font/healthicons.css" rel="stylesheet">
-
-    <meta name="description"
-        content="Especialista en cirugía cardiovascular, bypass coronario, várices con láser, aneurisma de aorta y paciente renal. Más de 10,000 pacientes atendidos. San Francisco de Macorís y Santo Domingo.">
-    <meta name="keywords"
-        content="cirujano cardiovascular San Francisco de Macorís, cirugía corazón República Dominicana, bypass coronario, tratamiento várices láser, aneurisma aorta abdominal, endarterectomía carotídea, fístula arteriovenosa hemodiálisis, cirujano vascular nordeste dominicano, Dr Lorenzo García cardiólogo">
-    <meta name="author" content="Dr. Lorenzo García">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://drlorenzogarcia.com/">
-
-    <!-- Open Graph (WhatsApp, Facebook) -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Dr. Lorenzo García | Cirujano Cardiovascular">
-    <meta property="og:description"
-        content="Pionero en cirugía cardiovascular del nordeste dominicano. Bypass coronario, várices, aneurisma de aorta y más.">
-    <meta property="og:image" content="https://i.postimg.cc/VNsTbCzP/Whats-App-Image-2026-03-07-at-9-49-59-AM-(1).jpg">
-    <meta property="og:url" content="https://drlorenzogarcia.com/">
-    <meta property="og:locale" content="es_DO">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Dr. Lorenzo García | Cirujano Cardiovascular">
-    <meta name="twitter:description"
-        content="Especialista en cirugía cardiovascular. San Francisco de Macorís y Santo Domingo.">
-    <meta name="twitter:image" content="https://i.postimg.cc/VNsTbCzP/Whats-App-Image-2026-03-07-at-9-49-59-AM-(1).jpg">
-
-    <!-- Geo -->
-    <meta name="geo.region" content="DO">
-    <meta name="geo.placename" content="San Francisco de Macorís, República Dominicana">
-
-    <!--Iconos de la página-->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-    <!-- Google reCAPTCHA v2 -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
     <style>
-        /* Variables de colores y fuentes */
-        :root {
-            --primary-color: #2a7fba;
-            --primary-dark: #1a5f8a;
-            --secondary-color: #f8f9fa;
-            --accent-color: #34c759;
-            --text-dark: #333;
-            --text-light: #666;
-            --text-on-dark: #fff;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --border-radius: 8px;
-            --transition: all 0.3s ease;
-        }
-
-        /* Reset y estilos generales */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #0d47a1;
+            --primary-dark: #002171;
+            --primary-light: #edf4ff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --white: #ffffff;
+            --bg: #f8fbff;
+            --success: #2563eb;
+            --shadow: 0 10px 30px rgba(13, 71, 161, .10);
+            --radius: 20px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background-color: #f5f7fa;
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--text);
+            overflow-x: hidden;
         }
 
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 1rem;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-            color: var(--primary-color);
-        }
-
-        h3 {
-            font-size: 1.5rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
 
         a {
             text-decoration: none;
-            color: inherit;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
         }
 
         .container {
             width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
+            margin: auto;
             padding: 0 20px;
         }
 
-        .section {
-            padding: 80px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: "";
-            position: absolute;
-            width: 60px;
-            height: 4px;
-            background-color: var(--accent-color);
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 28px;
-            background-color: var(--primary-color);
-            color: var(--text-on-dark);
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-        }
-
-        .btn:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--primary-color);
-            color: var(--text-on-dark);
-        }
-
-        /* CAPTCHA Styles */
-        .captcha-container {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: var(--border-radius);
-            border: 1px solid #e0e0e0;
-        }
-
-        .captcha-error {
-            color: #dc3545;
-            font-size: 0.85rem;
-            margin-top: 8px;
-            display: none;
-        }
-
-        .captcha-error.show {
-            display: block;
-        }
-
-        /* Mensajes de éxito/error */
-        .form-message {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            display: none;
-        }
-
-        .form-message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .form-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .form-message.show {
-            display: block;
-        }
-
-        /* Header y navegación */
+        /* Header */
         header {
-            background-color: var(--text-on-dark);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: fixed;
             width: 100%;
+            background: rgba(255, 255, 255, .95);
+            position: sticky;
             top: 0;
             z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(226, 232, 240, .7);
         }
 
         .navbar {
+            height: 78px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            flex-wrap: wrap;
-            position: relative;
+            justify-content: space-between;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            z-index: 1001;
+            gap: 12px;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary);
         }
 
         .logo-icon {
-            color: var(--primary-color);
-            font-size: 2rem;
-        }
-
-        .logo-text {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            white-space: nowrap;
+            width: 42px;
+            height: 42px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            box-shadow: 0 8px 20px rgba(13, 71, 161, .25);
         }
 
         .nav-links {
             display: flex;
-            list-style: none;
-            gap: 0;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links li {
-            margin-left: 30px;
+            align-items: center;
+            gap: 35px;
         }
 
         .nav-links a {
+            color: #475569;
+            font-size: .95rem;
             font-weight: 500;
-            transition: var(--transition);
-            font-size: 0.95rem;
+            transition: .25s;
         }
 
         .nav-links a:hover {
-            color: var(--primary-color);
+            color: var(--primary);
         }
 
-        .mobile-menu-btn {
-            display: none;
-            font-size: 1.5rem;
-            background: none;
+        .btn {
             border: none;
+            outline: none;
             cursor: pointer;
-            color: var(--primary-color);
-            z-index: 1001;
-            padding: 5px;
-        }
-
-        /* ===== RESPONSIVE NAVBAR ===== */
-        @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                background-color: var(--text-on-dark);
-                padding: 10px 0 20px;
-                border-top: 1px solid #eee;
-                margin-top: 10px;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .nav-links li {
-                margin: 0;
-                width: 100%;
-            }
-
-            .nav-links a {
-                display: block;
-                padding: 12px 20px;
-                font-size: 1rem;
-                border-bottom: 1px solid #f0f0f0;
-                transition: background 0.2s ease;
-            }
-
-            .nav-links a:hover {
-                background-color: #f5f9ff;
-                color: var(--primary-color);
-                padding-left: 28px;
-            }
-
-            .logo-text {
-                font-size: 1.1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-text {
-                font-size: 1rem;
-            }
-
-            .navbar {
-                padding: 12px 0;
-            }
-        }
-
-        /* HERO MODERNO (FIGMA STYLE) */
-        .hero-modern {
-            background-color: #f5f9ff;
-            padding: 160px 0 100px;
-            color: var(--text-dark);
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            align-items: center;
-            gap: 60px;
-        }
-
-        .hero-content h1 {
-            font-size: 3rem;
-            color: #1e3a5f;
-        }
-
-        .hero-content p {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 520px;
-        }
-
-        .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: #e6f0ff;
-            color: var(--primary-color);
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
+            justify-content: center;
+            gap: 10px;
+            transition: .3s ease;
+            font-weight: 600;
+            border-radius: 14px;
         }
 
-        .hero-info-left {
-            justify-content: flex-start;
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 14px 28px;
+            box-shadow: 0 10px 25px rgba(13, 71, 161, .25);
         }
 
-        .hero-info {
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid #bfd5ff;
+            padding: 14px 28px;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(to bottom, #f5f9ff, #eef5ff);
+            padding: 120px 0 110px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: rgba(13, 71, 161, .05);
+            border-radius: 50%;
+            top: -250px;
+            right: -150px;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(13, 71, 161, .04);
+            border-radius: 50%;
+            bottom: -220px;
+            left: -120px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.08;
+            color: var(--primary-dark);
+            font-weight: 800;
+            margin-bottom: 28px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 720px;
+            margin: 0 auto 45px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
             display: flex;
-            gap: 30px;
-            margin-top: 30px;
+            justify-content: center;
+            gap: 18px;
             flex-wrap: wrap;
         }
 
-        .info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+        /* Sections */
+        section {
+            padding: 100px 0;
         }
 
-        .info-icon {
-            font-size: 1.4rem;
-            color: var(--primary-color);
-            margin-top: 4px;
+        .section-header {
+            text-align: center;
+            margin-bottom: 65px;
         }
 
-        .hero-image {
-            position: relative;
+        .section-header h2 {
+            font-size: 3rem;
+            color: var(--primary-dark);
+            margin-bottom: 18px;
+            font-weight: 800;
         }
 
-        .hero-image img {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .hero-card {
-            position: absolute;
-            bottom: 30px;
-            left: -40px;
-            background: #fff;
-            padding: 20px 24px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .hero-card i {
-            font-size: 1.8rem;
-            color: var(--accent-color);
-        }
-
-        .hero-card strong {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-
-        .hero-card span {
-            display: block;
-            font-size: 0.9rem;
+        .section-header p {
             color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: auto;
+            line-height: 1.8;
         }
 
-        @media (max-width: 576px) {
-            .hero-info {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        /* Responsive Hero */
-        @media (max-width: 992px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-image {
-                margin-top: 40px;
-            }
-
-            .hero-card {
-                left: 20px;
-            }
-        }
-
-        /* Sección Servicios */
-        .services {
-            background-color: var(--secondary-color);
-        }
-
-        .services-grid {
+        /* Features */
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
         }
 
-        .service-card {
-            background-color: var(--text-on-dark);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
+        .feature-card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px 30px;
+            border: 1px solid #edf2f7;
+            transition: .35s ease;
+            box-shadow: 0 5px 15px rgba(15, 23, 42, .03);
         }
 
-        .service-card:hover {
-            transform: translateY(-10px);
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, .08);
         }
 
-        .service-icon {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-
-        /* Sección Doctor */
-        .doctor {
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: #eff6ff;
+            color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 50px;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 25px;
         }
 
-        .doctor-image {
-            flex: 0 0 auto;
-            width: clamp(320px, 50vw, 480px);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .doctor-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
-            aspect-ratio: 3 / 4;
-        }
-
-        .doctor-info {
-            flex: 1;
-        }
-
-        .doctor-qualifications {
-            margin-top: 30px;
-        }
-
-        .qualification-item {
-            display: flex;
-            align-items: center;
+        .feature-card h3 {
+            font-size: 1.35rem;
             margin-bottom: 15px;
+            color: var(--primary-dark);
         }
 
-        .qualification-icon {
-            color: var(--accent-color);
-            margin-right: 15px;
-            font-size: 1.2rem;
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 1rem;
         }
 
-        /* Responsive para pantallas pequeñas */
-        @media (max-width: 768px) {
-            .doctor {
-                flex-direction: column;
-                gap: 30px;
-            }
-
-            .doctor-image {
-                width: clamp(180px, 60vw, 280px);
-                margin: 0 auto;
-            }
+        /* Pricing */
+        .pricing {
+            background: #f5f9ff;
         }
 
-        /* Sección Testimonios */
-        .testimonials {
-            background-color: var(--secondary-color);
-        }
-
-        .testimonials-grid {
+        .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
+            align-items: stretch;
         }
 
-        /* Estilos para el carrusel automático de testimonios */
-        .testimonials-carousel-container {
+        .price-card {
+            background: white;
+            border-radius: 28px;
+            padding: 45px 35px;
             position: relative;
-            overflow: hidden;
-            padding: 20px 0;
-            margin-top: 30px;
-        }
-
-        .testimonials-row {
+            transition: .35s ease;
+            border: 1px solid #e2e8f0;
             display: flex;
-            width: 100%;
-            margin-bottom: 30px;
-            overflow: hidden;
-            position: relative;
+            flex-direction: column;
         }
 
-        .testimonials-track {
-            display: flex;
-            gap: 25px;
-            padding: 10px 0;
-            will-change: transform;
+        .price-card:hover {
+            transform: translateY(-8px);
         }
 
-        .service-icon-img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            margin-bottom: 15px;
+        .price-card.popular {
+            background: linear-gradient(180deg, #0d47a1, #114fb1);
+            color: white;
+            transform: scale(1.04);
+            box-shadow: 0 30px 50px rgba(13, 71, 161, .25);
         }
 
-        /* Estilos para las tarjetas del carrusel */
-        .testimonials-row .testimonial-card {
-            flex: 0 0 350px;
-            min-width: 350px;
-            background-color: var(--text-on-dark);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
-        }
-
-        .testimonials-row .testimonial-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Animaciones para las filas */
-        .testimonials-row-top .testimonials-track {
-            animation: scroll-left 40s linear infinite;
-        }
-
-        .testimonials-row-bottom .testimonials-track {
-            animation: scroll-right 35s linear infinite;
-        }
-
-        /* Pausar animación al hacer hover */
-        .testimonials-row:hover .testimonials-track {
-            animation-play-state: paused;
-        }
-
-        /* Overlay para gradiente en los bordes */
-        .carousel-overlay {
+        .badge {
             position: absolute;
-            top: 0;
-            width: 100px;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
+            top: 20px;
+            left: 20px;
+            background: white;
+            color: var(--primary);
+            font-size: .75rem;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 999px;
         }
 
-        .carousel-overlay.left {
-            left: 0;
-            background: linear-gradient(to right,
-                    var(--secondary-color) 0%,
-                    rgba(248, 249, 250, 0.8) 50%,
-                    transparent 100%);
+        .plan-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
         }
 
-        .carousel-overlay.right {
-            right: 0;
-            background: linear-gradient(to left,
-                    var(--secondary-color) 0%,
-                    rgba(248, 249, 250, 0.8) 50%,
-                    transparent 100%);
+        .price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
         }
 
-        /* Animaciones clave */
-        @keyframes scroll-left {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
+        .price span {
+            font-size: 1rem;
+            font-weight: 500;
         }
 
-        @keyframes scroll-right {
-            0% {
-                transform: translateX(-50%);
-            }
-
-            100% {
-                transform: translateX(0);
-            }
+        .price-note {
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            opacity: 0.8;
         }
 
-        /* Responsive para el carrusel */
-        @media (max-width: 992px) {
-            .testimonials-row .testimonial-card {
-                flex: 0 0 300px;
-                min-width: 300px;
-            }
-
-            .carousel-overlay {
-                width: 60px;
-            }
+        .features-list {
+            list-style: none;
+            margin-bottom: 35px;
+            flex-grow: 1;
         }
 
-        @media (max-width: 768px) {
-            .testimonials-row .testimonial-card {
-                flex: 0 0 280px;
-                min-width: 280px;
-            }
-
-            .testimonials-row {
-                margin-bottom: 20px;
-            }
-
-            .testimonials-track {
-                gap: 20px;
-            }
-
-            .carousel-overlay {
-                width: 40px;
-            }
-
-            .testimonials-row-top .testimonials-track {
-                animation: scroll-left 30s linear infinite;
-            }
-
-            .testimonials-row-bottom .testimonials-track {
-                animation: scroll-right 25s linear infinite;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .testimonials-row .testimonial-card {
-                flex: 0 0 260px;
-                min-width: 260px;
-                padding: 20px;
-            }
-
-            .carousel-overlay {
-                width: 30px;
-            }
-        }
-
-        .testimonial-card {
-            background-color: var(--text-on-dark);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-        }
-
-        .testimonial-header {
+        .features-list li {
+            margin-bottom: 18px;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
+            align-items: center;
+            gap: 12px;
+            color: inherit;
         }
 
-        .stars {
-            color: #ffc107;
+        .features-list i {
+            font-size: .95rem;
+            width: 20px;
         }
 
-        .patient-name {
-            font-weight: 600;
+        .price-card .btn {
+            width: 100%;
+        }
+
+        .popular .btn {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Sección de Bancos Mejorada */
+        .banks-section {
+            margin-top: 80px;
+            text-align: center;
+            padding: 40px 30px;
+            background: white;
+            border-radius: 28px;
+            border: 1px solid var(--border);
+        }
+
+        .banks-title {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .banks-subtitle {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .banks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* Tarjetas de Banco Mejoradas */
+        .bank-card {
+            background: white;
+            border-radius: 24px;
+            padding: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bank-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .bank-header {
+            padding: 25px 25px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .bank-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .bank-name {
+            font-size: 1.5rem;
+            font-weight: 800;
             margin-bottom: 5px;
         }
 
-        .patient-since {
+        .bank-type {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .bank-details {
+            padding: 20px 25px;
+            background: #f8fafc;
+            border-top: 1px solid var(--border);
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+
+        .detail-value {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--primary-dark);
             font-size: 0.9rem;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-value:hover {
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+
+        .copy-icon {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .bank-footer {
+            padding: 15px 25px 25px;
+            text-align: center;
+        }
+
+        .tooltip-bank {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-bank .tooltip-text {
+            visibility: hidden;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip-bank:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Colores específicos por banco */
+        .bank-card.banreservas .bank-header {
+            background: linear-gradient(135deg, #003366, #002244);
+            color: white;
+        }
+        .bank-card.banreservas .bank-logo {
+            background: #ffd700;
+            color: #003366;
+        }
+
+        .bank-card.bhd .bank-header {
+            background: linear-gradient(135deg, #f05a28, #d44a1a);
+            color: white;
+        }
+        .bank-card.bhd .bank-logo {
+            background: white;
+            color: #f05a28;
+        }
+
+        .bank-card.popular .bank-header {
+            background: linear-gradient(135deg, #cc0000, #990000);
+            color: white;
+        }
+        .bank-card.popular .bank-logo {
+            background: white;
+            color: #cc0000;
+        }
+
+        .exchange-note {
+            background: #f0f7ff;
+            padding: 18px;
+            border-radius: 16px;
+            max-width: 550px;
+            margin: 30px auto 0 auto;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Modal de Contacto Rediseñado */
+        .modal-contacto {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: .3s ease;
+            padding: 16px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-contacto.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content-contacto {
+            width: 100%;
+            max-width: 550px;
+            max-height: calc(100vh - 32px);
+            background: white;
+            border-radius: 28px;
+            position: relative;
+            animation: modalShow .3s ease;
+            box-shadow: 0 25px 60px rgba(15, 23, 42, .3);
+            overflow: hidden;
+        }
+
+        @keyframes modalShow {
+            from {
+                transform: translateY(20px) scale(.96);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 28px 28px 20px;
+            position: relative;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .modal-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .close-modal-contacto {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            color: white;
+            transition: .25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal-contacto:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 28px;
+            max-height: calc(100vh - 250px);
+            overflow-y: auto;
+        }
+
+        /* Stepper */
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .stepper::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+            background: white;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 700;
+            color: #64748b;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-number {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 0 5px rgba(13, 71, 161, 0.2);
+        }
+
+        .step.completed .step-number {
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            font-weight: 600;
             color: var(--text-light);
         }
 
-        /* Sección Contacto */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 50px;
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 700;
         }
 
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+        /* Plan Resumen Mejorado */
+        .plan-resumen {
+            background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(13, 71, 161, 0.2);
         }
 
-        .contact-item {
+        .plan-resumen h4 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-size: 1rem;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(13, 71, 161, 0.2);
+        }
+
+        .plan-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .plan-detail-label {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .plan-detail-value {
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .price-comparison {
+            display: flex;
             gap: 15px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 2px solid rgba(13, 71, 161, 0.3);
+            flex-wrap: wrap;
         }
 
-        .contact-icon {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            margin-top: 5px;
+        .price-comparison > div {
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            text-align: center;
+            flex: 1;
+            min-width: 70px;
         }
 
-        .contact-form {
-            background-color: var(--text-on-dark);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
+        /* Formulario */
         .form-group {
             margin-bottom: 20px;
         }
@@ -801,1075 +800,857 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.85rem;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .form-group label i {
+            margin-right: 6px;
+            color: var(--primary);
+        }
+
+        .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-family: inherit;
+            height: 50px;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            padding: 0 16px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: .25s;
+            background: white;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 71, 161, .10);
+        }
+
+        .btn-whatsapp {
+            width: 100%;
+            height: 54px;
             font-size: 1rem;
-        }
-
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .map-container {
-            width: 100%;
-            height: 100px;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            background: #eee;
-        }
-
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /*Redes sociales*/
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-            margin-top: 20px;
-            align-items: center;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            transition: var(--transition);
-            font-size: 1.4rem;
+            background: #25D366;
             color: white;
-            text-decoration: none;
+            margin-top: 10px;
+            border-radius: 14px;
+            font-weight: 700;
         }
 
-        .social-link:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        .btn-whatsapp:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
         }
 
-        /* Redes sociales en sección de contacto - Horizontal */
-        .contact-social {
-            display: flex;
-            gap: 20px;
-            margin-top: 12px;
-            flex-wrap: wrap;
+        .terms-text {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-align: center;
+            margin-top: 15px;
         }
 
-        .contact-social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 42px;
-            height: 42px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            transition: var(--transition);
-            font-size: 1.2rem;
-            text-decoration: none;
-        }
-
-        .contact-social-link:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Colores específicos para hover (opcional) */
-        .social-link:hover .fa-facebook-f,
-        .contact-social-link:hover .fa-facebook-f {
-            color: white;
-        }
-
-        /* Responsive para móviles */
-        @media (max-width: 768px) {
-            .social-links {
-                justify-content: center;
-                gap: 20px;
-            }
-
-            .contact-social {
-                justify-content: flex-start;
-                gap: 18px;
-            }
-
-            .social-link {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-            }
-
-            .contact-social-link {
-                width: 38px;
-                height: 38px;
-                font-size: 1.1rem;
-            }
-        }
-
-        /* Para pantallas muy pequeñas */
-        @media (max-width: 480px) {
-            .social-links {
-                gap: 15px;
-            }
-
-            .contact-social {
-                gap: 15px;
-            }
-        }
-
-        /* Sección Consultorio */
-        .clinic-images {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
-        }
-
-        .clinic-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .clinic-image:hover {
-            transform: scale(1.03);
-        }
-
-        .lightbox {
+        /* Modal Demo */
+        .modal-demo {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(15, 23, 42, .95);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            z-index: 9999;
             opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 2000;
+            visibility: hidden;
+            transition: .3s ease;
+            padding: 16px;
+            overflow-y: auto;
         }
 
-        .lightbox.active {
+        .modal-demo.active {
             opacity: 1;
-            pointer-events: auto;
+            visibility: visible;
         }
 
-        .lightbox img {
-            max-width: 90%;
-            max-height: 90%;
+        .modal-content-demo {
+            width: 100%;
+            max-width: 450px;
+            max-height: calc(100vh - 32px);
+            background: white;
+            border-radius: 28px;
+            padding: 28px 24px 32px;
+            position: relative;
+            animation: modalShow .3s ease;
+            box-shadow: 0 25px 60px rgba(15, 23, 42, .3);
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: sticky;
+            top: 0;
+            float: right;
+            width: 36px;
+            height: 36px;
+            border: none;
             border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            font-size: 2.5rem;
-            color: #fff;
+            background: #f1f5f9;
             cursor: pointer;
+            font-size: 0.9rem;
+            color: #334155;
+            transition: .25s;
+            margin-bottom: 16px;
+            margin-right: -8px;
         }
 
-        .stats {
+        .close-modal:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-content-demo h2 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+            clear: both;
+        }
+
+        .modal-content-demo p {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .select-wrapper select {
+            width: 100%;
+            height: 52px;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            padding: 0 14px;
+            font-size: 0.95rem;
+            outline: none;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        .btn-demo-submit {
+            width: 100%;
+            height: 52px;
+            font-size: 1rem;
+            border-radius: 14px;
+        }
+
+        /* Alertas */
+        .alert-floating {
+            position: fixed;
+            top: 95px;
+            right: 20px;
+            z-index: 10000;
+            min-width: 280px;
+            max-width: 400px;
+            padding: 14px 18px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
+            animation: slideIn .35s ease;
+        }
+
+        .alert-floating.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .alert-floating.success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CTA */
+        .cta {
+            background: linear-gradient(135deg, #0d47a1, #002171);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, .05);
+            border-radius: 50%;
+            top: -200px;
+            right: -100px;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .cta p {
+            font-size: 1.15rem;
+            opacity: .9;
+            max-width: 700px;
+            margin: auto auto 40px;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
             display: flex;
             justify-content: center;
-            gap: 60px;
-            margin-top: 50px;
-            text-align: center;
+            gap: 18px;
+            flex-wrap: wrap;
         }
 
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .btn-light {
+            background: white;
+            color: var(--primary);
+            padding: 14px 28px;
         }
 
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            line-height: 1;
+        .btn-dark {
+            background: #00154d;
+            color: white;
+            padding: 14px 28px;
         }
 
-        /* ===== FOOTER PROFESIONAL REDISEÑADO ===== */
+        /* Footer */
         footer {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, #0a3b5e 100%);
-            color: var(--text-on-dark);
-            padding: 60px 0 30px;
-            position: relative;
+            background: #001b63;
+            color: white;
+            padding: 80px 0 30px;
         }
 
-        .footer-content {
+        .footer-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 40px;
             margin-bottom: 50px;
         }
 
-        /* Columnas del footer */
-        .footer-section h3 {
-            color: white;
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            position: relative;
-            padding-bottom: 10px;
+        .footer-brand p {
+            margin-top: 18px;
+            color: #cbd5e1;
+            line-height: 1.8;
+            max-width: 320px;
         }
 
-        .footer-section h3::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 40px;
-            height: 3px;
-            background-color: var(--accent-color);
+        .footer-column h4 {
+            margin-bottom: 22px;
+            font-size: 1.1rem;
         }
 
-        .footer-description {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        /* Enlaces del footer */
         .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: var(--transition);
-            font-size: 0.95rem;
-            display: inline-block;
+            color: #cbd5e1;
+            transition: .25s;
         }
 
         .footer-links a:hover {
-            color: var(--accent-color);
-            transform: translateX(5px);
-        }
-
-        /* Información de contacto */
-        .contact-info li {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-        }
-
-        .contact-icon-footer {
-            color: var(--accent-color);
-            font-size: 1rem;
-            min-width: 20px;
-            margin-top: 3px;
-        }
-
-        /* Sección de Redes Sociales */
-        .social-section {
-            margin-top: 25px;
-        }
-
-        .social-title {
             color: white;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            font-weight: 500;
+            transform: translateX(3px);
         }
 
-        .social-links-footer {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .social-link-footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1.2rem;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        /* Instagram DESTACADO - más grande y con estilo especial */
-        .social-link-footer.instagram:hover {
-            background: radial-gradient(circle at 30% 30%, #fdf497, #fd5949, #d6249f, #285AEB);
-            transform: translateY(-5px);
-        }
-
-        .social-link-footer.tiktok:hover {
-            background-color: #010101;
-            transform: translateY(-5px);
-        }
-
-        .social-link-footer.linkedin:hover {
-            background-color: #0A66C2;
-            transform: translateY(-5px);
-        }
-
-        .social-link-footer.youtube:hover {
-            background-color: #ff0000;
-            transform: translateY(-5px);
-        }
-
-        .social-link-footer:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Copyright */
-        .copyright {
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            padding-top: 25px;
             text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
+            color: #cbd5e1;
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 40px;
-            }
+        /* Responsive */
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
         }
 
-        @media (max-width: 768px) {
-            footer {
-                padding: 40px 0 20px;
-            }
+        @media(max-width:992px) {
+            .hero h1 { font-size: 3rem; }
+            .section-header h2, .cta h2 { font-size: 2.4rem; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
 
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .footer-section h3::after {
+        @media(max-width:768px) {
+            .menu-btn { display: block; }
+            .nav-links {
+                position: absolute;
+                top: 78px;
                 left: 0;
-                transform: none;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 30px;
+                gap: 20px;
+                border-bottom: 1px solid var(--border);
+                display: none;
             }
-
-            .social-links-footer {
-                justify-content: flex-start;
-            }
+            .nav-links.active { display: flex; }
+            .hero { padding: 90px 0; }
+            .hero h1 { font-size: 2.5rem; }
+            .section-header h2, .cta h2 { font-size: 2rem; }
+            .price-card.popular { transform: none; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .banks-grid { grid-template-columns: 1fr; }
+            .modal-header h2 { font-size: 1.4rem; }
         }
 
-        @media (max-width: 480px) {
-            .social-links-footer {
-                gap: 12px;
-            }
-
-            .social-link-footer {
-                width: 38px;
-                height: 38px;
-                font-size: 1.1rem;
-            }
-
-            .social-link-footer.instagram {
-                width: 46px;
-                height: 46px;
-                font-size: 1.4rem;
-            }
-        }
-
-        /* ===== CORAZÓN LATIENTE ===== */
-        @keyframes latido {
-            0% {
-                transform: scale(1);
-            }
-
-            25% {
-                transform: scale(1.1);
-            }
-
-            35% {
-                transform: scale(1);
-            }
-
-            45% {
-                transform: scale(1.15);
-            }
-
-            55% {
-                transform: scale(1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .heart-beat {
-            animation: latido 1.5s ease-in-out infinite;
-            display: inline-block;
-        }
-
-        /* Para el corazón del hero-badge */
-        .hero-badge i.fa-heart {
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        /* Para el corazón del footer */
-        .footer-section .logo i.fa-heartbeat {
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        /* Para el corazón de la tarjeta del hero */
-        .hero-card i.fa-heartbeat {
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        /* Para el icono de cirugía de corazón en servicios */
-        .service-card i.fa-heart-pulse,
-        .service-card i.fa-heart {
-            animation: latido 2s ease-in-out infinite;
-            transition: all 0.3s ease;
-        }
-
-        .service-card i.fa-heart-pulse:hover,
-        .service-card i.fa-heart:hover {
-            animation: latido 0.8s ease-in-out infinite;
-            color: var(--accent-color);
-        }
-
-        /* Clase helper para cualquier corazón que quieras que lata */
-        .latido {
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        /* Versión más rápida para hover */
-        .latido-rapido {
-            animation: latido 0.8s ease-in-out infinite;
-        }
-
-        .logo-image-wrapper {
-            display: inline-block;
-            animation: latido 1.5s ease-in-out infinite;
-        }
-
-        .logo-image-wrapper img {
-            display: block;
+        @media(max-width:500px) {
+            .hero h1 { font-size: 2rem; }
+            .hero-buttons, .cta-buttons { flex-direction: column; }
+            .btn, .btn-primary, .btn-outline { width: 100%; }
+            .bank-card { margin: 0 10px; }
         }
     </style>
 </head>
 
 <body>
-    <!-- Header y Navegación -->
     <header>
+        @if (session('error'))
+            <div class="alert-floating error">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span>{{ session('error') }}</span>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="alert-floating success">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
         <div class="container">
             <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-image-wrapper heart-beat">
-                        <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
-                            class="logo-icon" height="30" width="30"
-                            alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" />
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
                     </div>
-                    <span class="logo-text">Dr. Lorenzo García</span>
+                    <span>DoctorClick</span>
+                </a>
+
+                <div class="nav-links" id="navLinks">
+                    <a href="#caracteristicas">Características</a>
+                    <a href="#precios">Precios</a>
+                    <a href="#demo">Demo</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary" style="color:white;">Comenzar</a>
                 </div>
 
-                <button class="mobile-menu-btn" id="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
+                <button class="menu-btn" id="menuBtn">
+                    <i class="fa-solid fa-bars"></i>
                 </button>
-
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#servicios">Procedimientos</a></li>
-                    <li><a href="#doctor">Sobre Mí</a></li>
-                    <li><a href="#consultorio">Más de Nosotros</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
-                </ul>
             </nav>
         </div>
     </header>
 
-    <!-- Sección Hero / Inicio -->
-    <section class="hero hero-modern" id="inicio">
-        <div class="container hero-grid">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
             <div class="hero-content">
-                <span class="hero-badge">
-                    <i class="fas fa-heart"></i> Cirugía Cardiovascular Especializada
-                </span>
+                <h1>El Sistema de Gestión Médica que Transforma tu Práctica</h1>
+                <p>Simplifica la administración de tu consultorio con DoctorClick. Agenda, expedientes digitales, recetas electrónicas y mucho más, todo en un solo lugar.</p>
+                <div class="hero-buttons">
+                    <button type="button" class="btn btn-light" onclick="abrirModalDemo()">
+                        <i class="fa-solid fa-bolt"></i> Probar Demo Gratis
+                    </button>
+                    <a href="{{ route('login') }}" class="btn btn-primary">Comenzar Ahora <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <h1>Pionero en Cirugía Cardiovascular del Nordeste</h1>
+    <!-- Features Section -->
+    <section id="caracteristicas">
+        <div class="container">
+            <div class="section-header">
+                <h2>Todo lo que necesitas para gestionar tu consultorio</h2>
+                <p>Herramientas profesionales diseñadas específicamente para médicos</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-regular fa-calendar"></i></div>
+                    <h3>Gestión de Citas</h3>
+                    <p>Agenda y administra citas médicas de manera eficiente con recordatorios automáticos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                    <h3>Expedientes Digitales</h3>
+                    <p>Almacena y accede a historiales clínicos completos de forma segura y organizada.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-regular fa-file-lines"></i></div>
+                    <h3>Recetas Electrónicas</h3>
+                    <p>Genera y envía recetas médicas digitales con firma electrónica válida.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-chart-column"></i></div>
+                    <h3>Reportes y Estadísticas</h3>
+                    <p>Visualiza métricas clave de tu consultorio con dashboards intuitivos y análisis avanzados.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-regular fa-clock"></i></div>
+                    <h3>Gestión de Tiempo</h3>
+                    <p>Optimiza tu agenda y reduce tiempos de espera mediante automatización inteligente.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                    <h3>Seguridad HIPAA</h3>
+                    <p>Protección de datos médicos con cifrado de nivel empresarial.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <p>
-                    Experiencia avanzada en procedimientos de corazón, cirugía
-                    venosa con láser y tratamientos vasculares de última tecnología.
-                    Top Ranking Cirujano Cardiovascular del Nordeste.
-                    Más de 10,000 pacientes atendidos.
+    <!-- Pricing Section -->
+    <section class="pricing" id="precios">
+        <div class="container">
+            <div class="section-header">
+                <h2>Planes que se adaptan a tus consultas</h2>
+                <p>Elige el plan perfecto para ti. Cancela cuando quieras.</p>
+            </div>
+            <div class="pricing-grid">
+                <!-- BÁSICO -->
+                <div class="price-card">
+                    <div class="plan-name">Básico</div>
+                    <div class="price">$25 <span>/mes</span></div>
+                    <div class="price-note">RD$ 1,500 /mes</div>
+                    <ul class="features-list">
+                        <li><i class="fa-regular fa-circle-check"></i> 3,000 pacientes registrados</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 200 citas mensuales</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 1 doctor</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 1 secretaria</li>
+                    </ul>
+                    <button onclick="abrirModalContacto('Básico', '25', '1,500')" class="btn btn-primary">Seleccionar Plan</button>
+                </div>
+
+                <!-- ESTÁNDAR -->
+                <div class="price-card popular">
+                    <div class="badge">MÁS POPULAR</div>
+                    <div class="plan-name">Estándar</div>
+                    <div class="price">$40 <span>/mes</span></div>
+                    <div class="price-note">RD$ 2,400 /mes</div>
+                    <ul class="features-list">
+                        <li><i class="fa-regular fa-circle-check"></i> Pacientes ilimitados</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 500 citas mensuales</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 2 doctores</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 2 secretarias</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 2 enfermeras</li>
+                        <li><i class="fa-regular fa-circle-check"></i> Recordatorios WhatsApp (500 créditos)</li>
+                    </ul>
+                    <button onclick="abrirModalContacto('Estándar', '40', '2,400')" class="btn">Seleccionar Plan</button>
+                </div>
+
+                <!-- PLUS -->
+                <div class="price-card">
+                    <div class="plan-name">Plus</div>
+                    <div class="price">$130 <span>/mes</span></div>
+                    <div class="price-note">RD$ 7,800 /mes</div>
+                    <ul class="features-list">
+                        <li><i class="fa-regular fa-circle-check"></i> Pacientes ilimitados</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 1,500 citas mensuales</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 4 doctores</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 4 secretarias</li>
+                        <li><i class="fa-regular fa-circle-check"></i> 4 enfermeras / auxiliares</li>
+                        <li><i class="fa-regular fa-circle-check"></i> Recordatorios WhatsApp (1,500 créditos)</li>
+                    </ul>
+                    <button onclick="abrirModalContacto('Plus', '130', '7,800')" class="btn btn-primary">Seleccionar Plan</button>
+                </div>
+            </div>
+
+            <!-- Sección de Bancos Mejorada con Tarjetas -->
+            <div class="banks-section">
+                <h3 class="banks-title">
+                    <i class="fa-solid fa-building-columns" style="margin-right: 12px;"></i>
+                    Métodos de Pago Disponibles
+                </h3>
+                <p class="banks-subtitle">
+                    Realiza tu pago mediante transferencia bancaria en cualquiera de nuestras entidades aliadas.<br>
+                    <strong>¡Haz clic en los números de cuenta para copiarlos!</strong>
                 </p>
 
-                <div class="hero-buttons">
-                    <a href="#contacto" class="btn">
-                        <i class="far fa-calendar-alt"></i> Agendar Consulta
-                    </a>
-                    <a href="#servicios" class="btn btn-secondary">
-                        Ver Procedimientos
-                    </a>
-                </div>
-
-                <div class="hero-info hero-info-left">
-                    <div class="info-item">
-                        <i class="fas fa-award info-icon"></i>
-                        <div>
-                            <strong>Experiencia</strong>
-                            <p>Más de 10,000 pacientes</p>
+                <div class="banks-grid">
+                    <!-- BanReservas -->
+                    <div class="bank-card banreservas">
+                        <div class="bank-header">
+                            <div class="bank-logo">
+                                <i class="fa-solid fa-landmark"></i>
+                            </div>
+                            <div class="bank-name">BanReservas</div>
+                            <div class="bank-type">Banco de Reservas de la República Dominicana</div>
                         </div>
-                    </div>
-
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt info-icon"></i>
-                        <div>
-                            <strong>Ubicación</strong>
-                            <p>San Francisco de Macorís</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="hero-image">
-                <img src="https://i.postimg.cc/VNsTbCzP/Whats-App-Image-2026-03-07-at-9-49-59-AM-(1).jpg"
-                    alt="Cirujano Cardiovascular" />
-                <div class="hero-card">
-                    <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
-                        alt="Logo Dr. García" style="width: 44px; height: 44px; object-fit: contain;" />
-                    <div>
-                        <strong>Alta Especialización</strong>
-                        <span>Cirugía Cardiovascular</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!--Procedimientos-->
-    <section class="section services" id="servicios">
-        <div class="container">
-            <h2 class="section-title">Procedimientos Especializados</h2>
-            <div class="services-grid">
-
-                <!-- Cirugía de Corazón -->
-                <div class="service-card">
-                    <i class="fas fa-heart-pulse service-icon"></i>
-                    <h3>Cirugía de Corazón</h3>
-                    <p>
-                        Cirugía de las Válvulas Cardiacas.<br />
-                        Cirugía Bypass Coronario.
-                    </p>
-                </div>
-
-                <!-- Endarterectomía Carotídea -->
-                <div class="service-card">
-                    <i class="fas fa-brain service-icon"></i>
-                    <h3>Endarterectomía Carotídea</h3>
-                    <p>Cirugía para eliminar la placa de las arterias carótidas y reducir el riesgo de accidente
-                        cerebrovascular.</p>
-                </div>
-
-                <!-- Paciente Renal -->
-                <div class="service-card">
-                    <i class="fas fa-droplet service-icon"></i>
-                    <h3>Paciente Renal</h3>
-                    <p>
-                        Creación de fístula arteriovenosa, colocación de catéter
-                        permanente y manejo de acceso para hemodiálisis.
-                    </p>
-                </div>
-
-                <!-- Tratamiento de Várices -->
-                <div class="service-card">
-                    <i class="bi bi-virus service-icon"></i>
-                    <h3>Tratamiento de Várices</h3>
-                    <p>
-                        Procedimientos modernos y efectivos para la corrección de várices.
-                    </p>
-                </div>
-
-                <!-- Cirugía Venosa con Láser -->
-                <div class="service-card">
-                    <i class="fas fa-bolt service-icon"></i>
-                    <h3>Cirugía Venosa con Láser</h3>
-                    <p>
-                        Manejo avanzado de patología venosa mediante técnicas mínimamente invasivas.
-                    </p>
-                </div>
-
-                <!-- Aneurisma de Aorta Abdominal -->
-                <div class="service-card">
-                    <svg class="service-icon" viewBox="0 0 100 100" width="50" height="50">
-
-                        <!-- Tronco principal -->
-                        <path d="M50 15
-                 C46 30, 46 45, 50 55
-                 C54 45, 54 30, 50 15" stroke="#3b82c4" stroke-width="14" fill="none" stroke-linecap="round" />
-
-                        <!-- Arteria lateral izquierda -->
-                        <path d="M50 40 L30 40" stroke="#3b82c4" stroke-width="10" fill="none"
-                            stroke-linecap="round" />
-
-                        <!-- Arteria lateral derecha -->
-                        <path d="M50 40 L70 40" stroke="#3b82c4" stroke-width="10" fill="none"
-                            stroke-linecap="round" />
-
-                        <!-- Panza (aneurisma) -->
-                        <ellipse cx="50" cy="60" rx="12" ry="10" stroke="#3b82c4"
-                            stroke-width="14" fill="none" />
-
-                        <!-- Bifurcación principal -->
-                        <path d="M50 70 L35 90" stroke="#3b82c4" stroke-width="14" fill="none"
-                            stroke-linecap="round" />
-
-                        <path d="M50 70 L65 90" stroke="#3b82c4" stroke-width="14" fill="none"
-                            stroke-linecap="round" />
-
-                        <!-- Ramitas secundarias -->
-                        <path d="M38 78 L30 85" stroke="#3b82c4" stroke-width="6" fill="none"
-                            stroke-linecap="round" />
-
-                        <path d="M62 78 L70 85" stroke="#3b82c4" stroke-width="6" fill="none"
-                            stroke-linecap="round" />
-
-                    </svg>
-
-                    <h3>Aneurisma de Aorta Abdominal</h3>
-                    <p>
-                        Tratamiento quirúrgico y endovascular para la corrección de aneurismas de la aorta abdominal.
-                    </p>
-                </div>
-
-                <!-- Angioplastia de Miembros Inferiores -->
-                <div class="service-card">
-                    <i class="fas fa-walking service-icon"></i>
-                    <h3>Angioplastia de Miembros Inferiores</h3>
-                    <p>Procedimiento mínimamente invasivo para restablecer el flujo sanguíneo en arterias obstruidas de
-                        las piernas.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="doctor">
-        <div class="container">
-            <div class="doctor">
-                <div class="doctor-image">
-                    <img src="https://i.postimg.cc/Fsk5p3t4/Whats-App-Image-2026-03-07-at-9-44-53-PM-(1).jpg"
-                        alt="Dr. Lorenzo" />
-                </div>
-
-                <div class="doctor-info">
-                    <h2>Dr. Lorenzo García</h2>
-
-                    <p>
-                        Pionero en la cirugía cardiovascular del nordeste. Primer
-                        especialista en realizar procedimientos de corazón abierto en la
-                        región.
-                    </p>
-
-                    <p>
-                        Manejo avanzado de patología venosa con láser y procedimientos de
-                        última tecnología. Especialista en acceso vasculares en pacientes renales,
-                        creación de fístula arteriovenosa, colocación de catéter
-                        permanente.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Consultorio -->
-    <section class="section" id="consultorio">
-        <div class="container">
-            <h2 class="section-title">Encargado de su Cuidado</h2>
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <img src="https://i.postimg.cc/k4tMbZy4/Whats-App-Image-2026-03-07-at-9-44-53-PM.jpg"
-                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" class="clinic-image"
-                    style="max-width: calc(33.33% - 14px);" />
-            </div>
-
-            <div class="clinic-images">
-                <img src="https://i.postimg.cc/ZKLbp667/Whats-App-Image-2026-03-07-at-9-49-59-AM.jpg"
-                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" class="clinic-image" />
-                <img src="https://i.postimg.cc/tCkfpLSY/Whats-App-Image-2026-03-09-at-5-10-37-PM.png"
-                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís"class="clinic-image" />
-                <img src="https://i.postimg.cc/nrJxQLzy/DSC-6927.jpg" alt="Consultorio 3" class="clinic-image" />
-            </div>
-
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <img src="https://i.postimg.cc/QxZ1YkVF/Opera.jpg"
-                    alt="Dr. Lorenzo García cirujano cardiovascular San Francisco de Macorís" class="clinic-image"
-                    style="max-width: calc(33.33% - 14px);" />
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Contacto con CAPTCHA -->
-    <section class="section" id="contacto">
-        <div class="container">
-            <h2 class="section-title">Contáctanos</h2>
-            <p style="text-align: center; max-width: 800px; margin: 0 auto 50px">
-                Estamos aquí para atenderte. Ponte en contacto con nosotros para que agendes
-                tu cita de forma rápida y sencilla.
-            </p>
-
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <h3>Información de Contacto</h3>
-
-                    <div class="contact-item">
-                        <i class="fas fa-phone contact-icon"></i>
-                        <div>
-                            <h4>Teléfono</h4>
-                            <p>+1 (809) 588-5601 - San Francisco de Macorís</p>
-                            <p>+1 (829) 378-1976 ext 224 240 - Santo Domingo</p>
-                        </div>
-                    </div>
-
-                    <div class="contact-item">
-                        <i class="far fa-clock contact-icon"></i>
-                        <div>
-                            <h4>Horario</h4>
-                            <p>
-                                Lunes a Viernes: Previa cita a partir de las 9AM<br />
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt contact-icon"></i>
-                        <div>
-                            <h4>Dirección</h4>
-                            <p>C/. Duarte, Edificio Profesional Dr. Reynaldo Almanzar, 2Do Nive.l<br />San Francisco de
-                                Macorís</p>
-                        </div>
-                    </div>
-                    <div class="map-container">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d941.3922733279405!2d-70.25859704849792!3d19.301096363614818!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eae2deeb606e03d%3A0xd3b901431e39fb92!2sEdificio%20Medico%20Dr.Almanzar%20(Siglo%2021)!5e0!3m2!1ses-419!2sdo!4v1773155131750!5m2!1ses-419!2sdo"
-                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt contact-icon"></i>
-                        <div>
-                            <h4>Dirección</h4>
-                            <p>Grupo Médico Mac Center</p>
-                        </div>
-                    </div>
-                    <div class="map-container">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d946.1523292626038!2d-69.95754218065501!3d18.456039431621484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ea561db57f454cd%3A0xbdd9cb94abe987ed!2sGrupo%20M%C3%A9dico%20Mac%20Center!5e0!3m2!1ses-419!2sdo!4v1774011906508!5m2!1ses-419!2sdo"
-                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                </div>
-
-                <div class="contact-form">
-                    <h3>Envíanos un Mensaje</h3>
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Nombre Completo</label>
-                            <input type="text" id="name" placeholder="Tu nombre" required
-                                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo se permiten letras" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message">Motivo de la consulta</label>
-                            <textarea id="message" placeholder="Ej: Consulta general, dolor, chequeo..." required></textarea>
-                        </div>
-
-                        <!-- CAPTCHA de Google (selección de imágenes) -->
-                        <div class="captcha-container">
-                            <div class="g-recaptcha" data-sitekey="6LdFEJUsAAAAAIcOJNgguO-U8szFl_0OAmVP-PEi"></div>
-                            <div class="captcha-error" id="captchaError">
-                                <i class="fas fa-exclamation-circle"></i> Por favor, completa el CAPTCHA para continuar.
+                        <div class="bank-details">
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fa-regular fa-credit-card"></i> N° Cuenta:</span>
+                                <span class="detail-value tooltip-bank" onclick="copiarAlPortapapeles('001-123456-7', this)">
+                                    <span>001-123456-7</span>
+                                    <i class="fa-regular fa-copy copy-icon"></i>
+                                    <span class="tooltip-text">¡Copiado!</span>
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fa-solid fa-chart-line"></i> Tipo:</span>
+                                <span class="detail-value">Cuenta Corriente Empresarial</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fa-solid fa-user"></i> Beneficiario:</span>
+                                <span class="detail-value">DoctorClick SRL</span>
                             </div>
                         </div>
+                        <div class="bank-footer">
+                            <small><i class="fa-regular fa-clock"></i> Transferencias en línea disponibles 24/7</small>
+                        </div>
+                    </div>
 
-                        <button type="submit" class="btn" id="submitBtn" style="width: 100%">
-                            <i class="fab fa-whatsapp" style="color: #25d366"></i> Agendar
-                            por WhatsApp
-                        </button>
+                    <!-- Banco BHD -->
+                    <div class="bank-card bhd">
+                        <div class="bank-header">
+                            <div class="bank-logo">
+                                <i class="fa-solid fa-chart-simple"></i>
+                            </div>
+                            <div class="bank-name">Banco BHD</div>
+                            <div class="bank-type">Banco BHD León</div>
+                        </div>
+                        <div class="bank-details">
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fa-regular fa-credit-card"></i> N° Cuenta:</span>
+                                <span class="detail-value tooltip-bank" onclick="copiarAlPortapapeles('789-012345-6', this)">
+                                    <span>789-012345-6</span>
+                                    <i class="fa-regular fa-copy copy-icon"></i>
+                                    <span class="tooltip-text">¡Copiado!</span>
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fa-solid fa-chart-line"></i> Tipo:</span>
+                                <span class="detail-value">Cuenta de Ahorros Premium</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fa-solid fa-user"></i> Beneficiario:</span>
+                                <span class="detail-value">DoctorClick SRL</span>
+                            </div>
+                        </div>
+                        <div class="bank-footer">
+                            <small><i class="fa-regular fa-clock"></i> Transferencias en línea disponibles 24/7</small>
+                        </div>
+                    </div>
 
-                        <div class="form-message" id="formMessage"></div>
-                    </form>
+                    <!-- Banco Popular -->
+                    <div class="bank-card popular">
+                        <div class="bank-header">
+                            <div class="bank-logo">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <div class="bank-name">Banco Popular</div>
+                            <div class="bank-type">Banco Popular Dominicano</div>
+                        </div>
+                        <div class="bank-details">
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fa-regular fa-credit-card"></i> N° Cuenta:</span>
+                                <span class="detail-value tooltip-bank" onclick="copiarAlPortapapeles('456-789012-3', this)">
+                                    <span>456-789012-3</span>
+                                    <i class="fa-regular fa-copy copy-icon"></i>
+                                    <span class="tooltip-text">¡Copiado!</span>
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fa-solid fa-chart-line"></i> Tipo:</span>
+                                <span class="detail-value">Cuenta Corriente</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label"><i class="fa-solid fa-user"></i> Beneficiario:</span>
+                                <span class="detail-value">DoctorClick SRL</span>
+                            </div>
+                        </div>
+                        <div class="bank-footer">
+                            <small><i class="fa-regular fa-clock"></i> Transferencias en línea disponibles 24/7</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exchange-note">
+                    <p style="margin: 0; font-size: 0.85rem;">
+                        <i class="fa-regular fa-clock"></i> Los datos bancarios completos se enviarán a tu correo al finalizar la contratación.<br>
+                        <strong>Tipo de cambio referencial: 1 USD = 60 DOP</strong> (sujeto a variación según el banco)
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer>
+    <!-- CTA Section -->
+    <section class="cta" id="demo">
         <div class="container">
-            <div class="footer-content">
-                <!-- Columna 1: Logo y descripción -->
-                <div class="footer-section about-section">
-                    <div class="logo" style="margin-bottom: 20px">
-                        <i class="fas fa-heartbeat logo-icon"></i>
-                        <span class="logo-text">Dr. Lorenzo García</span>
-                    </div>
-                    <p class="footer-description">
-                        Especialista en Cirugía Cardiovascular. Innovación, precisión y
-                        experiencia al servicio de tu salud.
-                    </p>
+            <div class="cta-content">
+                <h2>¿Listo para modernizar tu consultorio?</h2>
+                <p>Únete a cientos de profesionales de la salud que ya confían en DoctorClick.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-light" onclick="abrirModalDemo()">Probar Demo Gratis</button>
+                    <a href="{{ route('login') }}" class="btn btn-dark">Comenzar Ahora</a>
                 </div>
-
-                <!-- Columna 2: Enlaces Rápidos -->
-                <div class="footer-section">
-                    <h3>Enlaces Rápidos</h3>
-                    <ul class="footer-links">
-                        <li><a href="#inicio">Inicio</a></li>
-                        <li><a href="#servicios">Procedimientos</a></li>
-                        <li><a href="#doctor">Sobre Mí</a></li>
-                        <li><a href="#consultorio">Más de Nosotros</a></li>
-                        <li><a href="#contacto">Contacto</a></li>
-                    </ul>
-                </div>
-
-                <!-- Columna 3: Procedimientos (más compacta) -->
-                <div class="footer-section">
-                    <h3>Procedimientos</h3>
-                    <ul class="footer-links">
-                        <li><a href="#servicios">Cirugía de Corazón</a></li>
-                        <li><a href="#servicios">Endarterectomía Carotídea</a></li>
-                        <li><a href="#servicios">Paciente Renal</a></li>
-                        <li><a href="#servicios">Cirugía Venosa con Láser</a></li>
-                        <li><a href="#servicios">Aneurisma de Aorta</a></li>
-                        <li><a href="#servicios">Tratamiento de Várices</a></li>
-                    </ul>
-                </div>
-
-                <!-- Columna 4: Contacto + Redes Sociales (Instagram destacado) -->
-                <div class="footer-section contact-section">
-                    <h3>Contacto</h3>
-                    <ul class="footer-links contact-info">
-                        <li>
-                            <i class="fas fa-phone contact-icon-footer"></i>
-                            <span>+1 (809) 588-5601 - San Francisco de Macorís</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-phone contact-icon-footer"></i>
-                            <span>+1 (829) 378-1976 ext 224 240 - Santo Domingo</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-map-marker-alt contact-icon-footer"></i>
-                            <span>C/. Duarte, Edif. Dr. Reynaldo Almanzar, 2do Nivel<br>San Francisco de Macorís</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-map-marker-alt contact-icon-footer"></i>
-                            <span>Grupo Médico Mac Center<br>Santo Domingo</span>
-                        </li>
-                        <li>
-                            <i class="far fa-clock contact-icon-footer"></i>
-                            <span>Lun-Vie: Previa cita desde 9AM</span>
-                        </li>
-                    </ul>
-
-                    <!-- Redes Sociales con Instagram Destacado -->
-                    <div class="social-section">
-                        <h4 class="social-title">Síguenos en:</h4>
-                        <div class="social-links-footer">
-                            <!-- Instagram DESTACADO (más grande y primero) -->
-                            <a href="https://www.instagram.com/cardiovascular_lorenzogarcia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-                                target="_blank" class="social-link-footer instagram" aria-label="Instagram">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Copyright -->
-            <div class="copyright">
-                <p>&copy; <span id="year"></span> Dr. Lorenzo García.</p>
             </div>
         </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="logo" style="color:white;">
+                        <div class="logo-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                        <span>DoctorClick</span>
+                    </a>
+                    <p>La solución completa para la gestión de tus consultas médicas.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Producto</h4>
+                    <div class="footer-links">
+                        <a href="#caracteristicas">Características</a>
+                        <a href="#precios">Precios</a>
+                        <a href="#demo">Demo</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Empresa</h4>
+                    <div class="footer-links">
+                        <a href="#">Sobre Nosotros</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Contacto</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <div class="footer-links">
+                        <a href="#">Privacidad</a>
+                        <a href="#">Términos</a>
+                        <a href="#">Seguridad</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">© {{ date('Y') }} DoctorClick. Todos los derechos reservados.</div>
+        </div>
     </footer>
-    <div class="lightbox" id="lightbox">
-        <span class="lightbox-close">&times;</span>
-        <img id="lightbox-img" src="" alt="Imagen ampliada" />
+
+    <!-- Modal Demo -->
+    <div class="modal-demo" id="modalDemo">
+        <div class="modal-content-demo">
+            <button class="close-modal" onclick="cerrarModalDemo()"><i class="fa-solid fa-xmark"></i></button>
+            <h2>Selecciona tu especialidad</h2>
+            <p>Configuraremos el demo automáticamente según tu área médica.</p>
+            <form action="{{ route('demo.crear') }}" method="POST">
+                @csrf
+                <div class="select-wrapper">
+                    <select name="especialidad_id" required>
+                        <option value="">Selecciona una especialidad</option>
+                        @foreach ($especialidades as $especialidad)
+                            <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-demo-submit"><i class="fa-solid fa-stethoscope"></i> Entrar al Demo</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Contacto Rediseñado -->
+    <div class="modal-contacto" id="modalContacto">
+        <div class="modal-content-contacto">
+            <div class="modal-header">
+                <button class="close-modal-contacto" onclick="cerrarModalContacto()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h2>Solicitar Activación</h2>
+                <p>Completa tus datos para activar tu plan</p>
+            </div>
+            <div class="modal-body">
+                <!-- Stepper -->
+                <div class="stepper">
+                    <div class="step active" id="step1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Plan</div>
+                    </div>
+                    <div class="step" id="step2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Datos</div>
+                    </div>
+                    <div class="step" id="step3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Enviar</div>
+                    </div>
+                </div>
+
+                <!-- Resumen del Plan Mejorado -->
+                <div class="plan-resumen" id="planResumen"></div>
+
+                <form id="formContacto" onsubmit="return false;">
+                    <div class="form-group">
+                        <label><i class="fa-regular fa-user"></i> Nombre Completo</label>
+                        <input type="text" id="nombre" placeholder="Ej: Juan Pérez Rodríguez" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-regular fa-envelope"></i> Correo Electrónico</label>
+                        <input type="email" id="email" placeholder="Ej: juan@consultorio.com" required>
+                    </div>
+                    <button type="button" onclick="enviarWhatsApp()" class="btn btn-whatsapp">
+                        <i class="fa-brands fa-whatsapp"></i> Enviar Solicitud por WhatsApp
+                    </button>
+                    <div class="terms-text">
+                        Al enviar aceptas nuestros <a href="#" style="color: var(--primary);">Términos y Condiciones</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Menú móvil
-            const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-            const navLinks = document.getElementById("nav-links");
+        // Menu móvil
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+        menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
 
-            if (mobileMenuBtn && navLinks) {
-                mobileMenuBtn.addEventListener("click", () => {
-                    navLinks.classList.toggle("active");
-                    mobileMenuBtn.innerHTML = navLinks.classList.contains("active") ?
-                        '<i class="fas fa-times"></i>' :
-                        '<i class="fas fa-bars"></i>';
-                });
-            }
-
-            // Cerrar menú al hacer clic en un enlace
-            document.querySelectorAll(".nav-links a").forEach((link) => {
-                link.addEventListener("click", () => {
-                    navLinks.classList.remove("active");
-                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-                });
-            });
-
-            // Formulario con CAPTCHA
-            const contactForm = document.getElementById("contactForm");
-            const submitBtn = document.getElementById("submitBtn");
-            const captchaError = document.getElementById("captchaError");
-            const formMessage = document.getElementById("formMessage");
-
-            if (contactForm) {
-                contactForm.addEventListener("submit", async (e) => {
-                    e.preventDefault();
-
-                    // Ocultar mensajes previos
-                    captchaError.classList.remove("show");
-                    formMessage.classList.remove("show", "success", "error");
-
-                    // Verificar CAPTCHA
-                    const recaptchaResponse = grecaptcha.getResponse();
-
-                    if (!recaptchaResponse) {
-                        captchaError.classList.add("show");
-                        return;
-                    }
-
-                    // Deshabilitar botón mientras se procesa
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = "Verificando...";
-
-                    try {
-                        // Verificar CAPTCHA con Google (opcional - para producción)
-                        // En entorno de pruebas, la clave demo siempre es válida
-                        // Para producción, debes reemplazar la site key y verificar en backend
-
-                        const name = document.getElementById("name").value.trim();
-                        const message = document.getElementById("message").value.trim();
-                        const whatsappNumber = "18095885601";
-
-                        const text = `
-                            *SOLICITUD DE CITA MÉDICA*
-
-                            *Nombre:* ${name}
-
-
-                            *Motivo de la consulta:*
-                            ${message}
-
-                            Quedo atento(a) a su confirmación.
-                            Muchas gracias.
-                        `.trim();
-
-                        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
-
-                        // Resetear CAPTCHA después de verificación exitosa
-                        grecaptcha.reset();
-
-                        // Mostrar mensaje de éxito
-                        formMessage.textContent = "✓ Verificación exitosa. Redirigiendo a WhatsApp...";
-                        formMessage.classList.add("show", "success");
-
-                        // Redirigir después de un breve momento
-                        setTimeout(() => {
-                            window.open(url, "_blank");
-                            contactForm.reset();
-                        }, 1000);
-
-                    } catch (error) {
-                        console.error("Error:", error);
-                        formMessage.textContent = "✗ Ocurrió un error. Por favor, intenta nuevamente.";
-                        formMessage.classList.add("show", "error");
-                        grecaptcha.reset();
-                    } finally {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="fab fa-whatsapp" style="color: #25d366"></i> Agendar por WhatsApp';
-                    }
-                });
-            }
-
-            // Smooth scroll
-            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-                anchor.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute("href"));
-                    if (target) {
-                        window.scrollTo({
-                            top: target.offsetTop - 80,
-                            behavior: "smooth",
-                        });
-                    }
-                });
-            });
-
-            /* ================= LIGHTBOX ================= */
-            const images = document.querySelectorAll(".clinic-image");
-            const lightbox = document.getElementById("lightbox");
-            const lightboxImg = document.getElementById("lightbox-img");
-            const closeBtn = document.querySelector(".lightbox-close");
-
-            if (images.length && lightbox && lightboxImg && closeBtn) {
-                images.forEach((img) => {
-                    img.addEventListener("click", () => {
-                        lightboxImg.src = img.src;
-                        lightbox.classList.add("active");
-                        document.body.style.overflow = "hidden";
-                    });
-                });
-
-                closeBtn.addEventListener("click", () => {
-                    lightbox.classList.remove("active");
-                    document.body.style.overflow = "";
-                });
-
-                lightbox.addEventListener("click", (e) => {
-                    if (e.target === lightbox) {
-                        lightbox.classList.remove("active");
-                        document.body.style.overflow = "";
-                    }
-                });
-            }
-        });
-
-        /*Validación de campos del formulario */
-        const phoneInput = document.getElementById("phone");
-        if (phoneInput) {
-            phoneInput.addEventListener("input", () => {
-                phoneInput.value = phoneInput.value.replace(/\D/g, "");
+        // Función para copiar al portapapeles
+        function copiarAlPortapapeles(texto, elemento) {
+            navigator.clipboard.writeText(texto).then(() => {
+                const tooltip = elemento.querySelector('.tooltip-text');
+                if (tooltip) {
+                    const textoOriginal = tooltip.textContent;
+                    tooltip.textContent = '✓ Copiado';
+                    setTimeout(() => {
+                        tooltip.textContent = textoOriginal;
+                    }, 1500);
+                }
             });
         }
 
-        document.getElementById("year").textContent = new Date().getFullYear();
+        // Modales
+        function abrirModalDemo() {
+            document.getElementById('modalDemo').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function cerrarModalDemo() {
+            document.getElementById('modalDemo').classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        let planSeleccionado = { nombre: '', precioUSD: '', precioRD: '' };
+
+        function abrirModalContacto(planNombre, precioUSD, precioRD) {
+            planSeleccionado = { nombre: planNombre, precioUSD: precioUSD, precioRD: precioRD };
+
+            const montoDOP = parseInt(precioRD.replace(/,/g, ''));
+            const mensualidades = [
+                { plazo: '3 meses', descuento: '3%', total: Math.round(montoDOP * 3 * 0.97) },
+                { plazo: '6 meses', descuento: '5%', total: Math.round(montoDOP * 6 * 0.95) },
+                { plazo: '12 meses', descuento: '10%', total: Math.round(montoDOP * 12 * 0.90) }
+            ];
+
+            document.getElementById('planResumen').innerHTML = `
+                <h4><i class="fa-solid fa-file-invoice"></i> Resumen de tu selección</h4>
+                <div class="plan-detail-row">
+                    <span class="plan-detail-label">Plan seleccionado:</span>
+                    <span class="plan-detail-value">${planNombre}</span>
+                </div>
+                <div class="plan-detail-row">
+                    <span class="plan-detail-label">Precio mensual:</span>
+                    <span class="plan-detail-value">$${precioUSD} USD (RD$${precioRD})</span>
+                </div>
+                <div class="price-comparison">
+                    <div><small>💳 Pago mensual</small><br><strong>RD$${precioRD}</strong></div>
+                    <div><small>🎯 3 meses (-3%)</small><br><strong>RD$${mensualidades[0].total.toLocaleString()}</strong></div>
+                    <div><small>🏆 6 meses (-5%)</small><br><strong>RD$${mensualidades[1].total.toLocaleString()}</strong></div>
+                    <div><small>⭐ 12 meses (-10%)</small><br><strong>RD$${mensualidades[2].total.toLocaleString()}</strong></div>
+                </div>
+                <div class="plan-detail-row" style="margin-top:12px; border-top:1px dashed rgba(13,71,161,0.2); padding-top:12px;">
+                    <span class="plan-detail-label">Método de pago:</span>
+                    <span class="plan-detail-value">Transferencia Bancaria</span>
+                </div>
+            `;
+
+            document.getElementById('modalContacto').classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+
+        function cerrarModalContacto() {
+            document.getElementById('modalContacto').classList.remove('active');
+            document.body.classList.remove('modal-open');
+            document.getElementById('nombre').value = '';
+            document.getElementById('telefono').value = '';
+            document.getElementById('email').value = '';
+        }
+
+        window.addEventListener('click', function(e) {
+            const modalDemo = document.getElementById('modalDemo');
+            if (e.target === modalDemo) cerrarModalDemo();
+            const modalContacto = document.getElementById('modalContacto');
+            if (e.target === modalContacto) cerrarModalContacto();
+        });
+
+        function enviarWhatsApp() {
+            const nombre = document.getElementById('nombre').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!nombre || !telefono || !email) {
+                alert('⚠️ Por favor, completa todos los campos');
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('⚠️ Por favor, ingresa un correo electrónico válido');
+                return;
+            }
+
+            const mensaje = `🏥 *NUEVA SOLICITUD - DoctorClick* 🏥%0A%0A` +
+                `👤 *DATOS DEL CLIENTE*%0A` +
+                `• Nombre: ${nombre}%0A` +
+                `• Correo: ${email}%0A%0A` +
+                `📋 *PLAN SELECCIONADO*%0A` +
+                `• Plan: ${planSeleccionado.nombre}%0A` +
+                `• Precio: $${planSeleccionado.precioUSD} USD (RD$${planSeleccionado.precioRD}/mes)%0A` +
+                `• Método: Transferencia Bancaria%0A%0A` +
+                `🏦 *INSTRUCCIONES DE PAGO*%0A` +
+                `Banco: BanReservas / BHD / Popular%0A` +
+                `Beneficiario: DoctorClick SRL%0A` +
+                `✅ Monto a pagar: RD$${planSeleccionado.precioRD} (mensual)%0A%0A` +
+                `*Tipo de Cambio:* 1 USD = 60 DOP%0A%0A` +
+                `📌 *ESTADO:* Pendiente de pago - Enviar comprobante para activación`;
+
+            const numeroWhatsApp = '18297268194';
+            const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
+            window.open(urlWhatsApp, '_blank');
+            cerrarModalContacto();
+            alert('✅ Solicitud preparada. Serás redirigido a WhatsApp para completar el proceso.');
+        }
     </script>
 </body>
 

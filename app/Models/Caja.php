@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Caja extends Model
 {
     protected $fillable = [
+        'consultorio_id',
         'usuario_id',
         'monto_inicial',
         'monto_final',
@@ -14,6 +15,11 @@ class Caja extends Model
         'fecha_cierre',
         'estado'
     ];
+
+    public function consultorio()
+    {
+        return $this->belongsTo(Consultorio::class);
+    }
 
     public function movimientos()
     {

@@ -159,35 +159,116 @@
                             </span>
                             <a href="{{ route('consultas.show', $consulta) }}" class="btn btn-sm btn-light">Ver Detalle</a>
                         </div>
-                        <div class="card-body p-2">
-                            <table class="table table-sm table-bordered mb-0">
-                                <tbody>
-                                    <tr>
-                                        <th style="width:25%">Tipo de Consulta</th>
-                                        <td>{{ $consulta->tipo_consulta ?? 'No registrado' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Motivo</th>
-                                        <td>{{ $consulta->motivo_consulta ?? 'No registrado' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Enfermedad Actual</th>
-                                        <td>{{ $consulta->enfermedad_actual ?? 'No registrado' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Plan</th>
-                                        <td>{{ $consulta->plan ?? 'No registrado' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Observaciones</th>
-                                        <td>
-                                            {!! nl2br(
-                                                e(trim(str_replace(['\\n', '\\r', '\\t'], "\n", strip_tags($consulta->observaciones ?? 'No registrado')))),
-                                            ) !!}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="card-body p-3">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6 class="fw-bold text-primary mb-2">Detalle del Historial</h6>
+
+                                    <p class="mb-1">
+                                        <strong>Tipo:</strong> {{ $consulta->tipo_consulta ?? 'No registrado' }}
+                                    </p>
+
+                                    <p class="mb-1">
+                                        <strong>Motivo:</strong>
+                                        {{ Str::limit($consulta->motivo_consulta, 80) ?? 'No registrado' }}
+                                    </p>
+
+                                    <p class="mb-1">
+                                        <strong>Enfermedad:</strong>
+                                        {{ Str::limit($consulta->enfermedad_actual, 80) ?? 'No registrado' }}
+                                    </p>
+
+                                    <p class="mb-1">
+                                        <strong>Plan:</strong>
+                                        {{ Str::limit($consulta->plan, 80) ?? 'No registrado' }}
+                                    </p>
+
+                                    <p>
+                                        <strong>Observaciones:</strong><br>
+                                        {!! nl2br(e($consulta->observaciones ?? 'No registrado')) !!}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Botón minimalista -->
+                            <div class="text-center mt-2">
+                                <button class="btn-toggle-details" data-target="detalleConsulta{{ $consulta->id }}">
+                                    <span class="btn-text">Ver más</span>
+                                    <svg class="btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 3L8 13M8 13L12 9M8 13L4 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="collapse mt-3" id="detalleConsulta{{ $consulta->id }}">
+                                <div class="card card-body bg-light border-0" style="border-radius: 12px;">
+
+                                    {{-- GINECOLOGÍA --}}
+                                    @if ($consulta->ginecologia)
+                                        <hr>
+                                        <h6 class="fw-bold text-danger mb-3">Detalle Ginecológico</h6>
+
+                                        <div class="row">
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Ciclo menstrual:</strong><br>
+                                                {{ $consulta->ginecologia->ciclo_menstrual ?? '-' }}
+                                            </div>
+
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Gestas:</strong><br>
+                                                {{ $consulta->ginecologia->gestas ?? 0 }}
+                                            </div>
+
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Partos:</strong><br>
+                                                {{ $consulta->ginecologia->partos ?? 0 }}
+                                            </div>
+
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Abortos:</strong><br>
+                                                {{ $consulta->ginecologia->abortos ?? 0 }}
+                                            </div>
+
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Cesáreas:</strong><br>
+                                                {{ $consulta->ginecologia->cesareas ?? 0 }}
+                                            </div>
+
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Embarazo actual:</strong><br>
+                                                {{ $consulta->ginecologia->embarazo_actual ? 'Sí' : 'No' }}
+                                            </div>
+
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Semanas gestación:</strong><br>
+                                                {{ $consulta->ginecologia->semanas_gestacion ?? '-' }}
+                                            </div>
+
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Método anticonceptivo:</strong><br>
+                                                {{ $consulta->ginecologia->metodo_anticonceptivo ?? '-' }}
+                                            </div>
+
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Vida sexual:</strong><br>
+                                                {{ $consulta->ginecologia->vida_sexual ? 'Activa' : 'No activa' }}
+                                            </div>
+
+                                            <div class="col-md-6 mb-2">
+                                                <strong>Examen pélvico:</strong><br>
+                                                {{ $consulta->ginecologia->examen_pelvico ?? '-' }}
+                                            </div>
+
+                                            <div class="col-md-6 mb-2">
+                                                <strong>Mamas:</strong><br>
+                                                {{ $consulta->ginecologia->mamas ?? '-' }}
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @empty
@@ -200,7 +281,8 @@
 
             <!-- ANTECEDENTES -->
             <div class="tab-pane fade {{ $tab == 'antecedentes' ? 'show active' : '' }}" id="antecedentes">
-                <button class="btn btn-secondary btn-sm mb-3" data-bs-toggle="collapse" data-bs-target="#formAntecedente">
+                <button class="btn btn-secondary btn-sm mb-3" data-bs-toggle="collapse"
+                    data-bs-target="#formAntecedente">
                     ➕ Registrar Antecedentes
                 </button>
 
@@ -407,4 +489,79 @@
     .card-body p {
         margin-bottom: 0.5rem;
     }
+
+    /* Estilos del botón minimalista */
+    .btn-toggle-details {
+        background: none;
+        border: none;
+        color: #0d47a1;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+        border-radius: 8px;
+    }
+
+    .btn-toggle-details:hover {
+        background-color: rgba(13, 71, 161, 0.08);
+        transform: translateY(-1px);
+    }
+
+    .btn-toggle-details:active {
+        transform: translateY(0);
+    }
+
+    .btn-icon {
+        transition: transform 0.2s ease;
+    }
+
+    .btn-toggle-details[aria-expanded="true"] .btn-icon {
+        transform: rotate(180deg);
+    }
+
+    .btn-toggle-details[aria-expanded="true"] .btn-text {
+        color: #0d47a1;
+    }
+
+    .btn-text {
+        transition: color 0.2s ease;
+    }
 </style>
+
+<script>
+    // JavaScript para manejar el toggle del botón minimalista
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButtons = document.querySelectorAll('.btn-toggle-details');
+
+        toggleButtons.forEach(button => {
+            const targetId = button.getAttribute('data-target');
+            const target = document.getElementById(targetId);
+
+            if (target) {
+                // Escuchar evento de collapse de Bootstrap
+                target.addEventListener('show.bs.collapse', function() {
+                    button.setAttribute('aria-expanded', 'true');
+                    const span = button.querySelector('.btn-text');
+                    if (span) span.textContent = 'Ver menos';
+                });
+
+                target.addEventListener('hide.bs.collapse', function() {
+                    button.setAttribute('aria-expanded', 'false');
+                    const span = button.querySelector('.btn-text');
+                    if (span) span.textContent = 'Ver más';
+                });
+
+                // Click handler
+                button.addEventListener('click', function() {
+                    const bsCollapse = new bootstrap.Collapse(target, {
+                        toggle: true
+                    });
+                });
+            }
+        });
+    });
+</script>
