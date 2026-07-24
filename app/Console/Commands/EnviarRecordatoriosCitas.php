@@ -26,9 +26,10 @@ class EnviarRecordatoriosCitas extends Command
                 $q->whereNotNull('telefono')->whereNull('deleted_at')
             )
             ->get()
-            ->filter(fn($c) =>
-                Carbon::parse($c->fecha . ' ' . $c->hora)->between($desde, $hasta)
-            );
+            ->filter(function ($c) use ($desde, $hasta) {
+                $fechaSolo = Carbon::parse($c->fecha)->format('Y-m-d');
+                return Carbon::parse($fechaSolo . ' ' . $c->hora)->between($desde, $hasta);
+            });
 
         if ($citas->isEmpty()) {
             $this->info('Sin citas pendientes de recordatorio.');
