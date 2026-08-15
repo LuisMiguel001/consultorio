@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('suscripcions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('consultorio_id')->constrained('consultorios')->onDelete('cascade');
-            $table->foreignId('plan_id')->constrained('plans')->onDelete('cascade');
+            $table->foreignId('plan_id')->constrained('planes')->onDelete('cascade');
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->enum('estado', ['activa', 'cancelada', 'expirada', 'pendiente'])->default('activa');

@@ -15,15 +15,10 @@
         </div>
 
         <div class="card-body">
-
             <div class="table-responsive">
-
                 <table class="table align-middle">
-
                     <thead>
-
                         <tr>
-
                             <th>#</th>
 
                             <th>Paciente</th>
@@ -37,15 +32,12 @@
                             <th></th>
 
                         </tr>
-
                     </thead>
 
                     <tbody>
 
                         @forelse($cuentas as $cuenta)
-
                             <tr>
-
                                 <td>
                                     {{ $cuenta->id }}
                                 </td>
@@ -79,40 +71,27 @@
                                         </span>
 
                                     @else
-
                                         <span class="badge bg-danger">
                                             Pendiente
                                         </span>
-
                                     @endif
-
                                 </td>
 
                                 <td>
-
                                     <a
                                         href="{{ route('cuentas.show', $cuenta->id) }}"
                                         class="btn btn-sm btn-primary"
                                     >
                                         Ver
                                     </a>
-
                                 </td>
-
                             </tr>
-
                         @empty
-
                             <tr>
-
                                 <td colspan="6" class="text-center">
-
                                     No hay cuentas registradas.
-
                                 </td>
-
                             </tr>
-
                         @endforelse
                     </tbody>
                 </table>

@@ -195,8 +195,10 @@
                             <div class="text-center mt-2">
                                 <button class="btn-toggle-details" data-target="detalleConsulta{{ $consulta->id }}">
                                     <span class="btn-text">Ver más</span>
-                                    <svg class="btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8 3L8 13M8 13L12 9M8 13L4 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <svg class="btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 3L8 13M8 13L12 9M8 13L4 9" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </button>
                             </div>
@@ -267,6 +269,77 @@
                                         </div>
                                     @endif
 
+                                    {{-- DERMATOLOGÍA --}}
+                                    @if ($consulta->dermatologia)
+                                        <hr>
+                                        <h6 class="fw-bold text-danger mb-3">Detalle Dermatológico</h6>
+
+                                        <div class="row">
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Fototipo:</strong><br>
+                                                {{ $consulta->dermatologia->fototipo_fitzpatrick ?? '-' }}
+                                            </div>
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Tipo de piel:</strong><br>
+                                                {{ $consulta->dermatologia->tipo_piel ?? '-' }}
+                                            </div>
+                                            <div class="col-md-4 mb-2">
+                                                <strong>Diagnóstico:</strong><br>
+                                                {{ $consulta->dermatologia->diagnostico_dermatologico ?? '-' }}
+                                            </div>
+
+                                            @if ($consulta->dermatologia->lesion_tipo)
+                                                <div class="col-md-12">
+                                                    <hr><small class="text-muted">Lesión</small>
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Tipo:</strong><br>{{ $consulta->dermatologia->lesion_tipo }}
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Localización:</strong><br>{{ $consulta->dermatologia->lesion_localizacion ?? '-' }}
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Tamaño:</strong><br>{{ $consulta->dermatologia->lesion_tamano ?? '-' }}
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Color:</strong><br>{{ $consulta->dermatologia->lesion_color ?? '-' }}
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Bordes:</strong><br>{{ $consulta->dermatologia->lesion_bordes ?? '-' }}
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Evolución:</strong><br>{{ $consulta->dermatologia->tiempo_evolucion ?? '-' }}
+                                                </div>
+                                                <div class="col-md-12 mb-2">
+                                                    <strong>Síntomas:</strong><br>
+                                                    {{ collect(['prurito' => 'Prurito', 'dolor' => 'Dolor', 'ardor' => 'Ardor', 'sangrado' => 'Sangrado'])->filter(fn($label, $key) => $consulta->dermatologia->$key)->implode(', ') ?:
+                                                        'Ninguno' }}
+                                                </div>
+                                            @endif
+
+                                            @if ($consulta->dermatologia->es_procedimiento_estetico)
+                                                <div class="col-md-12">
+                                                    <hr><small class="text-muted">Procedimiento Estético</small>
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Procedimiento:</strong><br>{{ $consulta->dermatologia->procedimiento_estetico ?? '-' }}
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Zona
+                                                        tratada:</strong><br>{{ $consulta->dermatologia->zona_tratada ?? '-' }}
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Producto / cantidad:</strong><br>
+                                                    {{ $consulta->dermatologia->producto_utilizado ?? '-' }} —
+                                                    {{ $consulta->dermatologia->cantidad_aplicada ?? '-' }}
+                                                </div>
+                                                <div class="col-md-4 mb-2">
+                                                    <strong>Próxima sesión:</strong><br>
+                                                    {{ $consulta->dermatologia->fecha_proxima_sesion ? \Carbon\Carbon::parse($consulta->dermatologia->fecha_proxima_sesion)->format('d/m/Y') : '-' }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

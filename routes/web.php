@@ -22,6 +22,7 @@ use App\Http\Controllers\PagoController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\CuentaPacienteController;
+use App\Http\Controllers\ProcedimientoFotoController;
 
 //Landing page
 Route::get('/', [AuthController::class, 'landing']);
@@ -35,9 +36,16 @@ Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ============================================================================
+// RUTA DE VERIFICACIÓN DE DOCTOR (FUERA del grupo nocache)
+// ============================================================================
+Route::post('/cuentas/verificar-doctor', [CuentaPacienteController::class, 'verificarDoctor'])
+    ->name('cuentas.verificar-doctor')
+    ->middleware(['auth']);  // Solo auth, sin nocache
+
+// ============================================================================
 // RUTAS PROTEGIDAS CON AUTENTICACIÓN Y VERIFICACIÓN DE SUSCRIPCIÓN
 // ============================================================================
-Route::middleware(['auth', 'demo.activo',  'nocache', 'suscripcion.activa', 'modulo.plan'])->group(function () {
+Route::middleware(['auth', 'demo.activo', 'nocache', 'suscripcion.activa', 'modulo.plan'])->group(function () {
 
     // Perfil del usuario (sin restricción de permisos, todos pueden ver su perfil)
     Route::get('/perfil', [UserController::class, 'perfil'])->name('perfil');
@@ -209,67 +217,51 @@ Route::middleware(['auth', 'demo.activo',  'nocache', 'suscripcion.activa', 'mod
         Route::get('/consultas/{consulta}/receta/pdf', [RecetaController::class, 'generar'])->name('receta.pdf');
     });
 
+    // routes/web.php
+    Route::post('/consultas-dermatologicas/{consultaDermatologica}/fotos', [ProcedimientoFotoController::class, 'store'])
+        ->name('procedimiento-fotos.store');
+
+    Route::delete('/procedimiento-fotos/{foto}', [ProcedimientoFotoController::class, 'destroy'])
+        ->name('procedimiento-fotos.destroy');
+
+    Route::get('/dermatologia/{consultaDermatologica}/comparar', [ProcedimientoFotoController::class, 'comparar'])
+        ->name('dermatologia.comparar');
+
     // SERVICIOS
     Route::get('/servicios', [ServicioController::class, 'index'])->name('servicios.index');
-
     Route::get('/servicios/crear', [ServicioController::class, 'create'])->name('servicios.create');
-
-    Route::post(
-        '/servicios',
-        [ServicioController::class, 'store']
-    )->name('servicios.store');
-
+    Route::post('/servicios', [ServicioController::class, 'store'])->name('servicios.store');
     Route::get('/servicios/{servicio}/editar', [ServicioController::class, 'edit'])->name('servicios.edit');
+    Route::put('/servicios/{servicio}', [ServicioController::class, 'update'])->name('servicios.update');
+    Route::delete('/servicios/{servicio}', [ServicioController::class, 'destroy'])->name('servicios.destroy');
 
-    Route::put(
-        '/servicios/{servicio}',
-        [ServicioController::class, 'update']
-    )->name('servicios.update');
+    // ── CUENTAS ────────────────────────────────────────────────────────────────
+    Route::post('/cuentas/cobrar', [CuentaPacienteController::class, 'cobrar'])
+        ->name('cuentas.cobrar');
 
-    Route::delete(
-        '/servicios/{servicio}',
-        [ServicioController::class, 'destroy']
-    )->name('servicios.destroy');
+    Route::put('/cuentas/detalle/{detalle}', [CuentaPacienteController::class, 'actualizarDetalle'])
+        ->name('cuentas.detalle.update');
 
-    Route::middleware(['auth'])->group(function () {
+    Route::delete('/cuentas/detalle/{detalle}', [CuentaPacienteController::class, 'eliminarDetalle'])
+        ->name('cuentas.detalle.destroy');
 
-        Route::get(
-            '/cuentas',
-            [CuentaPacienteController::class, 'index']
-        )->name('cuentas.index');
+    Route::get('/cuentas', [CuentaPacienteController::class, 'index'])
+        ->name('cuentas.index');
 
-        Route::get(
-            '/cuentas/{id}',
-            [CuentaPacienteController::class, 'show']
-        )->name('cuentas.show');
+    Route::get('/cuentas/{id}', [CuentaPacienteController::class, 'show'])
+        ->name('cuentas.show');
 
-        Route::post(
-            '/cuentas/cobrar',
-            [CuentaPacienteController::class, 'cobrar']
-        )->name('cuentas.cobrar');
-    });
+    Route::get('/caja/cuentas', [CajaController::class, 'cuentasPendientes'])
+        ->name('caja.cuentas');
 
-    Route::get(
-        '/caja/cuentas',
-        [CajaController::class, 'cuentasPendientes']
-    )->name('caja.cuentas');
-
-    Route::post(
-        '/caja/cobrar-cuenta',
-        [CajaController::class, 'cobrarCuenta']
-    )->name('caja.cobrarCuenta');
+    Route::post('/caja/cobrar-cuenta', [CajaController::class, 'cobrarCuenta'])
+        ->name('caja.cobrarCuenta');
 });
 
 // ============================================================================
 // RUTAS DE ADMINISTRACIÓN (SOLO ADMIN - SIN VERIFICACIÓN DE SUSCRIPCIÓN)
-// Admin puede gestionar consultorios, planes, suscripciones y pagos
-// sin restricciones de suscripción activa
 // ============================================================================
 Route::middleware(['auth', 'nocache', 'role:admin'])->group(function () {
-
-    // ========================================================================
-    // CONSULTORIOS (Solo Admin)
-    // ========================================================================
     Route::get('/consultorios', [ConsultorioController::class, 'index'])->name('consultorios.index');
     Route::get('/consultorios/create', [ConsultorioController::class, 'create'])->name('consultorios.create');
     Route::post('/consultorios', [ConsultorioController::class, 'store'])->name('consultorios.store');
@@ -277,34 +269,20 @@ Route::middleware(['auth', 'nocache', 'role:admin'])->group(function () {
     Route::put('/consultorios/{consultorio}', [ConsultorioController::class, 'update'])->name('consultorios.update');
     Route::post('/consultorios/{consultorio}/toggle', [ConsultorioController::class, 'toggleActivo'])->name('consultorios.toggle');
     Route::delete('/consultorios/{consultorio}', [ConsultorioController::class, 'destroy'])->name('consultorios.destroy');
-
-    // ========================================================================
-    // PLANES (Solo Admin)
-    // ========================================================================
     Route::resource('planes', PlanController::class);
     Route::patch('/planes/{plane}/toggle-status', [PlanController::class, 'toggleStatus'])->name('planes.toggle-status');
-
-    // ========================================================================
-    // SUSCRIPCIONES (Solo Admin)
-    // ========================================================================
     Route::resource('suscripciones', SuscripcionController::class);
     Route::post('/suscripciones/{suscripcion}/renovar', [SuscripcionController::class, 'renovar'])->name('suscripciones.renovar');
     Route::post('/suscripciones/{suscripcion}/cancelar', [SuscripcionController::class, 'cancelar'])->name('suscripciones.cancelar');
     Route::post('/suscripciones/{suscripcion}/cambiar-plan', [SuscripcionController::class, 'cambiarPlan'])->name('suscripciones.cambiar-plan');
-
-    // ========================================================================
-    // PAGOS (Solo Admin)
-    // ========================================================================
     Route::resource('pagos', PagoController::class);
     Route::get('/pagos/reporte/mensual', [PagoController::class, 'reporteMensual'])->name('pagos.reporte.mensual');
     Route::post('/pagos/{pago}/aprobar', [PagoController::class, 'aprobar'])->name('pagos.aprobar');
     Route::post('/pagos/{pago}/rechazar', [PagoController::class, 'rechazar'])->name('pagos.rechazar');
-
     Route::get('/consultorios/{consultorio}', [ConsultorioController::class, 'show'])->name('consultorios.show');
 });
 
 // ============================================================================
-// RUTAS OPCIONALES - Vistas públicas de planes (sin autenticación)
-// Por si quieres mostrar los planes disponibles antes del login
+// RUTAS OPCIONALES - Vistas públicas de planes
 // ============================================================================
 Route::get('/planes-disponibles', [PlanController::class, 'planesPublicos'])->name('planes.publicos');

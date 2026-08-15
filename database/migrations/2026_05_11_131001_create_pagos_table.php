@@ -25,7 +25,7 @@ return new class extends Migration
 
             $table->foreignId('plan_id')
                 ->nullable()
-                ->constrained()
+               ->constrained('planes')
                 ->nullOnDelete();
 
             $table->decimal('monto', 10, 2);

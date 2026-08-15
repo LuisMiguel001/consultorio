@@ -8,38 +8,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('plans', function (Blueprint $table) {
-            // Límites cuantitativos
-            $table->integer('max_citas')->nullable()->after('max_pacientes');
-            $table->integer('max_consultas')->nullable()->after('max_citas');
-            $table->integer('max_mensajes_whatsapp')->nullable()->after('max_consultas');
-
-            // Módulos habilitados (JSON con array de módulos)
-            $table->json('modulos_habilitados')->nullable()->after('caracteristicas');
-
-            // Características adicionales específicas
-            $table->boolean('permite_archivar')->default(true)->after('modulos_habilitados');
-            $table->boolean('permite_recordatorios')->default(false)->after('permite_archivar');
-            $table->boolean('permite_whatsapp')->default(false)->after('permite_recordatorios');
-            $table->boolean('permite_reportes_avanzados')->default(false)->after('permite_whatsapp');
-            $table->boolean('permite_multiple_consultorios')->default(false)->after('permite_reportes_avanzados');
-        });
+        // NO-OP: estas columnas ya se agregaron directamente
+        // en 2026_05_11_125607_create_plans_table.php (creada como "planes").
+        // Esta migración quedó obsoleta y se deja vacía para no romper el historial.
     }
 
     public function down(): void
     {
-        Schema::table('plans', function (Blueprint $table) {
-            $table->dropColumn([
-                'max_citas',
-                'max_consultas',
-                'max_mensajes_whatsapp',
-                'modulos_habilitados',
-                'permite_archivar',
-                'permite_recordatorios',
-                'permite_whatsapp',
-                'permite_reportes_avanzados',
-                'permite_multiple_consultorios',
-            ]);
-        });
+        // NO-OP por la misma razón.
     }
 };

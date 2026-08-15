@@ -164,6 +164,14 @@
                 </button>
             </li>
 
+            @if ($especialidad === 'dermatologia')
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#dermatologia">
+                        Dermatología
+                    </button>
+                </li>
+            @endif
+
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#evolucion">
                     Evolución
@@ -757,6 +765,192 @@
                 @endif
 
             </div>
+
+            @if ($especialidad === 'dermatologia' && $consulta->dermatologia)
+                <div class="tab-pane fade" id="dermatologia">
+                    <div class="card card-body mb-4">
+                        <h6 class="fw-bold text-danger mb-3">🩺 Evaluación Dermatológica</h6>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <strong>Fototipo:</strong><br>{{ $consulta->dermatologia->fototipo_fitzpatrick ?? '-' }}
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <strong>Tipo de piel:</strong><br>{{ $consulta->dermatologia->tipo_piel ?? '-' }}
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <strong>Diagnóstico:</strong><br>{{ $consulta->dermatologia->diagnostico_dermatologico ?? '-' }}
+                            </div>
+
+                            @if ($consulta->dermatologia->lesion_tipo)
+                                <div class="col-md-12">
+                                    <hr><small class="text-muted">Lesión</small>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <strong>Tipo:</strong><br>{{ $consulta->dermatologia->lesion_tipo }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <strong>Localización:</strong><br>{{ $consulta->dermatologia->lesion_localizacion ?? '-' }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <strong>Tamaño:</strong><br>{{ $consulta->dermatologia->lesion_tamano ?? '-' }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <strong>Color:</strong><br>{{ $consulta->dermatologia->lesion_color ?? '-' }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <strong>Bordes:</strong><br>{{ $consulta->dermatologia->lesion_bordes ?? '-' }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <strong>Evolución:</strong><br>{{ $consulta->dermatologia->tiempo_evolucion ?? '-' }}
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <strong>Síntomas:</strong><br>
+                                    {{ collect(['prurito' => 'Prurito', 'dolor' => 'Dolor', 'ardor' => 'Ardor', 'sangrado' => 'Sangrado'])->filter(fn($l, $k) => $consulta->dermatologia->$k)->implode(', ') ?:
+                                        'Ninguno' }}
+                                </div>
+                            @endif
+
+                            @if ($consulta->dermatologia->dermatoscopia_realizada || $consulta->dermatologia->biopsia_realizada)
+                                <div class="col-md-12">
+                                    <hr><small class="text-muted">Estudios</small>
+                                </div>
+                                @if ($consulta->dermatologia->dermatoscopia_realizada)
+                                    <div class="col-md-6 mb-2">
+                                        <strong>Dermatoscopia:</strong><br>{{ $consulta->dermatologia->hallazgos_dermatoscopia ?? '-' }}
+                                    </div>
+                                @endif
+                                @if ($consulta->dermatologia->biopsia_realizada)
+                                    <div class="col-md-6 mb-2">
+                                        <strong>Biopsia:</strong><br>{{ $consulta->dermatologia->resultado_biopsia ?? '-' }}
+                                    </div>
+                                @endif
+                            @endif
+
+                            @if ($consulta->dermatologia->es_procedimiento_estetico)
+                                <div class="col-md-12">
+                                    <hr><small class="text-muted">Procedimiento Estético</small>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <strong>Procedimiento:</strong><br>{{ $consulta->dermatologia->procedimiento_estetico ?? '-' }}
+                                </div>
+                                <div class="col-md-4 mb-2"><strong>Zona
+                                        tratada:</strong><br>{{ $consulta->dermatologia->zona_tratada ?? '-' }}</div>
+                                <div class="col-md-4 mb-2">
+                                    <strong>Producto / cantidad:</strong><br>
+                                    {{ $consulta->dermatologia->producto_utilizado ?? '-' }} —
+                                    {{ $consulta->dermatologia->cantidad_aplicada ?? '-' }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- 👇 CONTROL FOTOGRÁFICO --}}
+                    <div class="card card-body">
+                        <h6 class="fw-bold text-danger mb-3">📸 Control Fotográfico</h6>
+
+                        <div class="row">
+                            @foreach (['antes' => 'Antes', 'durante' => 'Durante', 'despues' => 'Después'] as $key => $label)
+                                <div class="col-md-4 mb-3">
+
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong>{{ $label }}</strong>
+                                        <button class="btn btn-sm btn-outline-secondary" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#subirFoto{{ $key }}{{ $consulta->dermatologia->id }}">
+                                            + Agregar
+                                        </button>
+                                    </div>
+
+                                    <div class="d-flex flex-wrap gap-2 mb-2 p-2 bg-light rounded"
+                                        style="min-height:100px;">
+                                        @forelse ($consulta->dermatologia->fotos->where('etapa', $key)->sortBy('orden') as $foto)
+                                            <div class="position-relative">
+                                                <img src="{{ $foto->url }}" class="rounded border"
+                                                    style="width:90px;height:90px;object-fit:cover;cursor:pointer;"
+                                                    data-bs-toggle="modal" data-bs-target="#verFoto{{ $foto->id }}"
+                                                    alt="{{ $foto->descripcion }}">
+
+                                                <form action="{{ route('procedimiento-fotos.destroy', $foto) }}"
+                                                    method="POST" class="position-absolute top-0 end-0 m-1"
+                                                    onsubmit="return confirm('¿Eliminar esta foto?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button
+                                                        class="btn btn-danger p-0 d-flex align-items-center justify-content-center"
+                                                        style="width:18px;height:18px;font-size:10px;border-radius:50%;line-height:1;">
+                                                        ✕
+                                                    </button>
+                                                </form>
+
+                                                {{-- Modal para ver la foto en grande --}}
+                                                <div class="modal fade" id="verFoto{{ $foto->id }}" tabindex="-1">
+                                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <span class="badge bg-danger">{{ $label }}</span>
+                                                                <small class="text-muted ms-2">
+                                                                    {{ $foto->created_at->format('d/m/Y H:i') }}
+                                                                </small>
+                                                                <button type="button" class="btn-close ms-auto"
+                                                                    data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <img src="{{ $foto->url }}" class="img-fluid">
+                                                            @if ($foto->descripcion)
+                                                                <div class="modal-body">
+                                                                    <p class="mb-0">{{ $foto->descripcion }}</p>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <small class="text-muted align-self-center mx-auto">Sin fotos</small>
+                                        @endforelse
+                                    </div>
+
+                                    <div class="collapse"
+                                        id="subirFoto{{ $key }}{{ $consulta->dermatologia->id }}">
+                                        <form
+                                            action="{{ route('procedimiento-fotos.store', $consulta->dermatologia->id) }}"
+                                            method="POST" enctype="multipart/form-data"
+                                            class="card card-body bg-white border">
+                                            @csrf
+                                            <input type="hidden" name="etapa" value="{{ $key }}">
+
+                                            <div class="mb-2">
+                                                <input type="file" name="fotos[]" class="form-control form-control-sm"
+                                                    multiple accept="image/*" required>
+                                            </div>
+
+                                            <div class="mb-2">
+                                                <input type="text" name="descripcion"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Descripción (opcional)">
+                                            </div>
+
+                                            <button class="btn btn-sm btn-primary w-100">Subir</button>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            @endforeach
+                        </div>
+
+                        @if ($consulta->dermatologia->fotosAntes()->exists() && $consulta->dermatologia->fotosDespues()->exists())
+                            <a href="{{ route('dermatologia.comparar', $consulta->dermatologia->id) }}"
+                                class="btn btn-outline-primary btn-sm mt-2 w-100">
+                                🔍 Ver Comparación Antes / Después
+                            </a>
+                        @else
+                            <small class="text-muted d-block mt-2">
+                                Sube al menos una foto de "Antes" y una de "Después" para habilitar la comparación.
+                            </small>
+                        @endif
+                    </div>
+                </div>
+            @endif
 
             <div class="tab-pane fade" id="evolucion">
 

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('plans', function (Blueprint $table) {
+        Schema::table('planes', function (Blueprint $table) {
 
             $table->integer('max_doctores')
                 ->nullable()

@@ -68,6 +68,11 @@ class Consulta extends Model
         return $this->hasOne(ConsultaGinecologica::class);
     }
 
+    public function dermatologia()
+    {
+        return $this->hasOne(ConsultaDermatologica::class);
+    }
+
     public function cuenta()
     {
         return $this->hasOne(CuentaPaciente::class);
