@@ -12,6 +12,7 @@ class ConsultaDermatologica extends Model
         'tipo_piel',
         'motivo_dermatologico',
         'lesion_tipo',
+        'zona_corporal_id',
         'lesion_localizacion',
         'lesion_tamano',
         'lesion_color',
@@ -80,5 +81,10 @@ class ConsultaDermatologica extends Model
     public function fotosDespues()
     {
         return $this->fotos()->where('etapa', 'despues');
+    }
+
+    public function zonaCorporal()
+    {
+        return $this->belongsTo(ZonaCorporal::class);
     }
 }

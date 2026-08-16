@@ -13,6 +13,8 @@
             ->where('activo', 1)
             ->orderBy('nombre')
             ->get();
+
+        $zonasAgrupadas = \App\Models\ZonaCorporal::agrupadas();
     @endphp
 
     <div class="container my-4">
@@ -401,8 +403,24 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">Localización</label>
-                    <input type="text" name="lesion_localizacion" class="form-control" placeholder="Ej: antebrazo izquierdo">
+                    <label class="form-label">Zona Corporal</label>
+                    <select name="zona_corporal_id" class="form-select">
+                        <option value="">--Seleccione--</option>
+                        @foreach ($zonasAgrupadas as $grupo => $zonas)
+                            <optgroup label="{{ $grupo }}">
+                                @foreach ($zonas as $zona)
+                                    <option value="{{ $zona->id }}">{{ $zona->nombre }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                    <small class="text-muted">Necesario para comparar esta lesión entre consultas futuras</small>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Detalle de ubicación (opcional)</label>
+                    <input type="text" name="lesion_localizacion" class="form-control"
+                        placeholder="Ej: cara lateral, cerca del codo">
                 </div>
 
                 <div class="col-md-4 mb-3">
@@ -845,5 +863,14 @@
                 calcularTotal
             );
         });
+
+        // Mostrar/ocultar bloque de procedimiento estético
+        const checkEstetico = document.getElementById('es_procedimiento_estetico');
+        const bloqueEstetico = document.getElementById('bloqueEstetico');
+        if (checkEstetico && bloqueEstetico) {
+            checkEstetico.addEventListener('change', function() {
+                bloqueEstetico.classList.toggle('d-none', !this.checked);
+            });
+        }
     });
 </script>

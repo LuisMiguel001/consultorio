@@ -103,6 +103,7 @@ class ConsultaController extends Controller
             'evoluciones',
             'ginecologia',
             'dermatologia.fotos',
+            'dermatologia.zonaCorporal',
             'cuenta.detalles.servicio'
         ]);
 
@@ -220,6 +221,7 @@ class ConsultaController extends Controller
                 'tipo_piel'                             => $request->tipo_piel,
                 'motivo_dermatologico'                  => $request->motivo_dermatologico,
                 'lesion_tipo'                           => $request->lesion_tipo,
+                'zona_corporal_id'                      => $request->zona_corporal_id,
                 'lesion_localizacion'                   => $request->lesion_localizacion,
                 'lesion_tamano'                         => $request->lesion_tamano,
                 'lesion_color'                          => $request->lesion_color,

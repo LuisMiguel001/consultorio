@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\ConsultaDermatologica;
+use App\Models\Paciente;
 use App\Models\ProcedimientoFoto;
+use App\Models\ZonaCorporal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +17,6 @@ class ProcedimientoFotoController extends Controller
     {
         $user = Auth::user();
 
-        // Seguridad: la consulta debe pertenecer a un paciente del consultorio del usuario
         $consultaDermatologica->load('consulta.paciente');
 
         if ($consultaDermatologica->consulta->paciente->consultorio_id != $user->consultorio_id) {
@@ -25,7 +26,7 @@ class ProcedimientoFotoController extends Controller
         $request->validate([
             'etapa'    => 'required|in:antes,durante,despues',
             'fotos'    => 'required|array|min:1',
-            'fotos.*'  => 'image|mimes:jpg,jpeg,png,webp|max:8192', // 8MB c/u
+            'fotos.*'  => 'image|mimes:jpg,jpeg,png,webp|max:8192',
             'descripcion' => 'nullable|string|max:150',
         ]);
 
@@ -88,6 +89,33 @@ class ProcedimientoFotoController extends Controller
             'dermatologia' => $consultaDermatologica,
             'fotosAntes' => $consultaDermatologica->fotos->where('etapa', 'antes')->sortBy('orden'),
             'fotosDespues' => $consultaDermatologica->fotos->where('etapa', 'despues')->sortBy('orden'),
+        ]);
+    }
+
+    /**
+     * Línea de tiempo de todas las consultas dermatológicas del paciente
+     * en una zona corporal específica, con sus fotos por etapa.
+     */
+    public function lineaTiempoZona(Paciente $paciente, ZonaCorporal $zona)
+    {
+        $user = Auth::user();
+
+        if ($paciente->consultorio_id != $user->consultorio_id) {
+            abort(404);
+        }
+
+        $consultasDerm = ConsultaDermatologica::where('zona_corporal_id', $zona->id)
+            ->whereHas('consulta', fn($q) => $q->where('paciente_id', $paciente->id))
+            ->with(['consulta', 'fotos' => fn($q) => $q->orderBy('etapa')->orderBy('orden')])
+            ->join('consultas', 'consulta_dermatologicas.consulta_id', '=', 'consultas.id')
+            ->orderBy('consultas.fecha_consulta')
+            ->select('consulta_dermatologicas.*')
+            ->get();
+
+        return view('dermatologia.linea-tiempo-zona', [
+            'paciente' => $paciente,
+            'zona' => $zona,
+            'consultasDerm' => $consultasDerm,
         ]);
     }
 }

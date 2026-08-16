@@ -227,6 +227,8 @@ Route::middleware(['auth', 'demo.activo', 'nocache', 'suscripcion.activa', 'modu
     Route::get('/dermatologia/{consultaDermatologica}/comparar', [ProcedimientoFotoController::class, 'comparar'])
         ->name('dermatologia.comparar');
 
+    Route::get('/pacientes/{paciente}/zona/{zona}/linea-tiempo', [ProcedimientoFotoController::class, 'lineaTiempoZona'])
+    ->name('dermatologia.linea-tiempo-zona');
     // SERVICIOS
     Route::get('/servicios', [ServicioController::class, 'index'])->name('servicios.index');
     Route::get('/servicios/crear', [ServicioController::class, 'create'])->name('servicios.create');

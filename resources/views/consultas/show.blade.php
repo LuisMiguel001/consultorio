@@ -938,10 +938,16 @@
                             @endforeach
                         </div>
 
+                        @if ($consulta->dermatologia->zonaCorporal)
+                            <a href="{{ route('dermatologia.linea-tiempo-zona', [$consulta->paciente_id, $consulta->dermatologia->zona_corporal_id]) }}"
+                                class="btn btn-outline-secondary btn-sm mt-2 w-100">
+                                Línea de Tiempo de esta Zona
+                            </a>
+                        @endif
                         @if ($consulta->dermatologia->fotosAntes()->exists() && $consulta->dermatologia->fotosDespues()->exists())
                             <a href="{{ route('dermatologia.comparar', $consulta->dermatologia->id) }}"
                                 class="btn btn-outline-primary btn-sm mt-2 w-100">
-                                🔍 Ver Comparación Antes / Después
+                                Ver Comparación Antes / Después
                             </a>
                         @else
                             <small class="text-muted d-block mt-2">
