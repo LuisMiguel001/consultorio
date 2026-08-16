@@ -228,7 +228,16 @@ Route::middleware(['auth', 'demo.activo', 'nocache', 'suscripcion.activa', 'modu
         ->name('dermatologia.comparar');
 
     Route::get('/pacientes/{paciente}/zona/{zona}/linea-tiempo', [ProcedimientoFotoController::class, 'lineaTiempoZona'])
-    ->name('dermatologia.linea-tiempo-zona');
+        ->name('dermatologia.linea-tiempo-zona');
+
+    Route::post('/procedimiento-fotos/{foto}/anotar', [ProcedimientoFotoController::class, 'anotar'])
+        ->name('procedimiento-fotos.anotar');
+
+        Route::get('/refresh-csrf', function () {
+    return response()->json([
+        'token' => csrf_token()
+    ]);
+})->name('refresh-csrf');
     // SERVICIOS
     Route::get('/servicios', [ServicioController::class, 'index'])->name('servicios.index');
     Route::get('/servicios/crear', [ServicioController::class, 'create'])->name('servicios.create');

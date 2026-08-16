@@ -14,6 +14,8 @@ class ProcedimientoFoto extends Model
         'descripcion',
         'orden',
         'subido_por',
+        'anotaciones',
+        'ruta_anotada',
     ];
 
     public function consultaDermatologica()
@@ -29,5 +31,14 @@ class ProcedimientoFoto extends Model
     public function getUrlAttribute(): string
     {
         return Storage::url($this->ruta);
+    }
+
+    protected $casts = [
+        'anotaciones' => 'array',
+    ];
+
+    public function getUrlAnotadaAttribute()
+    {
+        return $this->ruta_anotada ? Storage::url($this->ruta_anotada) : null;
     }
 }

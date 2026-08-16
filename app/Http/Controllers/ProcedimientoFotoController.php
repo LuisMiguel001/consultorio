@@ -70,6 +70,9 @@ class ProcedimientoFotoController extends Controller
         }
 
         Storage::disk('public')->delete($foto->ruta);
+        if ($foto->ruta_anotada) {
+            Storage::disk('public')->delete($foto->ruta_anotada);
+        }
         $foto->delete();
 
         return back()->with('success', 'Foto eliminada');
@@ -116,6 +119,59 @@ class ProcedimientoFotoController extends Controller
             'paciente' => $paciente,
             'zona' => $zona,
             'consultasDerm' => $consultasDerm,
+        ]);
+    }
+
+    /**
+     * Guarda la anotación (círculo, flecha, texto) dibujada sobre una foto.
+     * Recibe: imagen aplanada en base64 (dataURL) + JSON de las formas (para poder re-editar luego).
+     */
+    public function anotar(Request $request, ProcedimientoFoto $foto)
+    {
+        $user = Auth::user();
+
+        $foto->load('consultaDermatologica.consulta.paciente');
+
+        if ($foto->consultaDermatologica->consulta->paciente->consultorio_id != $user->consultorio_id) {
+            abort(404);
+        }
+
+        $request->validate([
+            'imagen_base64' => 'required|string',
+            'anotaciones_json' => 'nullable|string',
+        ]);
+
+        $dataUrl = $request->imagen_base64;
+
+        if (!preg_match('/^data:image\/(png|jpeg|jpg);base64,/', $dataUrl)) {
+            return response()->json(['success' => false, 'error' => 'Formato de imagen inválido.'], 422);
+        }
+
+        $binario = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $dataUrl));
+
+        if ($binario === false) {
+            return response()->json(['success' => false, 'error' => 'No se pudo decodificar la imagen.'], 422);
+        }
+
+        if ($foto->ruta_anotada) {
+            Storage::disk('public')->delete($foto->ruta_anotada);
+        }
+
+        $nombre = Str::uuid() . '.png';
+        $pacienteId = $foto->consultaDermatologica->consulta->paciente_id;
+
+        $rutaAnotada = "pacientes/{$pacienteId}/dermatologia/{$foto->consulta_dermatologica_id}/anotadas/{$nombre}";
+
+        Storage::disk('public')->put($rutaAnotada, $binario);
+
+        $foto->update([
+            'ruta_anotada' => $rutaAnotada,
+            'anotaciones' => $request->anotaciones_json ? json_decode($request->anotaciones_json, true) : null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'url_anotada' => Storage::url($rutaAnotada),
         ]);
     }
 }

@@ -35,6 +35,11 @@
                 letter-spacing: .5px;
             }
 
+            .comparar-foto-item {
+                margin-bottom: 14px;
+                position: relative;
+            }
+
             .comparar-foto {
                 width: 100%;
                 border-radius: 10px;
@@ -42,10 +47,24 @@
                 aspect-ratio: 1 / 1;
                 cursor: pointer;
                 border: 1px solid #e3ecf7;
+                display: block;
             }
 
-            .comparar-foto-item {
-                margin-bottom: 14px;
+            .comparar-btn-anotar {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                background: rgba(13, 71, 161, .85);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 12px;
+                padding: 4px 8px;
+                cursor: pointer;
+            }
+
+            .comparar-btn-anotar:hover {
+                background: #0d47a1;
             }
 
             .comparar-foto-fecha {
@@ -53,6 +72,13 @@
                 color: #6c8bb5;
                 margin-top: 4px;
                 text-align: center;
+            }
+
+            .comparar-badge-anotada {
+                position: absolute;
+                bottom: 8px;
+                left: 8px;
+                font-size: 10px;
             }
 
             .comparar-vacio {
@@ -80,9 +106,21 @@
 
                     @forelse ($fotosAntes as $foto)
                         <div class="comparar-foto-item">
-                            <img src="{{ $foto->url }}" class="comparar-foto"
+                            <img src="{{ $foto->ruta_anotada ? $foto->url_anotada : $foto->url }}"
+                                class="comparar-foto"
                                 data-bs-toggle="modal" data-bs-target="#verFotoComparar{{ $foto->id }}"
                                 alt="{{ $foto->descripcion }}">
+
+                            <button type="button" class="comparar-btn-anotar foto-anotable"
+                                data-foto-id="{{ $foto->id }}"
+                                data-foto-url="{{ $foto->url }}">
+                                ✏️ Anotar
+                            </button>
+
+                            @if ($foto->ruta_anotada)
+                                <span class="badge bg-info comparar-badge-anotada">Anotada</span>
+                            @endif
+
                             <div class="comparar-foto-fecha">
                                 {{ $foto->created_at->format('d/m/Y H:i') }}
                                 @if ($foto->descripcion)
@@ -102,7 +140,7 @@
                                         <button type="button" class="btn-close ms-auto"
                                             data-bs-dismiss="modal"></button>
                                     </div>
-                                    <img src="{{ $foto->url }}" class="img-fluid">
+                                    <img src="{{ $foto->ruta_anotada ? $foto->url_anotada : $foto->url }}" class="img-fluid">
                                     @if ($foto->descripcion)
                                         <div class="modal-body">
                                             <p class="mb-0">{{ $foto->descripcion }}</p>
@@ -126,9 +164,21 @@
 
                     @forelse ($fotosDespues as $foto)
                         <div class="comparar-foto-item">
-                            <img src="{{ $foto->url }}" class="comparar-foto"
+                            <img src="{{ $foto->ruta_anotada ? $foto->url_anotada : $foto->url }}"
+                                class="comparar-foto"
                                 data-bs-toggle="modal" data-bs-target="#verFotoComparar{{ $foto->id }}"
                                 alt="{{ $foto->descripcion }}">
+
+                            <button type="button" class="comparar-btn-anotar foto-anotable"
+                                data-foto-id="{{ $foto->id }}"
+                                data-foto-url="{{ $foto->url }}">
+                                ✏️ Anotar
+                            </button>
+
+                            @if ($foto->ruta_anotada)
+                                <span class="badge bg-info comparar-badge-anotada">Anotada</span>
+                            @endif
+
                             <div class="comparar-foto-fecha">
                                 {{ $foto->created_at->format('d/m/Y H:i') }}
                                 @if ($foto->descripcion)
@@ -148,7 +198,7 @@
                                         <button type="button" class="btn-close ms-auto"
                                             data-bs-dismiss="modal"></button>
                                     </div>
-                                    <img src="{{ $foto->url }}" class="img-fluid">
+                                    <img src="{{ $foto->ruta_anotada ? $foto->url_anotada : $foto->url }}" class="img-fluid">
                                     @if ($foto->descripcion)
                                         <div class="modal-body">
                                             <p class="mb-0">{{ $foto->descripcion }}</p>
@@ -168,4 +218,6 @@
         </div>
 
     </div>
+
+    @include('dermatologia.partials.editor-anotacion')
 @endsection
